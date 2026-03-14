@@ -404,8 +404,8 @@ const ComparisonTable = () => {
     const container = useRef(null);
 
     const features = [
-        { name: 'Speed', compliance: '50 kW', competitor: '180–250 kW', rbs: '150–200 kW' },
-        { name: 'Stalls', compliance: '1', competitor: '4–8', rbs: '4 pull-through' },
+        { name: 'Speed', compliance: '50 kW', competitor: '180–250 kW', rbs: '150 kW' },
+        { name: 'Stalls', compliance: '1', competitor: '4–8', rbs: 'Scalable 2-Stall' },
         { name: 'Truck / Trailer', compliance: false, competitor: false, rbs: true },
         { name: '24/7 Access', compliance: false, competitor: true, rbs: true },
         { name: 'Battery Backup', compliance: false, competitor: false, rbs: true },
@@ -878,8 +878,8 @@ const SiteHosts = () => {
         },
         {
             icon: Battery,
-            title: 'Battery\u2011Backed, Pull\u2011Through Hubs',
-            desc: '4\u2011stall, 150–200 kW DC fast chargers with pull\u2011through bays for trucks and trailers. Battery backup cuts demand charges by 50–70%.'
+            title: 'Scalable Pull\u2011Through Hubs',
+            desc: 'Premium 2\u2011stall 150 kW DC fast charging foundation, expanding dynamically with demand. Battery backup cuts demand charges by 50–70%.'
         },
         {
             icon: DollarSign,
