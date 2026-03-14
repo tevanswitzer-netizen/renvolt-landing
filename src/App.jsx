@@ -35,7 +35,7 @@ const Navbar = () => {
         >
             <div className="flex items-center justify-between">
                 <div className="font-sans font-bold tracking-tight text-lg">
-                    Renewable Battery Solutions
+                    Renvolt
                 </div>
                 <div className="hidden md:flex items-center space-x-8 font-sans text-sm font-medium">
                     <a href="#features" className="hover:-translate-y-[1px] transition-transform">Infrastructure</a>
@@ -435,7 +435,7 @@ const ComparisonTable = () => {
         <section ref={container} className="py-24 px-6 md:px-12 bg-background">
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-16">
-                    <p className="font-mono text-sm font-bold text-accent uppercase tracking-widest mb-4">Why RBS</p>
+                    <p className="font-mono text-sm font-bold text-accent uppercase tracking-widest mb-4">Why Renvolt</p>
                     <h2 className="font-sans font-bold text-4xl md:text-5xl text-dark mb-6">
                         Not all chargers are
                         <span className="font-cormorant italic font-normal text-accent"> created equal.</span>
@@ -458,7 +458,7 @@ const ComparisonTable = () => {
                             <p className="font-sans font-bold text-sm text-dark">Network Charger</p>
                         </div>
                         <div className="p-5 text-center border-l-2 border-accent/30 bg-accent/5">
-                            <p className="font-mono text-xs uppercase tracking-wider text-accent mb-1">RBS</p>
+                            <p className="font-mono text-xs uppercase tracking-wider text-accent mb-1">Renvolt</p>
                             <p className="font-sans font-bold text-sm text-accent">Pull-Through Hub</p>
                         </div>
                     </div>
@@ -923,7 +923,7 @@ const SiteHosts = () => {
                         <span className="font-cormorant italic font-normal text-5xl md:text-6xl lg:text-7xl text-accent">Your Doorstep.</span>
                     </h2>
                     <p className="font-sans text-dark/60 text-lg max-w-2xl mx-auto text-balance">
-                        Partner with RBS to host a destination‑grade charging hub. We build, own, and operate — you earn revenue from day one.
+                        Partner with Renvolt to host a destination‑grade charging hub. We build, own, and operate — you earn revenue from day one.
                     </p>
                 </div>
 
@@ -1095,7 +1095,7 @@ const SiteHostForm = () => {
                     {/* Right: Persuasion */}
                     <div className="form-reveal flex-1 flex flex-col justify-center">
                         <h3 className="font-sans font-bold text-2xl md:text-3xl text-background mb-6">
-                            Why host with Renewable Battery Solutions?
+                            Why host with Renvolt?
                         </h3>
                         <div className="space-y-5 mb-10">
                             {[
@@ -1153,7 +1153,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
 
                 <div className="max-w-md">
-                    <div className="font-sans font-bold text-2xl mb-4">Renewable Battery Solutions</div>
+                    <div className="font-sans font-bold text-2xl mb-4">Renvolt</div>
                     <p className="font-cormorant italic text-2xl text-accent mb-8">
                         Powering the gaps.
                     </p>
@@ -1187,7 +1187,7 @@ const Footer = () => {
             </div>
 
             <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/10 text-center font-mono text-xs text-background/30 uppercase tracking-widest">
-                © {new Date().getFullYear()} Renewable Battery Solutions. All rights reserved.
+                © {new Date().getFullYear()} Renvolt. All rights reserved.
             </div>
             <div className="noise-overlay" />
         </footer>
