@@ -41,8 +41,8 @@ const Navbar = () => {
                  [&.scrolled]:bg-background/80 [&.scrolled]:backdrop-blur-xl [&.scrolled]:text-primary [&.scrolled]:border [&.scrolled]:border-primary/10 [&.scrolled]:shadow-lg"
         >
             <div className="flex items-center justify-between">
-                <div className="font-sans font-bold tracking-tight text-lg cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                    Renvolt
+                <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <img src="/logo-transparent.png" alt="Renvolt Logo" className="h-8 md:h-10 w-auto object-contain object-left" />
                 </div>
                 <div className="hidden md:flex items-center space-x-8 font-sans text-sm font-medium">
                     <button onClick={() => scrollToSection('features')} className="hover:-translate-y-[1px] transition-transform">Infrastructure</button>
@@ -1160,7 +1160,9 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
 
                 <div className="max-w-md">
-                    <div className="font-sans font-bold text-2xl mb-4">Renvolt</div>
+                    <div className="mb-6">
+                        <img src="/logo-transparent.png" alt="Renvolt Logo" className="h-12 w-auto object-contain object-left" />
+                    </div>
                     <p className="font-cormorant italic text-2xl text-accent mb-8">
                         Powering the gaps.
                     </p>
