@@ -42,7 +42,7 @@ const Navbar = () => {
         >
             <div className="flex items-center justify-between">
                 <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                    <img src="/logo-transparent.png" alt="Renvolt Logo" className="h-8 md:h-10 w-auto object-contain object-left" />
+                    <img src="/logo-transparent-dark.png" alt="Renvolt Logo" className="h-8 md:h-10 w-auto object-contain object-left" />
                 </div>
                 <div className="hidden md:flex items-center space-x-8 font-sans text-sm font-medium">
                     <button onClick={() => scrollToSection('features')} className="hover:-translate-y-[1px] transition-transform">Infrastructure</button>
