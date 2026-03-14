@@ -8,6 +8,13 @@ gsap.registerPlugin(ScrollTrigger);
 // Custom Hooks
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
+
 /* =========================================
    COMPONENTS
 ========================================= */
@@ -34,16 +41,16 @@ const Navbar = () => {
                  [&.scrolled]:bg-background/80 [&.scrolled]:backdrop-blur-xl [&.scrolled]:text-primary [&.scrolled]:border [&.scrolled]:border-primary/10 [&.scrolled]:shadow-lg"
         >
             <div className="flex items-center justify-between">
-                <div className="font-sans font-bold tracking-tight text-lg">
+                <div className="font-sans font-bold tracking-tight text-lg cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     Renvolt
                 </div>
                 <div className="hidden md:flex items-center space-x-8 font-sans text-sm font-medium">
-                    <a href="#features" className="hover:-translate-y-[1px] transition-transform">Infrastructure</a>
-                    <a href="#philosophy" className="hover:-translate-y-[1px] transition-transform">Philosophy</a>
-                    <a href="#protocol" className="hover:-translate-y-[1px] transition-transform">Protocol</a>
-                    <a href="#site-hosts" className="hover:-translate-y-[1px] transition-transform">Site Hosts</a>
+                    <button onClick={() => scrollToSection('features')} className="hover:-translate-y-[1px] transition-transform">Infrastructure</button>
+                    <button onClick={() => scrollToSection('pipeline')} className="hover:-translate-y-[1px] transition-transform">Pipeline</button>
+                    <button onClick={() => scrollToSection('protocol')} className="hover:-translate-y-[1px] transition-transform">Protocol</button>
+                    <button onClick={() => scrollToSection('site-hosts')} className="hover:-translate-y-[1px] transition-transform">Site Hosts</button>
                 </div>
-                <button className="relative overflow-hidden bg-accent text-background px-6 py-2.5 rounded-full font-sans text-sm font-semibold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group">
+                <button onClick={() => scrollToSection('site-host-form')} className="relative overflow-hidden bg-accent text-background px-6 py-2.5 rounded-full font-sans text-sm font-semibold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group">
                     <span className="relative z-10 flex items-center gap-2">
                         Site Review <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </span>
@@ -104,7 +111,7 @@ const Hero = () => {
                         Fast EV charging for Alberta’s highway gaps, powered by smart battery‑backed infrastructure.
                     </p>
                     <div className="hero-btn mt-10 space-x-4">
-                        <button className="relative overflow-hidden bg-accent text-background px-8 py-4 rounded-full font-sans text-base font-semibold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group inline-flex items-center gap-2">
+                        <button onClick={() => scrollToSection('site-host-form')} className="relative overflow-hidden bg-accent text-background px-8 py-4 rounded-full font-sans text-base font-semibold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group inline-flex items-center gap-2">
                             <span className="relative z-10 flex items-center gap-2">
                                 Book a 15-Minute Site Review <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </span>
@@ -351,7 +358,7 @@ const TheProblem = () => {
     }, []);
 
     return (
-        <section ref={container} className="py-24 px-6 md:px-12 bg-dark relative overflow-hidden">
+        <section id="the-problem" ref={container} className="py-24 px-6 md:px-12 bg-dark relative overflow-hidden">
             <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col lg:flex-row gap-16 items-start">
                     {/* Left: Heading */}
@@ -432,7 +439,7 @@ const ComparisonTable = () => {
     }, []);
 
     return (
-        <section ref={container} className="py-24 px-6 md:px-12 bg-background">
+        <section id="comparison" ref={container} className="py-24 px-6 md:px-12 bg-background">
             <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-16">
                     <p className="font-mono text-sm font-bold text-accent uppercase tracking-widest mb-4">Why Renvolt</p>
@@ -570,7 +577,7 @@ const Pipeline = () => {
     }, []);
 
     return (
-        <section ref={container} className="py-24 px-6 md:px-12 bg-dark relative overflow-hidden">
+        <section id="pipeline" ref={container} className="py-24 px-6 md:px-12 bg-dark relative overflow-hidden">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <p className="font-mono text-sm font-bold text-accent uppercase tracking-widest mb-4">Deployment Pipeline</p>
@@ -997,7 +1004,7 @@ const SiteHostForm = () => {
     ];
 
     return (
-        <section ref={containerRef} className="relative w-full py-24 md:py-32 px-6 overflow-hidden bg-dark text-background rounded-t-[3rem]">
+        <section id="site-host-form" ref={containerRef} className="relative w-full py-24 md:py-32 px-6 overflow-hidden bg-dark text-background rounded-t-[3rem]">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="form-reveal font-sans font-bold text-3xl md:text-5xl text-background mb-4">
@@ -1137,7 +1144,7 @@ const CTA = () => {
             <p className="font-sans text-dark/60 text-lg mb-12">
                 Join our network of strategic charging hubs and turn empty space into a vital, revenue-generating asset.
             </p>
-            <button className="relative overflow-hidden bg-accent text-background px-10 py-5 rounded-full font-sans text-lg font-bold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group inline-flex items-center gap-3">
+            <button onClick={() => scrollToSection('site-host-form')} className="relative overflow-hidden bg-accent text-background px-10 py-5 rounded-full font-sans text-lg font-bold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group inline-flex items-center gap-3">
                 <span className="relative z-10 flex items-center gap-2">
                     Book a 15-Minute Site Review <ExternalLink size={20} className="group-hover:rotate-12 transition-transform" />
                 </span>
@@ -1167,20 +1174,20 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-12 font-sans text-sm font-medium text-background/60">
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Platform</div>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Hardware</a>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Software</a>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Partnerships</a>
+                        <button onClick={() => scrollToSection('features')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Infrastructure</button>
+                        <button onClick={() => scrollToSection('comparison')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Why Renvolt</button>
+                        <button onClick={() => scrollToSection('site-hosts')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Site Hosts</button>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Company</div>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">About</a>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Careers</a>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Contact</a>
+                        <button onClick={() => scrollToSection('philosophy')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">About</button>
+                        <button onClick={() => scrollToSection('pipeline')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Pipeline</button>
+                        <button onClick={() => scrollToSection('site-host-form')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Contact</button>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Legal</div>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Privacy</a>
-                        <a href="#" className="hover:text-accent transition-colors hover:-translate-y-[1px]">Terms</a>
+                        <span className="text-background/30 cursor-default">Privacy</span>
+                        <span className="text-background/30 cursor-default">Terms</span>
                     </div>
                 </div>
 
