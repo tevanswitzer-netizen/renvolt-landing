@@ -1,0 +1,1408 @@
+
+
+======================================================
+SOURCE DOCUMENT: rbs_90_day_launch_plan.md
+======================================================
+
+# RBS 90-Day Launch Plan — First EV Charging Site
+
+*Your fractional co-founder playbook: from idea to signed LOIs and submitted grant application in 90 days.*
+
+---
+
+## Working Assumptions
+
+| Parameter | Assumption | Rationale |
+|---|---|---|
+| Site size | **4-6 chargers** (not 12) | Start smaller to reduce CapEx and risk for pilot |
+| Charger power | 100-150 kW DC fast (CCS1/CCS2) | Standard for public fast-charging |
+| Battery co-location | 100 kWh LFP | Demand charge shaving + grid services |
+| Pre-grant CapEx | ~$200K (4 chargers + battery) | Half-site proves economics at lower risk |
+| Post-grant CapEx | ~$100-120K | ZEVIP/provincial covers 40-50% of hardware |
+| Year 1 utilization | **8-12%** (realistic for ~1,500 EVs in Alberta) | Not 30% — be honest with investors |
+| Charging price | $0.40-0.55/kWh | Competitive with Petro-Canada/FLO |
+| Year 1 revenue/site | **$70-110K** (conservative) | Based on realistic utilization |
+| Payback (post-grant) | **14-20 months** (adjusted) | Honest number; still investor-attractive |
+| Target city | Edmonton or Calgary | Highest EV density in Alberta |
+
+> [!IMPORTANT]
+> I recommend starting with **4-6 chargers**, not 12. A 4-charger pilot costs ~$200K pre-grant vs $350K, proves the same economics, and is far easier to permit and deploy. Scale to 12 at site #2 once you have real data.
+
+---
+
+## 90-Day Overview
+
+```mermaid
+gantt
+    title RBS 90-Day Launch Plan
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+
+    section Foundation
+    Incorporate & Legal           :a1, 2026-03-09, 7d
+    Build Core Documents          :a2, 2026-03-09, 14d
+    Utility Research (ATCO/EPCOR) :a3, 2026-03-09, 14d
+
+    section Site Prospecting
+    Identify 10-15 Target Sites   :b1, 2026-03-16, 7d
+    Cold Outreach (20+ calls)     :b2, 2026-03-23, 14d
+    Site Visits & Qualification   :b3, 2026-04-06, 14d
+
+    section Technical Prep
+    Electrician/Engineer Engaged  :c1, 2026-03-23, 7d
+    Load Calc & Site Layout       :c2, 2026-03-30, 14d
+    Equipment Vendor Quotes       :c3, 2026-04-06, 14d
+
+    section Grants & LOIs
+    Grant Application Drafted     :d1, 2026-04-13, 14d
+    LOI Negotiations              :d2, 2026-04-20, 14d
+    Grant Submitted + LOIs Signed :milestone, d3, 2026-06-07, 0d
+```
+
+---
+
+## Week-by-Week Milestones
+
+### Week 1-2: Foundation & Research
+
+**Key Decisions:**
+- Edmonton or Calgary for first site? (Edmonton has EPCOR; Calgary has ENMAX — different utility processes)
+- Sole proprietorship → incorporation? (Recommend Alberta corporation for grant eligibility and liability)
+- 4-charger pilot or 6-charger? (I'd start with 4)
+
+**Documents to Create:**
+- [ ] **Site Host Pitch One-Pager** (see template below)
+- [ ] **Basic Financial Model** — simple spreadsheet: CapEx, monthly revenue at 8/12/20% utilization, payback
+- [ ] **Company Overview** — 1-page about RBS for grant applications
+
+**Who to Talk To:**
+- **Alberta Corporate Registry** — incorporate ($275-$500 filing fee)
+- **ATCO or EPCOR** — call their commercial services line and ask: *"What's the process and cost to add 80-150kW of commercial load to an existing gas station or commercial property?"*
+- **NRCan ZEVIP program office** — call and ask: *"When is the next intake? What documentation do I need? Can I apply before I have a signed site agreement?"*
+- **Alberta Municipal Affairs** — ask about the Alberta Electric Vehicle Charging Program (EVCP) timeline
+
+---
+
+### Week 3-4: Site Prospecting & Cold Outreach
+
+**Key Decisions:**
+- Which 10-15 sites to target? (Criteria below)
+- Revenue-share model: what % to offer the host? (Recommend 10-15% of charging revenue)
+
+**Site Selection Criteria (rank all targets):**
+
+| Criterion | Why It Matters | How to Check |
+|---|---|---|
+| **Traffic volume** | More cars = more potential EV drivers | Drive by, count cars, check Google traffic data |
+| **Existing electrical service** | 200A+ 3-phase = easy upgrade; 100A single-phase = expensive | Ask owner or check meter panel on-site |
+| **Proximity to highway/major road** | Highway travelers need fast charging most | Google Maps |
+| **Competitor proximity** | >10 km from existing DC fast charger = better | PlugShare app / NRCan station locator |
+| **Parking space available** | Need 4-6 spots preferably at lot edge | Site visit |
+| **Owner willingness** | Franchise vs. independent? Independent owners decide faster | Cold call |
+| **Lease term available** | Need minimum 7-10 years | Negotiation |
+
+**Target Types (in priority order):**
+1. **Independent gas stations** on highway corridors (QE2 between Edmonton-Red Deer-Calgary)
+2. **Strip mall / plaza owners** with large parking lots near major intersections
+3. **Hotel chains** near highways (Best Western, Holiday Inn — EV drivers need overnight charging)
+4. **Municipal parking lots** (City of Edmonton has expressed interest in EV infrastructure)
+5. **Fleet operator yards** (delivery companies, rental car lots)
+
+**Tasks:**
+- [ ] Build a target list of 15 sites using Google Maps + PlugShare
+- [ ] Cold-call/email 20+ site owners (see script below)
+- [ ] Schedule 3-5 in-person site visits
+- [ ] Drive the QE2 corridor and take photos/notes of candidate locations
+
+---
+
+### Week 5-6: Technical Preparation
+
+**Key Decisions:**
+- Charger brand: ABB Terra vs. Tritium RT vs. ChargePoint Express? (Get 3 quotes)
+- Battery system: containerized vs. pad-mounted? (Recommend pad-mounted for pilot — cheaper, simpler)
+- Hire a P.Eng. for stamped drawings? (Yes — mandatory for >400A commercial service in Alberta)
+
+**Who to Talk To:**
+- **Licensed electrician (Master Electrician)** — someone experienced with commercial EV installs. Ask your local IBEW chapter or the Alberta Safety Codes Council for recommendations
+- **Professional Engineer (P.Eng.)** — for stamped electrical drawings and load calcs. Budget $8-15K
+- **Charger distributors** — ABB, Tritium, and ChargePoint all have Canadian reps. Request formal quotes.
+- **Battery vendors** — Canadian Solar EP Cube, BYD Battery-Box, SimpliPhi — get quotes for 100kWh systems
+
+**Documents to Create:**
+- [ ] **Load Calculation Summary** (use the Grok template as starting point, have P.Eng. validate)
+- [ ] **Preliminary Site Layout Sketch** (parking spots, charger locations, battery pad, conduit run to panel)
+- [ ] **Equipment Comparison Matrix** (3 charger brands, 3 battery options — price, specs, warranty, lead time)
+
+---
+
+### Week 7-8: Grant Application & LOI Negotiation
+
+**Key Decisions:**
+- Which grant to apply to first? ZEVIP (federal) or EVCP (provincial)?
+- LOI terms: what revenue share, what lease length, who pays for electrical upgrade?
+
+**Documents to Create:**
+- [ ] **Grant Application Package** (see checklist below)
+- [ ] **Site Host LOI Template** (see template below)
+- [ ] **Draft Revenue-Share Agreement** (get a lawyer to review — budget $2-5K)
+
+**Who to Talk To:**
+- **NRCan ZEVIP** — submit application or confirm intake window
+- **Your top 2-3 site hosts** — negotiate LOI terms
+- **Business lawyer** — to draft/review LOI and revenue-share agreement. Use an Alberta business lawyer familiar with commercial leases. Budget $2-5K.
+
+---
+
+### Week 9-10: Site Qualification & Engineering
+
+**Tasks:**
+- [ ] P.Eng. completes stamped load calc and site drawings for top 1-2 sites
+- [ ] Utility confirms service upgrade cost and timeline for top sites
+- [ ] Finalize charger and battery vendor quotes
+- [ ] Refine financial model with real costs (not estimates)
+
+---
+
+### Week 11-12: Close LOIs & Submit Grant
+
+**Milestone Targets:**
+- [ ] **1-2 signed LOIs** from site hosts
+- [ ] **1 grant application submitted** (ZEVIP or EVCP)
+- [ ] **Firm equipment quotes** from 2+ vendors
+- [ ] **Utility confirmation** of service upgrade cost and timeline for site #1
+- [ ] **Updated financial model** with real numbers → ready for investor conversations
+
+---
+
+## Week 1 Exact To-Do List
+
+> [!TIP]  
+> Print this. Check items off. This is your entire first week.
+
+1. **Register an Alberta corporation** — Alberta Corporate Registry, online, $275-$500. Name: "Renewable Battery Solutions Ltd." or similar
+2. **Open a business bank account** — you need this for grant applications. ATB Financial or RBC.
+3. **Call EPCOR (Edmonton) or ENMAX (Calgary)** — ask: *"What's the process, cost, and timeline to add 80-150 kW of commercial 3-phase load to an existing commercial property?"* Write down everything.
+4. **Call NRCan ZEVIP program office** (1-800-387-2000) — ask: *"When is your next intake? What are the eligibility requirements? Can I apply as a new company?"*
+5. **Download the ZEVIP application guide** from NRCan website. Read it cover to cover. Highlight what you need.
+6. **Search the NRCan EV station locator** (+ PlugShare app)** — map every existing DC fast charger within 50 km of your target area. Identify *gaps* in coverage.
+7. **Drive your target corridor** (QE2 or Yellowhead or Whitemud) — photograph 10 candidate sites. Note: parking layout, panel location (outside wall), traffic volume, nearby amenities.
+8. **Create your Site Host Pitch One-Pager** (use template below)
+9. **Build a simple financial model** in Google Sheets: CapEx, monthly revenue at 8%/12%/20% utilization, demand charge savings, payback period. One page.
+10. **Identify and call 5 independent gas station owners** along your target corridor. Use the cold-call script below.
+11. **Find a licensed Master Electrician** experienced with commercial EV installs. Ask for a 30-minute consultation ($0-$150). Get their assessment of typical service upgrade costs in your area.
+12. **Email 3 charger distributors** (ABB, Tritium, ChargePoint) — request pricing for 4× 100-150kW DC fast chargers, delivered to Edmonton/Calgary. Ask about lead time.
+13. **Set up a simple CRM** — even a Google Sheet: site name, owner, phone, email, status, notes. Track every conversation.
+14. **Read 3 case studies** of Canadian EV charging deployments (FLO, Ivy Charging, Petro-Canada). Note what worked and what didn't.
+
+---
+
+## Questions to Ask Site Hosts (First 3-5 Meetings)
+
+Use these in conversation — don't read them like a survey. **Listen more than you talk.**
+
+### Understanding Their Situation
+1. *"How many cars come through your lot on a typical day? What about weekends?"*
+2. *"Have you noticed any EVs stopping here or nearby? Has anyone ever asked if you have charging?"*
+3. *"What's your current electrical setup here? Do you know if it's single-phase or three-phase? What size is your main breaker?"* (Don't worry if they don't know — you'll check the panel later.)
+4. *"Do you own this property or lease it? How long is your lease?"*
+
+### Gauging Interest
+5. *"Have you ever thought about adding EV charging here?"*
+6. *"What if someone installed chargers at no cost to you, maintained everything, and paid you a monthly share of the revenue? Would that interest you?"*
+7. *"What would your concerns be about having EV charging equipment on your property?"*
+
+### Logistics
+8. *"Do you have 4-6 parking spots that are underutilized — maybe at the edge of your lot?"*
+9. *"Where's your electrical panel? Can I take a look?"* (Bring a phone — photograph the panel label.)
+10. *"Would you be willing to sign a Letter of Intent if the economics looked right? Nothing binding — just a statement of interest so we can apply for government grants together."*
+
+---
+
+## Cold-Call / Email Script
+
+### Phone Script (90 seconds max)
+
+> *"Hi, my name is (Your Name). I run a company called Renewable Battery Solutions — we install EV fast-charging stations at commercial properties across Alberta.*
+>
+> *I'm reaching out because your location on (street/highway) looks like a strong fit for an EV charging site. Here's the quick version:*
+>
+> *We install the chargers, we pay for the equipment, we handle all the maintenance. There's zero cost to you. In exchange, you'd receive (10-15)% of the charging revenue as a monthly payment — and you'd get more foot traffic from EV drivers who stop to charge and come inside.*
+>
+> *The government is covering 40-50% of the hardware cost through grants right now, so we're moving quickly to lock in the best locations before the funding runs out.*
+>
+> *Would you be open to a 15-minute conversation this week? I can come to you — I just want to take a quick look at your lot and electrical setup."*
+
+### Email Version
+
+**Subject:** Free EV Charging Revenue for (Business Name) — No Cost to You
+
+> Hi (Owner Name),
+>
+> My name is (Your Name), and I'm the founder of Renewable Battery Solutions. We install EV fast-charging stations at commercial properties in the Edmonton/Calgary area.
+>
+> I noticed your property at (address) and think it could be a strong location for EV charging. Here's how it works:
+>
+> - **We pay for everything** — chargers, installation, permitting, maintenance
+> - **You pay nothing** — zero upfront cost, zero ongoing cost
+> - **You earn monthly revenue** — a percentage of every charging session
+> - **You attract new customers** — EV drivers spend 20-40 minutes charging and often shop or eat nearby
+>
+> The Alberta and federal governments are currently offering grants that cover 40-50% of hardware costs, so we're actively looking for the best locations before the funding window closes.
+>
+> Would you be open to a brief call or meeting this week? I'd love to learn more about your property and see if it's a good fit.
+>
+> Best regards,
+> (Your Name)
+> Founder, Renewable Battery Solutions
+> (Phone) | (Email)
+
+---
+
+## Technical Prep Checklists
+
+### Before Speaking to a City Permitting Office
+
+You need:
+- [ ] **Alberta corporation registration** (certificate of incorporation)
+- [ ] **Site address** and legal land description
+- [ ] **Preliminary site plan** showing charger and battery locations on the lot (sketch is fine for initial inquiry — they'll tell you what they need)
+- [ ] **Load calculation summary** — total kW demand, net demand after battery, service size required
+- [ ] **Equipment spec sheets** from charger and battery manufacturers (download from vendor websites)
+- [ ] Know the **zoning** of your site (commercial, industrial, mixed-use) — check the city's zoning map online
+
+**What to ask the permitting office:**
+- *"Do I need a development permit for EV charging equipment on a commercially-zoned property?"*
+- *"What triggers a building permit vs. just an electrical permit?"*
+- *"Does battery storage require any additional permits (fire, environmental)?"*
+- *"What's your typical turnaround time for commercial electrical permits?"*
+
+### Before Speaking to an Electrician / Engineering Firm
+
+You need:
+- [ ] **Site address + photos** of the existing electrical panel (close-up of the panel label showing amperage, voltage, phases)
+- [ ] **Equipment spec sheets** (charger input voltage, amperage, power rating)
+- [ ] **Load calculation draft** (they'll refine it, but having a starting point saves billable hours)
+- [ ] **Site layout sketch** showing distance from panel to proposed charger locations
+- [ ] **Budget range** — tell them upfront you're budgeting $8-15K for engineering and $30-50K for electrical install
+
+**What to ask:**
+- *"Can this panel support an additional 80-150 kW of load, or do we need a service upgrade?"*
+- *"If we need a service upgrade, what's the estimated cost and timeline?"*
+- *"Can you provide stamped drawings for the city permit application? What's your fee?"*
+- *"Have you done any EV charger installs before?"* (If not, find someone who has.)
+
+### Before Speaking to a Grant Program (ZEVIP / EVCP)
+
+You need:
+- [ ] **Incorporated company** with a business number (CRA)
+- [ ] **Site location** (even tentative — most grants allow changes before final reporting)
+- [ ] **Equipment quotes** from at least one vendor (even preliminary)
+- [ ] **Basic project budget** — total CapEx, amount of grant requested, your co-investment
+- [ ] **Environmental / climate impact estimate** — tonnes of CO₂ displaced (use NRCan's calculator or estimate: 1 EV charging session ≈ 2-4 kg CO₂ avoided vs. gasoline)
+- [ ] **Letters of support** — even a 1-paragraph email from a site host saying "we're interested in hosting" helps
+
+---
+
+## Top 5 Mistakes & How to Avoid Them
+
+### 1. Picking a Site Without Checking Grid Capacity
+
+> **The mistake:** You sign an LOI, apply for grants, order equipment... then discover the site has a 100A single-phase panel that can't support *any* fast chargers. Utility upgrade: $50-80K and 6 months.
+
+**How to avoid it:** **Check the electrical panel BEFORE you pitch the site host.** Drive by, look at the meter/panel on the outside wall, photograph the label. If it says "100A" or "single-phase" — move on unless the utility confirms a cheap upgrade.
+
+### 2. Overestimating Year 1 Utilization
+
+> **The mistake:** You project 30% utilization and promise investors $288K/year/site. Reality: 8-12% utilization in Year 1 (Alberta has ~1,500 EVs total). Revenue is $70-110K. You miss your targets and lose investor trust.
+
+**How to avoid it:** **Model three scenarios** (8%, 12%, 20% utilization) and lead with the conservative one. Show investors you're honest about timing, and that the economics *still work* at low utilization thanks to demand charge savings and grid services revenue.
+
+### 3. Signing a Bad Site Agreement
+
+> **The mistake:** You do a verbal handshake deal with a gas station owner. You install $200K of equipment. Two years later, the owner sells the property and the new owner wants you out. You have no legal recourse.
+
+**How to avoid it:** **Get a written agreement** with a minimum 7-10 year term, right of first refusal if the property is sold, and clear terms for equipment removal. Spend $2-5K on a lawyer — it's the best money you'll ever spend.
+
+### 4. Ignoring Alberta Winter
+
+> **The mistake:** Your charger screens freeze at -30°C, the battery loses 25% capacity in extreme cold, and the concrete pad cracks from frost heave. Equipment fails in January — your busiest month for highway travel.
+
+**How to avoid it:** Specify **cold-rated equipment** (-40°C operating range), budget for **heated battery enclosures** ($5-10K extra), use **frost-protected concrete pads** (48" depth for frost line in Edmonton), and confirm your charger warranty covers cold-weather failures.
+
+### 5. Applying for Grants Without a Real Site
+
+> **The mistake:** You submit a ZEVIP application with "TBD" for the site location. The application is deprioritized or rejected because the review committee can't assess feasibility.
+
+**How to avoid it:** **Have at least a signed LOI** (even non-binding) before you submit your grant application. Include the site address, a photo, and a support letter from the host. Grant reviewers fund *projects*, not *ideas*.
+
+---
+
+## Site Host LOI Template
+
+> **LETTER OF INTENT — EV CHARGING STATION**
+>
+> Date: ___________
+>
+> **Between:**
+> Renewable Battery Solutions Ltd. ("RBS")
+> (Your address)
+>
+> **And:**
+> (Site Host Business Name) ("Host")
+> (Host address)
+>
+> **RE: Installation of EV Fast-Charging Equipment at (Site Address)**
+>
+> This Letter of Intent expresses the mutual interest of RBS and Host in the installation and operation of electric vehicle fast-charging equipment at the Host's property located at the above address.
+>
+> **Proposed Terms (Non-Binding):**
+> 1. RBS will install, own, and maintain 4-6 DC fast-charging stations and associated battery storage equipment at the Host's property
+> 2. RBS will bear all costs of equipment, installation, permitting, and ongoing maintenance
+> 3. Host will provide designated parking spaces and access to electrical infrastructure
+> 4. Host will receive (10-15)% of gross charging revenue as a monthly payment
+> 5. Proposed term: 10 years with option to renew
+> 6. RBS will maintain comprehensive insurance covering all installed equipment
+>
+> **This LOI is non-binding** and does not create any legal obligation. A definitive agreement will be negotiated and executed prior to any installation.
+>
+> ___________________________
+> (Your Name), CEO, Renewable Battery Solutions Ltd.
+>
+> ___________________________
+> (Host Name), (Title), (Host Business)
+
+---
+
+## Site Host Pitch One-Pager (Template)
+
+> ### Earn Monthly Revenue from EV Charging — At Zero Cost to You
+>
+> **Renewable Battery Solutions** installs and operates EV fast-charging stations at commercial properties across Alberta.
+>
+> **How It Works:**
+> - We install 4-6 DC fast chargers at your property
+> - We pay 100% of the cost — equipment, installation, permits, maintenance
+> - You pay nothing — ever
+> - You receive **(10-15)%** of all charging revenue as a monthly payment
+>
+> **What You Get:**
+> - **Monthly passive income** — charging revenue deposited directly to your account
+> - **More customers** — EV drivers spend 20-40 minutes on-site while charging
+> - **Property value increase** — EV-ready properties are increasingly desirable
+> - **Green credentials** — demonstrate sustainability to your community
+>
+> **What We Handle:**
+> - All equipment and installation costs
+> - Permitting and electrical work
+> - 24/7 monitoring and maintenance
+> - Customer payment processing
+> - Insurance on all installed equipment
+>
+> **Why Now?**
+> The Government of Canada (ZEVIP) and Province of Alberta are currently offering grants covering 40-50% of EV charging hardware costs. These programs have limited funding and defined intake windows. Properties secured now will be first to benefit.
+>
+> **Next Step:** A 15-minute meeting to visit your property and assess feasibility. No commitment required.
+>
+> **Contact:**
+> (Your Name) | (Phone) | (Email)
+> Renewable Battery Solutions Ltd. | Edmonton, AB
+
+
+
+======================================================
+SOURCE DOCUMENT: rbs_analysis.md
+======================================================
+
+# RBS (Renewable Battery Solutions) — Deep Analysis
+
+A critical review of the **Comprehensive Business Plan** and the **Investor Pitch (4-Section Business Case)**.
+
+---
+
+## 🟢 What I Agree With / Strengths
+
+### 1. The Three-Pillar Integration Is Genuinely Compelling
+The core thesis — that EV charging, BaaS, and second-life battery aggregation feed each other — is **the strongest idea in both documents**. The cross-selling logic (charging site owners → BaaS prospects, aging BaaS batteries → second-life replacements) is sound and creates real defensibility. Very few competitors would attempt all three simultaneously.
+
+### 2. Demand Charge Optimization Is a Real, Underappreciated Opportunity
+The insight that the real margin in EV charging comes from **energy cost optimization** (not charging fees) is accurate and shows genuine market understanding. Most EV charging companies are bleeding money on demand charges. This is a legitimate competitive wedge.
+
+### 3. BaaS Model Addresses a Real Adoption Barrier
+Converting battery storage from CapEx to OpEx via a subscription model is a **proven playbook** (see: Nuvve, Stem Inc., Tesla Energy). The documents correctly identify that industrial customers want cost reduction but won't accept $300K+ upfront costs.
+
+### 4. Second-Life Battery Market Timing Is Right
+The observation that 1M+ EV batteries will enter end-of-life annually by 2030 while recycling capacity is only ~50K/year is directionally correct. There is a genuine whitespace for aggregation platforms in Canada.
+
+### 5. Government Grant Awareness Is Strong
+Both documents show good understanding of the ZEVIP program, provincial grants, and Clean Tech ITC. Using grants to de-risk CapEx is a legitimate strategy and the 40-50% subsidy claim is realistic for EV charging hardware.
+
+---
+
+## 🔴 Critical Holes & Problems
+
+### 1. The Two Documents Contradict Each Other — Significantly
+
+> [!CAUTION]
+> The financial projections between the two documents are **inconsistent**, which would be an immediate red flag for any investor.
+
+| Metric | Business Plan | Investor Pitch |
+|---|---|---|
+| **Year 1 Total Revenue** | $515K | $895K (74% higher!) |
+| **Year 1 Pillar 1 Revenue** | $84K (2 sites) | $550K (2 sites) |
+| **Year 1 Pillar 3 Revenue** | $375K (50 batteries) | $25K (10 units) |
+| **Year 3 Total Revenue** | $5.99M | $8.525M |
+| **Year 5 Exit Valuation** | $56-71M (EBITDA based) | $300-600M (revenue based) |
+| **Investor Equity for $3.5M** | 15.3% | 18% |
+| **Year 5 Investor Return** | 2.5-3.1x MOIC | 8.5-17x |
+| **Year 5 Profit Margin** | 30% EBITDA | 66% profit margin |
+| **BaaS Payback** | 18-24 months | 3 years |
+
+**These can't both be right.** An investor seeing both documents would lose trust immediately. You need **one consistent set of numbers** across all materials.
+
+### 2. Year 5 Profit Margins Are Fantasy-Level (Investor Pitch)
+
+The Investor Pitch projects **66% profit margins** by Year 5 ($20.74M profit on $31.24M revenue). This is extremely aggressive. For context:
+- **Tesla Energy** runs ~25% gross margins
+- **Enphase Energy** (best-in-class) achieves ~42% gross margins
+- **SaaS companies** average 65-75% gross margins, but RBS is a *hardware-heavy* business
+
+A hardware + services business achieving 66% margins would be unprecedented. The Business Plan's 30% EBITDA margin is much more realistic but still optimistic for a Year 5 company.
+
+### 3. Alberta's EV Market Is Dramatically Overstated
+
+> [!WARNING]
+> The documents claim "only ~1,000 EVs in Alberta as of 2025" but then project massive charging revenue. This creates a math problem.
+
+**Reality check:** 1,000 EVs across 2 charging sites generating $84K-$550K annually? Even with 15-20% growth, you'd have ~1,500-2,000 EVs by end of 2026. The utilization rate needed to hit these revenue numbers doesn't work with the stated EV population.
+
+The documents also conflate "stations planned" with "stations needed." 325 new stations for 1,000 EVs means **each station serves ~3 EVs**. That's economically unviable, which actually undermines the claim that more stations are needed.
+
+### 4. OEM Partnerships Are Claimed But Not Evidenced
+
+Both documents reference "exclusive partnerships with OEMs (Tesla, Nissan, BMW)" for second-life battery supply. But:
+- No LOIs from OEMs are mentioned (only generic "OEM partnership inquiries" in the appendix)
+- Tesla has its own battery recycling program and **does not typically partner with small startups for battery supply**
+- Calling these "exclusive" partnerships without signed agreements is a credibility risk
+- An investor will ask: "Show me the signed agreement with Tesla" — and if it doesn't exist, trust is broken
+
+### 5. Founding Team Has No Energy Industry Experience
+
+> [!IMPORTANT]
+> The CEO's background is in **event logistics and operations management**. The CTO has solar engineering experience but no named prior company or quantifiable achievements.
+
+For a $3.5M raise in energy infrastructure, investors will compare you to teams led by:
+- Former utility executives
+- Battery engineers from Tesla/Panasonic/CATL
+- People who've deployed grid-scale storage
+
+The "10+ years of event logistics" actually **hurts** more than helps when listed as the primary credential. It signals you might not understand the technical complexity of battery management, grid interconnection, and utility negotiations.
+
+### 6. No Competitor Response Analysis
+
+Both documents list competitors (ChargePoint, Tesla Supercharger, Petro-Canada, Aggreko, Nuvve, ABB) but never address:
+- What happens when **ChargePoint adds battery co-location**? (They're already exploring it)
+- What happens when **Tesla expands its Energy division** into Alberta?
+- What stops **Aggreko** from doing exactly what you're doing — they already have the infrastructure and customer base?
+
+The documents assume competitors will stay in their current lanes. They won't.
+
+### 7. Second-Life Battery Warranty Is a Massive Unaddressed Liability
+
+The Business Plan promises a **10-year warranty on all second-life batteries sold**. This is extraordinary and potentially company-killing:
+- You're buying batteries that have already been used for 8-10 years in EVs
+- Then promising they'll work for **another 10 years**
+- That's a 20-year total battery life, which exceeds most manufacturers' original warranties
+- If even 5% of batteries fail within the warranty period, the replacement costs could wipe out years of profit
+- No mention of warranty reserves, insurance costs, or failure rate assumptions
+
+### 8. "100+ Customer Conversations" Is Not Validation
+
+Both documents cite "100+ customer conversations" and "15+ warm leads per pillar." But:
+- Conversations ≠ Signed contracts or even LOIs with commitment
+- 15 warm leads across a "50,000+ industrial site" TAM is a 0.03% conversion rate so far
+- No mention of any **paid** pilot or **signed agreement**
+- Investors need to see: "Customer X signed a 3-year BaaS contract at $Y/month" — not just conversations
+
+### 9. $3.5M Series A at $19.4M Pre-Money Is Aggressive for Pre-Revenue
+
+> [!WARNING]
+> Raising at a ~$19M pre-money valuation with **zero revenue, zero deployed sites, and no signed customers** is a very aggressive ask.
+
+Typical pre-revenue cleantech Series A valuations in Canada range from $5-12M pre-money. The $19.4M valuation implies the business already has significant traction, IP, or team pedigree — none of which are demonstrated.
+
+---
+
+## 🟡 Things I'd Change or Improve
+
+### 1. Unify Your Numbers — Pick One Model
+Create a **single financial model** that both documents reference. The contradictions between the Business Plan and Investor Pitch are the #1 credibility killer. Use conservative numbers and include a sensitivity analysis (best/base/worst case) directly in the body, not just the appendix.
+
+### 2. Start With ONE Pillar, Not Three
+The integration story is compelling *strategically*, but operationally it's a red flag. You're asking a pre-revenue company to execute three complex hardware businesses simultaneously. **My recommendation:**
+- **Launch with Pillar 1 (EV Charging + Battery)** only — it has the shortest payback, most government support, and clearest path to revenue
+- Use Pillar 1 success to **prove the team and the technology**
+- Then expand to Pillar 2 (BaaS) in Year 2 using EV charging customers as leads
+- Then layer in Pillar 3 (Second-Life) in Year 3+ when supply actually materializes
+
+This phased approach is more credible and more fundable.
+
+### 3. Fix the Team Narrative
+- **Reframe** the CEO's background: don't lead with "event logistics." Instead, emphasize "complex multi-stakeholder operations management" and any specific energy-adjacent experience
+- **Add technical depth** to the CTO bio — name the company, cite specific projects, quantify achievements
+- **Prioritize hiring** a VP/Director with **direct energy storage industry experience** early (before Series A closes, if possible)
+- Consider bringing on a **technical advisor** from a battery OEM or utility
+
+### 4. Replace "Exclusive OEM Partnerships" With Honest Language
+- Remove the word "exclusive" unless you have signed exclusive supply agreements
+- Instead, say: "In active discussions with OEMs including [names] for battery supply sourcing"
+- Get at least **one signed LOI** from a real supply source before fundraising
+
+### 5. Reduce the Exit Valuation Claims
+- The Business Plan's $56-71M exit is somewhat reasonable (8-10x EBITDA on $7M EBITDA)
+- The Investor Pitch's $300-600M is not credible for a Year 5 company. Drop this or caveat it heavily
+- Using Nuvve's 24x revenue multiple as a comp is misleading — Nuvve is publicly traded with different dynamics, and its stock has actually **crashed significantly** since its SPAC listing (now trading far below that $1.2B valuation)
+- Use more conservative comps: 3-5x revenue is realistic for a profitable energy infrastructure company
+
+### 6. Add Concrete Pilot Data
+Before approaching investors, you need:
+- At least **1 paid pilot deployment** for Pillar 1 or 2
+- Real operational data (charging revenue, demand charge savings, uptime %)
+- A signed **customer letter** saying "We'd expand to X more sites if RBS can deliver"
+- This converts the entire plan from "theoretical" to "proven at small scale"
+
+### 7. Address the Alberta EV Market Honestly
+- Acknowledge that the EV population is small now
+- Position the opportunity as: "We're building infrastructure **ahead of demand** to lock in prime locations"
+- Model early-year revenue conservatively (utilization will be low)
+- Show the revenue ramp tied to EV adoption curves, not aspirational targets
+
+### 8. Add a Detailed Risk Scenario on the Warranty
+- Model what happens if 5%, 10%, and 15% of second-life batteries fail within the warranty period
+- Calculate warranty reserve requirements
+- Consider offering a **shorter warranty** (3-5 years) or a performance guarantee instead of a flat 10-year full warranty
+- This alone could save the company from bankruptcy
+
+### 9. Include Working Capital / Cash Flow Projections
+Both documents show revenue and EBITDA but **no cash flow projections**. For a hardware business:
+- You buy batteries and chargers **upfront** but receive BaaS revenue **monthly over 10+ years**
+- This creates massive working capital needs
+- Show a monthly cash flow waterfall for at least Year 1-2
+- Show when you'd need the **next round of funding** (Series B timing)
+
+### 10. Differentiate the Documents' Purposes
+- The **Business Plan** should be the comprehensive, detailed document (it mostly is, but needs the fixes above)
+- The **Investor Pitch** should be a **concise, compelling narrative** — right now it's 292 lines and reads like a second business plan. Cut it to 10-15 slides max. Lead with the problem, show the solution, prove the economics with ONE set of numbers, and close with the ask
+
+---
+
+## Summary Scorecard
+
+| Category | Score | Notes |
+|---|---|---|
+| **Market Opportunity** | 7/10 | Real market, but overstated size and timing |
+| **Business Model** | 8/10 | Integration thesis is genuinely strong |
+| **Financial Projections** | 3/10 | Internal contradictions, fantasy margins in pitch |
+| **Team** | 4/10 | Lacks energy-specific industry experience |
+| **Competitive Strategy** | 5/10 | Good awareness, but no response-to-competition plan |
+| **Customer Validation** | 3/10 | Conversations ≠ customers; need paid pilots |
+| **Risk Analysis** | 6/10 | Comprehensive list, but misses warranty & cash flow risks |
+| **Investor Readiness** | 4/10 | Numbers conflict, valuation aggressive, no traction |
+
+### Bottom Line
+The **core idea is strong** — integrating EV charging, BaaS, and second-life batteries into one platform is genuinely differentiated. But the execution materials aren't investor-ready yet. The conflicting numbers between the two documents is the most urgent fix, followed by getting at least one paid deployment to prove the economics. Fix these issues and this becomes a much more fundable opportunity.
+
+
+
+======================================================
+SOURCE DOCUMENT: zevip_qualification_guide.md
+======================================================
+
+# ZEVIP Grant Qualification — RBS Action Plan
+
+> [!CAUTION]
+> **The current Call for Proposals closes March 20, 2026 — 14 days from now.**
+> If you miss this window, you wait for the next intake (timing unknown). This section is structured as a sprint to submit before the deadline.
+
+---
+
+## What Is ZEVIP?
+
+The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by Natural Resources Canada (NRCan). It funds the deployment of EV charging infrastructure across Canada. The "Public Places" stream is the one relevant to RBS.
+
+- **Portal:** [Transportation and Fuels Decarbonisation Programs](https://fuels-decarbonisation-carburants.canada.ca)
+- **Program page:** [NRCan ZEVIP](https://natural-resources.canada.ca/energy-efficiency/transportation-alternative-fuels/zero-emission-vehicle-infrastructure-program/21876)
+- **Planning Map:** [EV Charging Planning Map](https://app.geo.ca/en-ca/map-browser/record/fb7dd0e4-2feb-4fc1-96e7-aa626109f09c)
+
+---
+
+## How Much Can RBS Get?
+
+### Per-Charger Funding Caps
+
+| Charger Power | Max Funding Per Charger |
+|---|---|
+| 20-49 kW | $15,000 |
+| 50-99 kW | $50,000 |
+| **100-199 kW** | **$75,000** ← Your target range |
+| 200 kW+ | $100,000 |
+| Level 2 (co-located) | $5,000 per connector |
+
+### RBS Pilot Site Calculation
+
+| Your Setup | Funding |
+|---|---|
+| **4× 100 kW DC fast chargers** | 4 × $75,000 = **$300,000** |
+| 2× Level 2 co-located connectors (optional) | 2 × $5,000 = $10,000 |
+| **Maximum ZEVIP funding for this site** | **$300,000-$310,000** |
+| **But capped at 50% of total project cost** | If CapEx = $200K → max grant = **$100,000** |
+
+> [!IMPORTANT]
+> ZEVIP covers up to **50% of total project costs** (75% for Indigenous-led projects). So even though per-charger caps are generous, your actual grant is capped at half your total CapEx.
+
+### What This Means for Your Budget
+
+| Item | Cost | ZEVIP Covers (50%) |
+|---|---|---|
+| 4× 100 kW DC chargers | $120,000-$160,000 | $60,000-$80,000 |
+| 100 kWh battery system | $40,000-$60,000 | $20,000-$30,000 |
+| Installation + electrical | $30,000-$50,000 | $15,000-$25,000 |
+| Engineering (P.Eng. drawings) | $8,000-$15,000 | $4,000-$7,500 |
+| Permits | $3,000-$5,000 | $1,500-$2,500 |
+| **Total CapEx** | **$201,000-$290,000** | **$100,500-$145,000** |
+| **Your out-of-pocket (after ZEVIP)** | **$100,500-$145,000** | — |
+
+---
+
+## Eligibility Checklist — Does RBS Qualify?
+
+### Applicant Requirements
+
+| Requirement | Status | What You Need to Do |
+|---|---|---|
+| Canadian business or organization | ⚠️ **Need to incorporate** | Register an Alberta corporation — do this **today** ($275 online) |
+| Business number (CRA) | ⚠️ **Need to register** | Apply for BN immediately after incorporation (online, same day) |
+| Project in Canada | ✅ | Edmonton/Calgary area |
+| Willing to sign contribution agreement with NRCan | ✅ | Standard — just agree to terms |
+| Can complete project within **30 months** of agreement signing | ✅ | Your timeline is 6-12 months |
+
+### Site / Technical Requirements (Public Places Stream)
+
+| Requirement | RBS Status | Notes |
+|---|---|---|
+| At least **1 fast charger ≥ 100 kW** | ✅ | You're planning 4× 100 kW |
+| **Total site output ≥ 150 kW** | ✅ | 4× 100 kW = 400 kW total |
+| Site within **5 km of a road** on the Planning Map | ⚠️ **Must verify** | Check the map for your target sites |
+| Site in a **Priority Zone (Rank 4 or 5)** | ⚠️ **Must verify** | Higher rank = more competitive application |
+| **Public access 24/7** | ⚠️ **Depends on site** | Gas stations usually yes; some plazas lock lots at night |
+| Chargers must be **new** (not refurbished) | ✅ | You're buying new |
+| Chargers must be **purchased** (not leased) | ✅ | RBS owns the equipment |
+| Chargers must be **networked** (OCPP compliant) | ⚠️ **Verify with vendor** | Confirm OCPP support when requesting quotes |
+| Chargers must be **CSA or UL certified** for Canada | ⚠️ **Verify with vendor** | All major brands (ABB, Tritium, ChargePoint) are certified |
+
+### Expenses — What's Eligible and What's Not
+
+| Eligible (ZEVIP will reimburse) | NOT Eligible |
+|---|---|
+| Charger hardware (purchase only) | Land purchase or lease costs |
+| Battery storage hardware | Legal fees |
+| Electrical installation | Ongoing electricity costs |
+| Engineering and professional services | Networking/software subscription fees |
+| Permits and licensing | Marketing costs |
+| Environmental assessments | Salaries / operating costs |
+| Shipping and delivery | Equipment leasing costs |
+
+> [!WARNING]
+> **Your battery co-location** is eligible as capital equipment. But your ongoing **energy management SaaS revenue** and **demand charge savings** are NOT grant-funded activities — they're your business model *after* deployment. Don't confuse the two in your application.
+
+---
+
+## Your Application — What to Submit
+
+### Required Documents
+
+| Document | Do You Have It? | Action Required |
+|---|---|---|
+| **Completed application form** (online portal) | ❌ | Fill out on ZEVIP portal — allow 4-6 hours |
+| **Project description** | ❌ | Write 2-3 pages (see template below) |
+| **Project budget** | ❌ | Itemized CapEx breakdown (use table above) |
+| **Equipment quotes** | ❌ | Get 2-3 vendor quotes ASAP (email ABB, Tritium, ChargePoint **today**) |
+| **Site location + map** | ❌ | Google Maps screenshot + Planning Map rank |
+| **Site host letter of support / LOI** | ❌ | Even a 1-paragraph email from a site owner helps |
+| **Certificate of incorporation** | ❌ | Incorporate **this week** |
+| **CRA business number** | ❌ | Apply immediately after incorporation |
+| **CO₂ impact estimate** | ❌ | Calculate below |
+| **Project timeline (Gantt or milestones)** | ❌ | Use a simple table (see template below) |
+
+### CO₂ Impact Calculation
+
+ZEVIP applications are scored partly on environmental impact. Here's a simple calculation:
+
+```
+Conservative assumptions:
+- 4 chargers × 100 kW × 10% utilization × 24 hrs = 960 kWh/day
+- Annual: 960 × 365 = 350,400 kWh/year
+- Each kWh of EV charging displaces ~0.5 kg CO₂ (vs. gasoline equivalent)
+- Annual CO₂ displaced: 350,400 × 0.5 = 175,200 kg = ~175 tonnes CO₂/year
+- Over 10-year equipment life: ~1,750 tonnes CO₂
+```
+
+Use **175 tonnes CO₂/year** in your application. It's conservative and defensible.
+
+---
+
+## Project Description Template (2-3 Pages)
+
+Use this structure for the ZEVIP application narrative:
+
+### Section 1: Project Overview (½ page)
+>
+> Renewable Battery Solutions Ltd. ("RBS") proposes to install a 4-station DC fast-charging site with co-located battery storage at (site address) in (Edmonton/Calgary), Alberta. The project will deploy four (4) 100 kW CCS-compatible DC fast chargers and a 100 kWh lithium iron phosphate (LFP) battery system for demand charge optimization, serving the public 24 hours a day, 7 days a week.
+>
+> Total project cost: $(amount). ZEVIP funding requested: $(50% of total).
+
+### Section 2: Need & Gap Analysis (½ page)
+>
+> The proposed site is located in a Priority Zone ranked (4/5) on the NRCan EV Charging Planning Map, within (X) km of (highway/road name). The nearest existing DC fast charger is (X) km away at (location).
+>
+> Alberta currently has approximately (X) registered EVs with 15-20% annual growth projected. The (city) region has (X) existing public DC fast chargers, representing a charger-to-EV ratio of (X:1) — well below the recommended 1:10 ratio for adequate coverage.
+
+### Section 3: Technical Approach (½ page)
+>
+> Equipment specifications:
+>
+> - Chargers: 4× (Brand/Model), 100 kW, CCS1/CCS2 connectors, OCPP 1.6J compliant, CSA/UL certified
+> - Battery: 100 kWh LFP system, (Brand/Model), for peak demand shaving
+> - Networking: (Platform name), cloud-monitored, payment-enabled
+>
+> The co-located battery system will charge during off-peak hours and discharge during peak demand, reducing grid impact and operating costs while ensuring reliable fast-charging service.
+
+### Section 4: Project Timeline (¼ page)
+
+| Phase | Timeline | Milestone |
+|---|---|---|
+| Agreement signing | Month 0 | ZEVIP agreement executed |
+| Site preparation | Months 1-3 | Electrical upgrade, permits, concrete pad |
+| Equipment procurement | Months 2-4 | Chargers + battery ordered and delivered |
+| Installation + commissioning | Months 4-6 | Equipment installed, tested, connected to grid |
+| Public launch | Month 6 | Site open 24/7, fully operational |
+
+### Section 5: Sustainability & Impact (¼ page)
+>
+> Estimated annual CO₂ displacement: 175 tonnes (conservative, based on 10% utilization)
+> Over 10-year equipment life: 1,750 tonnes CO₂
+>
+> RBS is committed to the long-term operation and maintenance of this site. Revenue from charging fees and energy optimization ensures financial sustainability beyond the ZEVIP funding period.
+
+---
+
+## 14-Day Sprint to Submit
+
+> [!CAUTION]
+> **Deadline: March 20, 2026.** This plan assumes you start immediately.
+
+### Days 1-3 (March 6-8): Foundation
+
+- [ ] **Incorporate RBS** — Alberta Corporate Registry, online ($275)
+- [ ] **Apply for CRA Business Number** — online, same day as incorporation
+- [ ] **Create portal account** at [fuels-decarbonisation-carburants.canada.ca](https://fuels-decarbonisation-carburants.canada.ca)
+- [ ] **Open the EV Charging Planning Map** — check Priority Zone ranking for your top 3 target sites
+- [ ] **Email 3 charger vendors** (ABB, Tritium, ChargePoint) — request formal quotes for 4× 100 kW DC fast chargers, delivered to Edmonton. Tell them you need it **by March 14** for a grant application.
+- [ ] **Email 1-2 battery vendors** — request quote for 100 kWh LFP system
+
+### Days 4-7 (March 9-12): Site & LOI
+
+- [ ] **Cold-call your top 5 target sites** — use the script from the 90-day plan
+- [ ] **Visit top 2-3 sites** — photograph the parking lot, electrical panel, and surroundings
+- [ ] **Get a support letter or LOI from at least 1 site host** — even a 1-paragraph email: *"We confirm our interest in hosting EV charging equipment at our property at [address]. We understand there is no cost to us."* Signed by the owner.
+- [ ] **Verify 24/7 public access** for your target site
+- [ ] **Measure distance to Planning Map road segment** — must be within 5 km
+
+### Days 7-10 (March 12-15): Build Application
+
+- [ ] **Complete the online application form** — allow 4-6 hours; it's detailed
+- [ ] **Write project description** — use template above, 2-3 pages
+- [ ] **Build itemized budget** — list every CapEx line item with vendor quotes
+- [ ] **Calculate CO₂ impact** — use formula above
+- [ ] **Create project timeline** — simple table, 6-month deployment
+- [ ] **Gather supporting documents** — incorporation cert, BN, vendor quotes, site photos, LOI, Planning Map screenshot
+
+### Days 11-13 (March 16-18): Review & Polish
+
+- [ ] **Review entire application** — have someone else read it for clarity and completeness
+- [ ] **Verify all required fields** are filled in the portal
+- [ ] **Confirm vendor quotes** are attached as PDFs
+- [ ] **Confirm LOI / support letter** is attached
+- [ ] **Double-check eligibility** — all chargers ≥100 kW, total ≥150 kW, site in Priority Zone, 24/7 access
+
+### Day 14 (March 19): Submit
+
+- [ ] **Submit application via portal** — do NOT wait until March 20. Submit a day early in case of technical issues
+- [ ] **Save confirmation email / receipt** — screenshot the submission confirmation
+- [ ] **Celebrate** 🎉 — then get back to work on LOIs and site prep
+
+---
+
+## What Happens After Submission
+
+| Step | Timeline |
+|---|---|
+| NRCan reviews application | 30 business days (~6 weeks) |
+| Decision notification | ~Late April / May 2026 |
+| Contribution agreement signed | ~2 months after decision (June/July 2026) |
+| Project must be completed within | 30 months of agreement signing |
+| Reimbursement | After project completion and reporting |
+
+> [!IMPORTANT]
+> **ZEVIP reimburses AFTER you spend the money.** You must front the CapEx, then submit receipts for reimbursement. This means you need **working capital or investor funds** available before the grant money arrives. Factor this into your Series A conversations.
+
+---
+
+## Scoring — How to Make Your Application Competitive
+
+ZEVIP applications are scored on these criteria (focus your effort accordingly):
+
+| Factor | Weight | How to Maximize |
+|---|---|---|
+| **Location priority** | High | Site in Rank 4 or 5 zone on Planning Map |
+| **Gap in existing coverage** | High | Show nearest existing DC charger is far away |
+| **Charger power level** | Medium | 100 kW+ scores higher than Level 2 |
+| **24/7 public access** | Required | Must be unrestricted |
+| **Environmental impact** | Medium | Calculate CO₂ displacement clearly |
+| **Project readiness** | Medium | LOI, vendor quotes, timeline show you can execute |
+| **Multiple connectors** | Low-Medium | CCS1 + CCS2 compatibility preferred |
+| **Equity / accessibility** | Low-Medium | Sites serving underserved communities score higher |
+
+**Your strongest arguments:**
+
+1. Alberta is underserved for DC fast charging (large gap between planned and deployed)
+2. Battery co-location is innovative and improves grid impact
+3. 24/7 highway corridor location fills a critical gap
+4. Project is ready to execute within 6 months
+
+---
+
+## Immediate Action Items (Today)
+
+| # | Action | Time |
+|---|---|---|
+| 1 | **Incorporate RBS online** | 30 min |
+| 2 | **Open Planning Map** — check if your target sites are in Rank 4/5 zones | 30 min |
+| 3 | **Create portal account** at fuels-decarbonisation-carburants.canada.ca | 15 min |
+| 4 | **Email ABB, Tritium, ChargePoint** for charger quotes (tell them deadline is March 14) | 30 min |
+| 5 | **Call your best site host prospect** and ask for a support letter by March 12 | 15 min |
+
+
+
+======================================================
+SOURCE DOCUMENT: Renvolt_Engineering_Report.md
+======================================================
+
+<div align="center">
+<br><br><br><br><br>
+<img src="./public/logo-transparent-dark.png" width="300">
+<br><br><br>
+
+# PRELIMINARY ENGINEERING REPORT
+## Phase 1: Battery-Backed DC Fast Charging Infrastructure
+
+<br><br>
+<p><b>Prepared For:</b> ZEVIP Grant Application & Phase 1 Site Hosts</p>
+<p><b>Prepared By:</b> Renvolt Engineering</p>
+<p><b>Date:</b> March 14, 2026</p>
+<p><b>Status:</b> CONFIDENTIAL DRAFT</p>
+<br><br><br><br><br>
+</div>
+<div style="page-break-after: always;"></div>
+
+<br>
+
+**Standard:** Canadian Electrical Code (CEC) CSA C22.1-2024 | CSA C22.2 No. 107.1  
+**Jurisdiction:** Alberta, Canada — FortisAlberta / ATCO Electric service territory  
+**Architecture:** 150 kW Shared DC Bus / 100 kWh Local BESS Storage  
+
+---
+
+## 1. Design Philosophy
+
+This system is designed as a **zero-export, behind-the-meter** installation. The battery charges slowly from the grid (≤50 kW) and discharges rapidly (150 kW) into EV dispensers. From the utility's perspective, this site is a **predictable 50–70 kW commercial load** — not a generator.
+
+> [!IMPORTANT]
+> Zero-export configuration avoids the Generator Interconnection Application (GIA) requirement with FortisAlberta/ENMAX. The system qualifies as standard commercial service under AUC Rule 007 Section 3.
+
+### Operating Modes
+
+| Mode | Grid Draw | Battery State | DCFC Output |
+|------|-----------|---------------|-------------|
+| **Idle** (no vehicles) | 30–50 kW | Charging | 0 kW |
+| **Single vehicle** | 50 kW | Discharging | 150 kW (ZEVIP Compliant) |
+| **Multi-vehicle** (2 stalls) | 50 kW | Discharging | 75 kW × 2 (Dynamic Share) |
+| **Battery depleted** | 50 kW (passthrough) | Depleted — recharging | 50 kW (degraded mode) |
+| **Off-peak recovery** | 50 kW | Charging from 0–100% | 0 kW |
+
+**Key metric:** Full battery recovery from 0% to 100% = 100 kWh ÷ 50 kW = **2 hours**
+
+---
+
+## 2. System Architecture
+
+![Single-Line Architecture Diagram](./architecture.png)
+
+---
+
+## 3. Electrical Service Requirements
+
+### 3.1 Utility Service Sizing
+
+The grid connection only needs to support the **battery charge rate**, not the full 150 kW output. This is the core advantage.
+
+| Parameter | Without Battery | With Battery |
+|-----------|----------------|--------------|
+| Peak grid demand | **150 kW** | **50 kW** |
+| Service size needed | 600A @ 208V | **200A @ 208V** |
+| Estimated service upgrade cost | $80,000–$150,000 | **$0–$15,000** |
+| Monthly demand charge (@ $12/kW) | $1,800/mo | **$600/mo** |
+
+### 3.2 Service Specification
+
+| Item | Specification |
+|------|--------------|
+| **Voltage** | 208Y/120V, 3-phase, 4-wire |
+| **Service size** | 200A |
+| **Service entrance** | Overhead or underground per utility |
+| **Meter** | CT-rated revenue meter (utility-supplied) |
+| **Service conductor** | 3/0 AWG copper, TECK90, per CEC Table 2 |
+| **Grounding electrode** | Per CEC Rule 10-700 (min. #6 AWG copper to ground rod) |
+| **Bonding** | Per CEC Rule 10-600 series |
+
+### 3.3 Alternative: 600V Service
+
+For sites with existing 347/600V 3-phase service (common in Alberta industrial areas):
+
+| Item | Specification |
+|------|--------------|
+| **Voltage** | 347/600V, 3-phase, 4-wire |
+| **Service size** | 100A (50 kW at 600V = ~48A, 125% = 60A) |
+| **Service conductor** | #4 AWG copper, TECK90 |
+| **Advantage** | Lower current = smaller wire, lower losses |
+| **Disadvantage** | Requires step-down transformer if host building uses 208V |
+
+---
+
+## 4. Wire Sizing Calculations
+
+All calculations per **CEC 2024**, using **75°C copper conductors** and **CEC Table 2** ampacities.
+
+### 4.1 AC Side: Grid → Bidirectional Inverter
+
+**Load:** 50 kW continuous at 208V, 3-phase
+
+```
+Current (I) = P / (V × √3 × PF)
+           = 50,000 / (208 × 1.732 × 0.95)
+           = 50,000 / 342.1
+           = 146.1 A
+
+CEC Rule 8-104(5): Continuous load × 125%
+           = 146.1 × 1.25
+           = 182.6 A → Use 200A breaker
+```
+
+| Component | Specification | CEC Reference |
+|-----------|--------------|---------------|
+| **Conductors** | 3/0 AWG copper, TECK90 (200A @ 75°C) | Table 2 |
+| **Neutral** | 3/0 AWG copper (full-sized) | Rule 4-022 |
+| **Ground** | #6 AWG copper (bonding conductor) | Table 16 |
+| **Conduit** | 2" rigid metal conduit (RMC) or 2" TECK cable | Table D16 |
+| **Breaker** | 200A, 3-pole, 42 kAIC minimum | Rule 14-012 |
+| **Run length** | ≤ 25 m (voltage drop < 3%) | Rule 8-102 |
+
+**Voltage Drop Check (25 m run):**
+```
+Vd = (2 × L × I × R) / 1000
+   = (2 × 25 × 146 × 0.328) / 1000     [R for 3/0 AWG = 0.328 Ω/km]
+   = 2.39 V per conductor
+   = 2.39 / 208 × 100 = 1.15%           ✓ Under 3% limit
+```
+
+### 4.2 DC Side: Battery Bank → DC-DC Converter → Dispensers
+
+**Load:** 150 kW at 800V DC bus
+
+```
+Current (I) = P / V
+           = 150,000 / 800
+           = 187.5 A
+
+Continuous rating × 125%:
+           = 187.5 × 1.25
+           = 234.4 A → Use 250A DC fuse/breaker
+```
+
+| Component | Specification | Notes |
+|-----------|--------------|-------|
+| **DC bus conductors** | 4/0 AWG copper, PV Wire (USE-2), 600V DC min | 230A @ 75°C per Table 2 |
+| **DC disconnect** | 250A, 1000V DC rated, lockable | Required per CEC Rule 64-112 |
+| **DC fuses** | 250A, 1000V DC, gPV type | Per CEC Rule 64-060 |
+| **Conduit** | 1.5" rigid metal or PV-rated tray cable | |
+
+### 4.3 DC Side: Power Cabinet → Individual Dispenser Posts
+
+**Load per dispenser:** Dynamic. Up to 150 kW (ZEVIP Compliant) for a single vehicle, or mathematically shared across two vehicles.
+
+```
+Worst case (single vehicle demanding full 150kW at 400V):
+I = 150,000 / 400 = 375 A (Requires liquid-cooled dispenser cable or 400A continuous rating)
+
+Shared case (two vehicles demanding 75kW at 400V):
+I = 75,000 / 400 = 187.5 A → 125% = 234 A
+```
+
+| Component | Specification |
+|-----------|--------------|
+| **Conductors (per dispenser)** | 500 kcmil copper or specialized liquid-cooled assembly |
+| **Breaker per dispenser** | 400A-500A, 1000V DC |
+| **Cable length** | ≤ 10 m (dispenser cord is integral to unit) |
+
+### 4.4 Wire Schedule Summary
+
+| Circuit | Voltage | Current | Wire | Breaker/Fuse | Conduit |
+|---------|---------|---------|------|-------------|---------|
+| Grid → Main panel | 208V 3φ AC | 146A (182A rated) | 3/0 AWG Cu TECK90 × 3 + N + G | 200A 3P | 2" RMC |
+| Main panel → Inverter | 208V 3φ AC | 146A | 3/0 AWG Cu TECK90 × 3 + N + G | 200A 3P | 2" RMC |
+| Inverter ↔ Battery | 800V DC | 62.5A (charge) / 187.5A (discharge) | 4/0 AWG Cu USE-2 × 2 + G | 250A DC | 1.5" RMC |
+| Battery → DC-DC converter | 800V DC | 187.5A | 4/0 AWG Cu USE-2 × 2 + G | 250A DC | 1.5" RMC |
+| Cabinet → Dispenser 1 | 200–920V DC | up to 375A | 500 kcmil / Liquid-Cooled | 400A DC | Integral |
+| Cabinet → Dispenser 2 | 200–920V DC | up to 375A | 500 kcmil / Liquid-Cooled | 400A DC | Integral |
+| Host building sub-panel | 208V 3φ AC | 40A | #8 AWG Cu TECK90 × 3 + N + G | 50A 3P | 1" RMC |
+
+---
+
+## 5. Battery Bank Specification
+
+### 5.1 Cell Chemistry & Configuration
+
+| Parameter | Specification |
+|-----------|--------------|
+| **Chemistry** | LFP (Lithium Iron Phosphate — LiFePO₄) |
+| **Why LFP** | No thermal runaway, 5000+ cycle life, –30°C operation, no cobalt |
+| **Total capacity** | 100 kWh usable (110 kWh gross at 90% DoD) |
+| **Nominal voltage** | 819.2V (16 modules × 51.2V/module) |
+| **Module configuration** | 16S rack module, 51.2V, 100 Ah per module |
+| **Modules in series** | 16 (total: 819.2V nominal) |
+| **Min voltage (empty)** | 704V (16 × 44V cutoff) |
+| **Max voltage (full)** | 921.6V (16 × 57.6V float) |
+
+### 5.2 Charge / Discharge Rates
+
+| Parameter | Value | C-Rate |
+|-----------|-------|--------|
+| **Max charge rate** | 50 kW (from grid) | 0.5C |
+| **Max discharge rate** | 150 kW (to DCFC) | 1.5C |
+| **Full charge time** | 2 hours (0–100%) | — |
+| **Full discharge time** | 40 minutes (at 150 kW) | — |
+| **Cycle life** | >5,000 cycles @ 80% DoD | — |
+| **Calendar life** | 15+ years | — |
+
+### 5.3 Thermal Management
+
+| Condition | System Response |
+|-----------|----------------|
+| **>45°C cell temp** | Reduce charge/discharge to 50% |
+| **>55°C cell temp** | Shutdown — thermal fault |
+| **<–20°C cell temp** | Activate heated enclosure, delay charge until >0°C |
+| **<–40°C ambient** | Enclosure heaters maintain battery at >5°C (500W heating element) |
+| **Normal range** | 15–35°C (liquid or forced-air cooled) |
+
+### 5.4 BMS Requirements
+
+- Cell-level voltage monitoring (±10 mV accuracy)
+- Cell-level temperature monitoring (NTC per module)
+- Active cell balancing (top-balance at 3.65V/cell)
+- SOC estimation (Coulomb counting + OCV correction)
+- Communication: CAN bus to inverter, Modbus TCP to site controller
+- Safety: pre-charge circuit, contactor control, fuse monitoring
+
+---
+
+## 6. Single-Line Diagram
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│  UTILITY (FortisAlberta)                                                │
+│  208Y/120V, 3φ, 4W                                                     │
+└─────────────────────────────┬────────────────────────────────────────────┘
+                              │
+                         ┌────┴────┐
+                         │ CT Meter │  (Revenue meter, utility-owned)
+                         └────┬────┘
+                              │  3/0 AWG Cu TECK90 × 4 + #6G in 2" RMC
+                              │
+                    ┌─────────┴─────────┐
+                    │   MAIN BREAKER    │
+                    │   200A / 3P       │
+                    │   42 kAIC min     │
+                    └────┬─────────┬────┘
+                         │         │
+         ┌───────────────┘         └───────────────┐
+         │                                         │
+    ┌────┴────┐                            ┌───────┴───────┐
+    │ SPD     │                            │ Host Sub-panel│
+    │ Type 2  │                            │ 50A / 3P      │
+    └─────────┘                            │ #8 AWG Cu     │
+         │                                 │ Lights, CCTV, │
+         │                                 │ Signage, HVAC │
+    ┌────┴───────────────┐                 └───────────────┘
+    │ BIDIRECTIONAL      │
+    │ INVERTER           │
+    │ 50 kW AC ↔ DC      │
+    │ 208V AC → 800V DC  │
+    │ 97.5% efficiency   │
+    └────────┬───────────┘
+             │  4/0 AWG Cu USE-2 × 2 + G in 1.5" RMC
+             │
+     ┌───────┴───────┐
+     │ DC DISCONNECT │
+     │ 250A / 1000V  │
+     │ Lockable      │
+     └───────┬───────┘
+             │
+     ┌───────┴───────┐        ┌──────────────────┐
+     │ LFP BATTERY   │◄──────►│ BMS CONTROLLER   │
+     │ 100 kWh       │  CAN   │ Cell monitoring   │
+     │ 819.2V nom    │  bus   │ Thermal mgmt      │
+     │ 16 modules    │        │ SOC estimation     │
+     │ (16S × 51.2V) │        │ Contactor control  │
+     └───────┬───────┘        └──────────────────┘
+             │  4/0 AWG Cu USE-2 × 2 + G
+             │
+     ┌───────┴───────┐
+     │ DC FUSE       │
+     │ 250A / 1000V  │
+     │ gPV type      │
+     └───────┬───────┘
+             │
+    ┌────────┴────────────┐
+    │ POWER CABINET       │
+    │ 800V → 200-920V     │
+    │ 150 kW total        │
+    │ Dynamic power share │
+    └───┬────────────┬────┘
+        │            │
+   ┌────┴────┐  ┌────┴────┐
+   │DISP. 1  │  │DISP. 2  │
+   │Up to    │  │Up to    │
+   │150 kW   │  │150 kW   │
+   │CCS1+NACS│  │CCS1+NACS│
+   └─────────┘  └─────────┘
+
+
+ GROUNDING SYSTEM
+ ═══════════════
+ Equipment ground: #6 AWG Cu to main panel ground bus
+ Grounding electrode: 2× 10' ground rods, min 3m apart
+ Bond: #6 AWG Cu between rods
+ Battery enclosure: bonded to ground bus
+ DCFC dispensers: equipment ground per CEC Rule 10-400
+```
+
+---
+
+## 7. Protection & Safety
+
+### 7.1 AC Protection
+
+| Device | Rating | Purpose | CEC Rule |
+|--------|--------|---------|----------|
+| Main breaker | 200A, 3P, 42 kAIC | Overcurrent, service disconnect | 14-012 |
+| SPD (Type 2) | 208V, 100 kA | Surge protection | 18-100 |
+| Ground fault (GFCI) | 30 mA, Class A | Personnel protection at dispensers | 26-700 |
+| AFCI | Per panel schedule | Arc fault (if required by AHJ) | 26-656 |
+
+### 7.2 DC Protection
+
+| Device | Rating | Purpose |
+|--------|--------|---------|
+| DC disconnect | 250A, 1000V DC, lockable | Battery isolation (maintenance/fire) |
+| DC fuses (gPV) | 250A, 1000V DC | Short circuit protection |
+| Pre-charge relay | 10A, 1000V DC | Inrush current limiting at startup |
+| Contactor (×2) | 250A, 1000V DC | BMS-controlled battery isolation |
+
+### 7.3 Fire Safety
+
+| Requirement | Specification |
+|-------------|--------------|
+| **Enclosure rating** | NEMA 3R (outdoor, rain-tight) minimum |
+| **Fire suppression** | Clean agent (Novec 1230 or aerosol) — NOT water or foam |
+| **Thermal runaway detection** | Gas sensor (VOC) + rate-of-rise thermal sensor |
+| **Emergency stop** | Exterior-mounted E-stop, red mushroom, opens DC contactors |
+| **Clearances** | 1 m from building walls, 3 m from combustibles (per NFPA 855) |
+| **Signage** | "DANGER: BATTERY ENERGY STORAGE — 800V DC" at all access points |
+| **First responder placard** | Per NFPA 855 Section 4.1.5 — posted at site entrance |
+
+### 7.4 Arc Flash Labeling
+
+| Location | Estimated Incident Energy | PPE Category |
+|----------|--------------------------|--------------|
+| Main panel (AC) | 4–8 cal/cm² | Cat 1 |
+| DC disconnect | 2–4 cal/cm² (limited by fuse) | Cat 1 |
+| Battery rack | 8–15 cal/cm² | Cat 2 |
+
+> [!WARNING]
+> Arc flash study **must** be performed by a P.Eng. or certified technician before energization. These are estimates only.
+
+---
+
+## 8. Site Layout Considerations
+
+### 8.1 Equipment Footprint
+
+| Equipment | Dimensions (approx.) | Weight |
+|-----------|---------------------|--------|
+| Battery enclosure (outdoor rated) | 2.4 m × 1.2 m × 2.1 m (8' × 4' × 7') | ~2,500 kg |
+| Inverter + DC-DC (integrated unit) | 1.5 m × 0.8 m × 2.0 m | ~800 kg |
+| Main distribution panel | 0.9 m × 0.3 m × 1.5 m | ~100 kg |
+| DCFC Dispenser (each) | 0.6 m × 0.5 m × 1.8 m | ~300 kg |
+| **Total pad area** | **~3.5 m × 6 m (120 sq ft)** concrete pad | |
+
+### 8.2 Pull-Through Bay Layout
+
+```
+                    ┌─────────────────────────────────┐
+                    │       EQUIPMENT PAD              │
+                    │  [BATT]  [INV/DCDC]  [PANEL]    │
+                    │       (fenced, 1.8m chain-link)  │
+                    └────────────┬────────────────────┘
+                                 │  underground conduit
+          ───────────────────────┼───────────────────────
+         ← ENTRY                │                EXIT →
+          ─────┌─────────────[DISP 1]─────────────┐─────
+               │           Bay 1 (pull-through)    │
+          ─────└──────────────────────────────────┘─────
+          ─────┌─────────────[DISP 2]─────────────┐─────
+               │           Bay 2 (pull-through)    │
+          ─────└──────────────────────────────────┘─────
+          ───────────────────────────────────────────────
+                        HIGHWAY →
+```
+
+**Pull-through clearance:** 25 m length × 4 m width per bay (accommodates truck + 16 m trailer)
+
+---
+
+## 9. Bill of Materials (Preliminary)
+
+| Item | Qty | Unit Cost (CAD) | Total (CAD) |
+|------|-----|-----------------|-------------|
+| LFP Battery modules (51.2V/100Ah) | 16 | $3,500 | $56,000 |
+| Battery rack + enclosure (NEMA 3R, heated) | 1 | $12,000 | $12,000 |
+| BMS controller + harness | 1 | $5,000 | $5,000 |
+| Bidirectional inverter (50 kW, 208V↔800V) | 1 | $18,000 | $18,000 |
+| Central Power Cabinet (150kW shared DC bus) | 1 | $22,000 | $22,000 |
+| DCFC Dispenser Post (Capable of 150kW each) | 2 | $15,000 | $30,000 |
+| Main distribution panel (200A) | 1 | $3,500 | $3,500 |
+| DC disconnect (250A/1000V) | 2 | $1,200 | $2,400 |
+| SPD, fuses, breakers, contactors | 1 lot | $4,000 | $4,000 |
+| Cable & conduit (AC + DC) | 1 lot | $6,000 | $6,000 |
+| Concrete pad + bollards + fencing | 1 | $15,000 | $15,000 |
+| Fire suppression (Novec 1230) | 1 | $5,000 | $5,000 |
+| Signage, markings, lighting | 1 lot | $3,000 | $3,000 |
+| **Electrical installation labour** | ~120 hrs | $120/hr | **$14,400** |
+| Engineering (P.Eng. stamp, drawings) | 1 | $8,000 | $8,000 |
+| Permitting + inspection fees | 1 | $3,000 | $3,000 |
+| **TOTAL (pre-grant)** | | | **$207,300** |
+| **ZEVIP 75% (Indigenous partnership)** | | | **–$155,475** |
+| **NET COST TO RBS** | | | **$51,825** |
+
+> [!NOTE]
+> These are Q1 2026 estimates. Battery module prices are declining ~15%/year. Actual costs will vary by site conditions, utility requirements, and equipment vendor.
+
+---
+
+## 10. Permit & Inspection Checklist
+
+| Step | Responsible | Timeline |
+|------|-------------|----------|
+| Electrical permit application (Alberta Safety Codes) | Master Electrician | Week 1 |
+| FortisAlberta service application (200A commercial) | RBS / Electrician | Weeks 1–4 |
+| P.Eng. stamped drawings (single-line, site plan) | Contracted P.Eng. | Weeks 2–3 |
+| AHJ review (municipal planning, if applicable) | Municipality | Weeks 3–6 |
+| Foundation / concrete pour | Civil contractor | Week 5 |
+| Equipment installation | RBS Master Electrician | Weeks 6–8 |
+| Rough-in inspection | Safety Codes Officer | Week 7 |
+| Energization request to FortisAlberta | RBS / Utility | Week 8 |
+| Final inspection + system commissioning | Safety Codes Officer + RBS | Week 9 |
+| CUL/CSA compliance verification | Equipment vendor | Pre-shipment |
+| **Total timeline: ~9–12 weeks** (from permit to energized) | | |
+
+---
+
+## 11. Key Standards & References
+
+| Standard | Application |
+|----------|------------|
+| **CEC CSA C22.1-2024** | All electrical installation requirements |
+| **CSA C22.2 No. 107.1** | Power conversion equipment |
+| **CSA C22.2 No. 340** | Battery ESS — safety requirements |
+| **UL 9540 / UL 9540A** | ESS installation + thermal runaway testing |
+| **NFPA 855** | Stationary energy storage systems |
+| **SAE J1772 / J3068** | AC charging connector standards |
+| **SAE J3400** | NACS connector standard |
+| **IEC 61851-23** | DC EV supply equipment |
+| **AUC Rule 007** | Alberta generator/storage interconnection |
+
+---
+
+> [!CAUTION]
+> This document is for **preliminary design and planning purposes only.** All electrical designs must be reviewed and stamped by a licensed Professional Engineer (P.Eng.) registered in Alberta before construction. Wire sizing, protection coordination, and arc flash calculations must be verified against site-specific conditions.
+
+
+
+======================================================
+SOURCE DOCUMENT: bx_energy_rfq.md
+======================================================
+
+**Subject:** RFQ: 100kWh to 209kWh C&I BESS for DC Fast Charging Deployment (ZEVIP Project)
+
+**To:** sales@bxenergysystems.com
+**From:** [Your Name], CEO, Renvolt
+**Date:** March 14, 2026
+
+**Overview:**
+Renvolt is an Alberta-based EV infrastructure startup deploying battery-backed, zero-export DC Fast Charging (DCFC) hubs along priority highway corridors. We are preparing a ZEVIP grant submission (Deadline: March 20) and require localized BESS hardware for our Phase 1 pilot site.
+
+We are requesting a budget quotation and lead-time estimate for a turnkey BESS. Our baseline engineering model assumes a 100kWh / 50kW system, but we are open to sizing up based on your standard product lines.
+
+**Quote Request 1: Custom/Scaled 100kWh System**
+Our ideal Phase 1 deployment utilizes a 50kW grid interconnection buffered by a ~100kWh BESS, which feeds a 150kW dynamic-share DC charging cabinet. 
+*   **Capacity:** ~100 kWh usable (e.g., a "half-rack" or scaled-down configuration of your standard units).
+*   **PCS (Inverter):** 50 kW continuous rating, bidirectional.
+*   **Discharge:** Must support short-duration (1-hour) discharges at 1C to 1.5C to feed the DC bus during peak charging sessions.
+
+**Quote Request 2: Standard C&I-ESS-209**
+We note from your specifications that your C&I-ESS-209 is your current baseline unit. We would like a secondary quote for this system to evaluate the economics of a larger Phase 1 deployment.
+*   **Capacity:** 209 kWh usable.
+*   **PCS (Inverter):** 104 kW continuous.
+
+**General Technical & Environmental Requirements (Both Quotes):**
+*   **Chemistry:** Lithium Iron Phosphate (LFP).
+*   **Voltage:** 208V 3-Phase AC grid interconnection. Internal DC bus must be compatible with commercial DC fast chargers.
+*   **EMS/BMS:** Must include an onboard Energy Management System capable of zero-export control and peak-shaving (we must strictly limit our utility draw).
+*   **Enclosure & Thermal:** NEMA 3R minimum. Must be cold-weather rated and packaged for continuous operation in Northern Alberta winter conditions (-30°C to +40°C ambient).
+
+**Project Details for Quoting:**
+*   **Delivery Location:** Edmonton/Calgary region (FOB site).
+*   **Target Delivery:** Q3/Q4 2026.
+*   **Volume:** Quoting for 1 pilot site, with 3+ additional sites modeled for 2027.
+
+Because we are finalizing our ZEVIP budget this week, preliminary line-item budgetary quotes (Hardware, PCS, Thermal Management, Delivery) by **Wednesday, March 18** would be highly appreciated.
+
+Please let me know if your engineering team requires a copy of our preliminary Single-Line Diagram to confirm PCS sizing and integration.
+
+Regards,
+
+**[Your Name]**
+CEO, Renvolt
+[Your Phone Number]
+[Your Website / Email]
+

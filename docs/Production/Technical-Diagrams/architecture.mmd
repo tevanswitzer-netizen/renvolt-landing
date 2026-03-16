@@ -1,0 +1,42 @@
+graph TD
+    subgraph UTILITY["Utility Service (FortisAlberta)"]
+        GRID["Grid<br/>208Y/120V 3φ 4W<br/>200A Service"]
+    end
+
+    subgraph MAIN_PANEL["Main Distribution Panel"]
+        MB["Main Breaker<br/>200A / 3P"]
+        M1["Meter<br/>CT-rated Revenue Meter"]
+    end
+
+    subgraph BATTERY_SYSTEM["Battery Energy Storage System (BESS)"]
+        INV["Bidirectional Inverter<br/>50 kW AC-DC<br/>208V AC → 800V DC"]
+        BMS["Battery Management System<br/>Cell balancing / Thermal / SOC"]
+        BATT["LFP Battery Bank<br/>100 kWh @ 819V nominal<br/>16 × 51.2V modules in series"]
+        DC_DISC["DC Disconnect<br/>250A / 1000V DC"]
+    end
+
+    subgraph DCFC["DC Fast Charging Output (Dynamic Share)"]
+        DCDC["Central Power Cabinet<br/>800V → 200-920V<br/>150 kW Shared DC Bus"]
+        D1["Dispenser Post 1<br/>CCS1 + NACS<br/>Up to 150 kW"]
+        D2["Dispenser Post 2<br/>CCS1 + NACS<br/>Up to 150 kW"]
+    end
+
+    subgraph PROTECTION["Protection & Controls"]
+        GFP["Ground Fault<br/>Protection"]
+        SPD["Surge Protection<br/>Device"]
+        ATS["Transfer Logic<br/>(Zero-Export Controller)"]
+        FIRE["Fire Suppression<br/>LFP-rated"]
+    end
+
+    GRID --> M1 --> MB
+    MB --> INV
+    INV <--> BATT
+    BMS --> BATT
+    DC_DISC --> BATT
+    BATT --> DCDC
+    DCDC --> D1
+    DCDC --> D2
+    GFP --> MB
+    SPD --> MB
+    ATS --> INV
+    FIRE --> BATT

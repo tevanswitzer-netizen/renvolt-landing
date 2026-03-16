@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renvolt Ad Campaign</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Script for standalone rendering -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2E4036",
+                        accent: "#CC5833",
+                        background: "#F2F0E9",
+                        dark: "#1A1A1A",
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        cormorant: ['"Cormorant Garamond"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom smooth curve for the button hover identical to the app */
+        .btn-hover {
+            transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .btn-hover:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="bg-dark flex items-center justify-center min-h-screen p-8">
+
+    <!-- AD CONTAINER (Standard LinkedIn / OpenGraph Image Size 1200x630) -->
+    <div class="relative w-[1200px] h-[630px] rounded-3xl overflow-hidden shadow-2xl group cursor-pointer">
+        
+        <!-- Background Image -->
+        <div class="absolute inset-0 w-full h-full">
+            <img 
+                src="./public/rally-ad.png" 
+                alt="Rally Porsche kicking up dust" 
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <!-- Gradient Overlay (Dark bottom/left for text readability) -->
+            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-dark/80 via-dark/40 to-transparent"></div>
+        </div>
+
+        <!-- Content Payload -->
+        <div class="absolute inset-0 p-16 flex flex-col justify-between z-10">
+            
+            <!-- Top: Logo / Brand -->
+            <div class="flex items-center">
+                <img src="./public/logo-transparent-light.png" alt="Renvolt" class="h-10 opacity-90 object-contain" onerror="this.outerHTML='<h2 class=\'text-background font-sans font-bold text-2xl tracking-widest uppercase\'>RENVOLT</h2>'" />
+            </div>
+
+            <!-- Bottom: Headline & CTA -->
+            <div class="max-w-3xl mb-4">
+                <div class="inline-block px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 backdrop-blur-md mb-6">
+                    <p class="text-accent font-sans font-bold text-sm tracking-widest uppercase">
+                        Built for the wild
+                    </p>
+                </div>
+                
+                <h1 class="flex flex-col text-background mb-8">
+                    <span class="font-sans font-bold text-5xl tracking-tight mb-2 opacity-95">
+                        Performance that
+                    </span>
+                    <span class="font-cormorant italic text-8xl leading-[0.85] text-accent pr-10">
+                        Never Quits.
+                    </span>
+                </h1>
+                
+                <p class="text-background/80 font-sans text-xl max-w-xl mb-10 leading-relaxed">
+                    Reliable DC fast-charging engineered for Alberta's most demanding grid environments. 
+                </p>
+
+                <!-- CTA Button identical to the main site -->
+                <button class="relative overflow-hidden bg-accent text-background px-8 py-4 rounded-full font-sans text-lg font-semibold btn-hover inline-flex items-center gap-3">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Discover the 150kW Hub 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </span>
+                    <!-- Flash effect identical to App.jsx -->
+                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"></div>
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>
