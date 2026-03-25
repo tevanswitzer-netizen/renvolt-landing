@@ -4,7 +4,7 @@
 SOURCE DOCUMENT: rbs_90_day_launch_plan.md
 ======================================================
 
-# RBS 90-Day Launch Plan — First EV Charging Site
+# Renvolt 90-Day Launch Plan — First EV Charging Site
 
 *Your fractional co-founder playbook: from idea to signed LOIs and submitted grant application in 90 days.*
 
@@ -34,7 +34,7 @@ SOURCE DOCUMENT: rbs_90_day_launch_plan.md
 
 ```mermaid
 gantt
-    title RBS 90-Day Launch Plan
+    title Renvolt 90-Day Launch Plan
     dateFormat  YYYY-MM-DD
     axisFormat  %b %d
 
@@ -73,7 +73,7 @@ gantt
 **Documents to Create:**
 - [ ] **Site Host Pitch One-Pager** (see template below)
 - [ ] **Basic Financial Model** — simple spreadsheet: CapEx, monthly revenue at 8/12/20% utilization, payback
-- [ ] **Company Overview** — 1-page about RBS for grant applications
+- [ ] **Company Overview** — 1-page about Renvolt for grant applications
 
 **Who to Talk To:**
 - **Alberta Corporate Registry** — incorporate ($275-$500 filing fee)
@@ -180,7 +180,7 @@ gantt
 > [!TIP]  
 > Print this. Check items off. This is your entire first week.
 
-1. **Register an Alberta corporation** — Alberta Corporate Registry, online, $275-$500. Name: "Renewable Battery Solutions Ltd." or similar
+1. **Register an Alberta corporation** — Alberta Corporate Registry, online, $275-$500. Name: "Renvolt Ltd." or similar
 2. **Open a business bank account** — you need this for grant applications. ATB Financial or RBC.
 3. **Call EPCOR (Edmonton) or ENMAX (Calgary)** — ask: *"What's the process, cost, and timeline to add 80-150 kW of commercial 3-phase load to an existing commercial property?"* Write down everything.
 4. **Call NRCan ZEVIP program office** (1-800-387-2000) — ask: *"When is your next intake? What are the eligibility requirements? Can I apply as a new company?"*
@@ -223,7 +223,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 
 ### Phone Script (90 seconds max)
 
-> *"Hi, my name is (Your Name). I run a company called Renewable Battery Solutions — we install EV fast-charging stations at commercial properties across Alberta.*
+> *"Hi, my name is (Your Name). I run a company called Renvolt — we install EV fast-charging stations at commercial properties across Alberta.*
 >
 > *I'm reaching out because your location on (street/highway) looks like a strong fit for an EV charging site. Here's the quick version:*
 >
@@ -239,7 +239,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 
 > Hi (Owner Name),
 >
-> My name is (Your Name), and I'm the founder of Renewable Battery Solutions. We install EV fast-charging stations at commercial properties in the Edmonton/Calgary area.
+> My name is (Your Name), and I'm the founder of Renvolt. We install EV fast-charging stations at commercial properties in the Edmonton/Calgary area.
 >
 > I noticed your property at (address) and think it could be a strong location for EV charging. Here's how it works:
 >
@@ -254,7 +254,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 >
 > Best regards,
 > (Your Name)
-> Founder, Renewable Battery Solutions
+> Founder, Renvolt
 > (Phone) | (Email)
 
 ---
@@ -345,7 +345,7 @@ You need:
 > Date: ___________
 >
 > **Between:**
-> Renewable Battery Solutions Ltd. ("RBS")
+> Renvolt Ltd. ("Renvolt")
 > (Your address)
 >
 > **And:**
@@ -354,20 +354,20 @@ You need:
 >
 > **RE: Installation of EV Fast-Charging Equipment at (Site Address)**
 >
-> This Letter of Intent expresses the mutual interest of RBS and Host in the installation and operation of electric vehicle fast-charging equipment at the Host's property located at the above address.
+> This Letter of Intent expresses the mutual interest of Renvolt and Host in the installation and operation of electric vehicle fast-charging equipment at the Host's property located at the above address.
 >
 > **Proposed Terms (Non-Binding):**
-> 1. RBS will install, own, and maintain 4-6 DC fast-charging stations and associated battery storage equipment at the Host's property
-> 2. RBS will bear all costs of equipment, installation, permitting, and ongoing maintenance
+> 1. Renvolt will install, own, and maintain 4-6 DC fast-charging stations and associated battery storage equipment at the Host's property
+> 2. Renvolt will bear all costs of equipment, installation, permitting, and ongoing maintenance
 > 3. Host will provide designated parking spaces and access to electrical infrastructure
 > 4. Host will receive (10-15)% of gross charging revenue as a monthly payment
 > 5. Proposed term: 10 years with option to renew
-> 6. RBS will maintain comprehensive insurance covering all installed equipment
+> 6. Renvolt will maintain comprehensive insurance covering all installed equipment
 >
 > **This LOI is non-binding** and does not create any legal obligation. A definitive agreement will be negotiated and executed prior to any installation.
 >
 > ___________________________
-> (Your Name), CEO, Renewable Battery Solutions Ltd.
+> (Your Name), CEO, Renvolt Ltd.
 >
 > ___________________________
 > (Host Name), (Title), (Host Business)
@@ -378,7 +378,7 @@ You need:
 
 > ### Earn Monthly Revenue from EV Charging — At Zero Cost to You
 >
-> **Renewable Battery Solutions** installs and operates EV fast-charging stations at commercial properties across Alberta.
+> **Renvolt** installs and operates EV fast-charging stations at commercial properties across Alberta.
 >
 > **How It Works:**
 > - We install 4-6 DC fast chargers at your property
@@ -406,7 +406,7 @@ You need:
 >
 > **Contact:**
 > (Your Name) | (Phone) | (Email)
-> Renewable Battery Solutions Ltd. | Edmonton, AB
+> Renvolt Ltd. | Edmonton, AB
 
 
 
@@ -414,7 +414,7 @@ You need:
 SOURCE DOCUMENT: rbs_analysis.md
 ======================================================
 
-# RBS (Renewable Battery Solutions) — Deep Analysis
+# Renvolt (Renvolt) — Deep Analysis
 
 A critical review of the **Comprehensive Business Plan** and the **Investor Pitch (4-Section Business Case)**.
 
@@ -465,7 +465,7 @@ Both documents show good understanding of the ZEVIP program, provincial grants, 
 The Investor Pitch projects **66% profit margins** by Year 5 ($20.74M profit on $31.24M revenue). This is extremely aggressive. For context:
 - **Tesla Energy** runs ~25% gross margins
 - **Enphase Energy** (best-in-class) achieves ~42% gross margins
-- **SaaS companies** average 65-75% gross margins, but RBS is a *hardware-heavy* business
+- **SaaS companies** average 65-75% gross margins, but Renvolt is a *hardware-heavy* business
 
 A hardware + services business achieving 66% margins would be unprecedented. The Business Plan's 30% EBITDA margin is much more realistic but still optimistic for a Year 5 company.
 
@@ -568,7 +568,7 @@ This phased approach is more credible and more fundable.
 Before approaching investors, you need:
 - At least **1 paid pilot deployment** for Pillar 1 or 2
 - Real operational data (charging revenue, demand charge savings, uptime %)
-- A signed **customer letter** saying "We'd expand to X more sites if RBS can deliver"
+- A signed **customer letter** saying "We'd expand to X more sites if Renvolt can deliver"
 - This converts the entire plan from "theoretical" to "proven at small scale"
 
 ### 7. Address the Alberta EV Market Honestly
@@ -618,7 +618,7 @@ The **core idea is strong** — integrating EV charging, BaaS, and second-life b
 SOURCE DOCUMENT: zevip_qualification_guide.md
 ======================================================
 
-# ZEVIP Grant Qualification — RBS Action Plan
+# ZEVIP Grant Qualification — Renvolt Action Plan
 
 > [!CAUTION]
 > **The current Call for Proposals closes March 20, 2026 — 14 days from now.**
@@ -628,7 +628,7 @@ SOURCE DOCUMENT: zevip_qualification_guide.md
 
 ## What Is ZEVIP?
 
-The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by Natural Resources Canada (NRCan). It funds the deployment of EV charging infrastructure across Canada. The "Public Places" stream is the one relevant to RBS.
+The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by Natural Resources Canada (NRCan). It funds the deployment of EV charging infrastructure across Canada. The "Public Places" stream is the one relevant to Renvolt.
 
 - **Portal:** [Transportation and Fuels Decarbonisation Programs](https://fuels-decarbonisation-carburants.canada.ca)
 - **Program page:** [NRCan ZEVIP](https://natural-resources.canada.ca/energy-efficiency/transportation-alternative-fuels/zero-emission-vehicle-infrastructure-program/21876)
@@ -636,7 +636,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ---
 
-## How Much Can RBS Get?
+## How Much Can Renvolt Get?
 
 ### Per-Charger Funding Caps
 
@@ -648,7 +648,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 | 200 kW+ | $100,000 |
 | Level 2 (co-located) | $5,000 per connector |
 
-### RBS Pilot Site Calculation
+### Renvolt Pilot Site Calculation
 
 | Your Setup | Funding |
 |---|---|
@@ -674,7 +674,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ---
 
-## Eligibility Checklist — Does RBS Qualify?
+## Eligibility Checklist — Does Renvolt Qualify?
 
 ### Applicant Requirements
 
@@ -688,7 +688,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ### Site / Technical Requirements (Public Places Stream)
 
-| Requirement | RBS Status | Notes |
+| Requirement | Renvolt Status | Notes |
 |---|---|---|
 | At least **1 fast charger ≥ 100 kW** | ✅ | You're planning 4× 100 kW |
 | **Total site output ≥ 150 kW** | ✅ | 4× 100 kW = 400 kW total |
@@ -696,7 +696,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 | Site in a **Priority Zone (Rank 4 or 5)** | ⚠️ **Must verify** | Higher rank = more competitive application |
 | **Public access 24/7** | ⚠️ **Depends on site** | Gas stations usually yes; some plazas lock lots at night |
 | Chargers must be **new** (not refurbished) | ✅ | You're buying new |
-| Chargers must be **purchased** (not leased) | ✅ | RBS owns the equipment |
+| Chargers must be **purchased** (not leased) | ✅ | Renvolt owns the equipment |
 | Chargers must be **networked** (OCPP compliant) | ⚠️ **Verify with vendor** | Confirm OCPP support when requesting quotes |
 | Chargers must be **CSA or UL certified** for Canada | ⚠️ **Verify with vendor** | All major brands (ABB, Tritium, ChargePoint) are certified |
 
@@ -757,7 +757,7 @@ Use this structure for the ZEVIP application narrative:
 
 ### Section 1: Project Overview (½ page)
 >
-> Renewable Battery Solutions Ltd. ("RBS") proposes to install a 4-station DC fast-charging site with co-located battery storage at (site address) in (Edmonton/Calgary), Alberta. The project will deploy four (4) 100 kW CCS-compatible DC fast chargers and a 100 kWh lithium iron phosphate (LFP) battery system for demand charge optimization, serving the public 24 hours a day, 7 days a week.
+> Renvolt Ltd. ("Renvolt") proposes to install a 4-station DC fast-charging site with co-located battery storage at (site address) in (Edmonton/Calgary), Alberta. The project will deploy four (4) 100 kW CCS-compatible DC fast chargers and a 100 kWh lithium iron phosphate (LFP) battery system for demand charge optimization, serving the public 24 hours a day, 7 days a week.
 >
 > Total project cost: $(amount). ZEVIP funding requested: $(50% of total).
 
@@ -792,7 +792,7 @@ Use this structure for the ZEVIP application narrative:
 > Estimated annual CO₂ displacement: 175 tonnes (conservative, based on 10% utilization)
 > Over 10-year equipment life: 1,750 tonnes CO₂
 >
-> RBS is committed to the long-term operation and maintenance of this site. Revenue from charging fees and energy optimization ensures financial sustainability beyond the ZEVIP funding period.
+> Renvolt is committed to the long-term operation and maintenance of this site. Revenue from charging fees and energy optimization ensures financial sustainability beyond the ZEVIP funding period.
 
 ---
 
@@ -803,7 +803,7 @@ Use this structure for the ZEVIP application narrative:
 
 ### Days 1-3 (March 6-8): Foundation
 
-- [ ] **Incorporate RBS** — Alberta Corporate Registry, online ($275)
+- [ ] **Incorporate Renvolt** — Alberta Corporate Registry, online ($275)
 - [ ] **Apply for CRA Business Number** — online, same day as incorporation
 - [ ] **Create portal account** at [fuels-decarbonisation-carburants.canada.ca](https://fuels-decarbonisation-carburants.canada.ca)
 - [ ] **Open the EV Charging Planning Map** — check Priority Zone ranking for your top 3 target sites
@@ -886,7 +886,7 @@ ZEVIP applications are scored on these criteria (focus your effort accordingly):
 
 | # | Action | Time |
 |---|---|---|
-| 1 | **Incorporate RBS online** | 30 min |
+| 1 | **Incorporate Renvolt online** | 30 min |
 | 2 | **Open Planning Map** — check if your target sites are in Rank 4/5 zones | 30 min |
 | 3 | **Create portal account** at fuels-decarbonisation-carburants.canada.ca | 15 min |
 | 4 | **Email ABB, Tritium, ChargePoint** for charger quotes (tell them deadline is March 14) | 30 min |
@@ -1312,7 +1312,7 @@ I = 75,000 / 400 = 187.5 A → 125% = 234 A
 | Permitting + inspection fees | 1 | $3,000 | $3,000 |
 | **TOTAL (pre-grant)** | | | **$207,300** |
 | **ZEVIP 75% (Indigenous partnership)** | | | **–$155,475** |
-| **NET COST TO RBS** | | | **$51,825** |
+| **NET COST TO Renvolt** | | | **$51,825** |
 
 > [!NOTE]
 > These are Q1 2026 estimates. Battery module prices are declining ~15%/year. Actual costs will vary by site conditions, utility requirements, and equipment vendor.
@@ -1324,14 +1324,14 @@ I = 75,000 / 400 = 187.5 A → 125% = 234 A
 | Step | Responsible | Timeline |
 |------|-------------|----------|
 | Electrical permit application (Alberta Safety Codes) | Master Electrician | Week 1 |
-| FortisAlberta service application (200A commercial) | RBS / Electrician | Weeks 1–4 |
+| FortisAlberta service application (200A commercial) | Renvolt / Electrician | Weeks 1–4 |
 | P.Eng. stamped drawings (single-line, site plan) | Contracted P.Eng. | Weeks 2–3 |
 | AHJ review (municipal planning, if applicable) | Municipality | Weeks 3–6 |
 | Foundation / concrete pour | Civil contractor | Week 5 |
-| Equipment installation | RBS Master Electrician | Weeks 6–8 |
+| Equipment installation | Renvolt Master Electrician | Weeks 6–8 |
 | Rough-in inspection | Safety Codes Officer | Week 7 |
-| Energization request to FortisAlberta | RBS / Utility | Week 8 |
-| Final inspection + system commissioning | Safety Codes Officer + RBS | Week 9 |
+| Energization request to FortisAlberta | Renvolt / Utility | Week 8 |
+| Final inspection + system commissioning | Safety Codes Officer + Renvolt | Week 9 |
 | CUL/CSA compliance verification | Equipment vendor | Pre-shipment |
 | **Total timeline: ~9–12 weeks** (from permit to energized) | | |
 

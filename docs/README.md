@@ -110,7 +110,7 @@ Partnerships, brand campaigns, advertising, media, and customer pipeline.
 |---|---|
 | [Bear-Hills-Casino-Contacts-and-Outreach.md](./Sales%20and%20Marketing/Partnerships/Bear-Hills-Casino-Contacts-and-Outreach.md) | Contact list and outreach playbook for Bear Hills Casino and Louis Bull Tribe |
 | [Bear-Hills-Letter-of-Intent-Template.md](./Sales%20and%20Marketing/Partnerships/Bear-Hills-Letter-of-Intent-Template.md) | Non-binding LOI template for ZEVIP site host agreements |
-| [RBS-Bear-Hills-Site-Host-Pitch.docx](./Sales%20and%20Marketing/Partnerships/RBS-Bear-Hills-Site-Host-Pitch.docx) | Formal site host pitch document |
+| [Renvolt-Bear-Hills-Site-Host-Pitch.docx](./Sales%20and%20Marketing/Partnerships/Renvolt-Bear-Hills-Site-Host-Pitch.docx) | Formal site host pitch document |
 
 ### 🎬 Brand-Campaigns
 | File | Description |
@@ -167,22 +167,22 @@ Grants, business plans, investor materials, financial models, and compliance.
 | [ZEVIP-Grant-Application-Narrative.md](./Accounting%20and%20Finance/Grant-Applications/ZEVIP-Grant-Application-Narrative.md) | ZEVIP grant narrative — Bear Hills QE2 Corridor pilot |
 | [ZEVIP-Qualification-and-Scoring-Guide.md](./Accounting%20and%20Finance/Grant-Applications/ZEVIP-Qualification-and-Scoring-Guide.md) | ZEVIP eligibility checklist, funding caps, 14-day sprint, scoring criteria |
 | [ZEVIP-Qualification-and-Scoring-Guide-v2.md](./Accounting%20and%20Finance/Grant-Applications/ZEVIP-Qualification-and-Scoring-Guide-v2.md) | Updated version of the qualification guide |
-| [RBS-ZEVIP-Grant-Business-Plan.docx](./Accounting%20and%20Finance/Grant-Applications/RBS-ZEVIP-Grant-Business-Plan.docx) | ZEVIP grant business plan (v1) |
-| [RBS-ZEVIP-Business-Plan.docx](./Accounting%20and%20Finance/Grant-Applications/RBS-ZEVIP-Business-Plan.docx) | ZEVIP business plan (alternate version) |
+| [Renvolt-ZEVIP-Grant-Business-Plan.docx](./Accounting%20and%20Finance/Grant-Applications/Renvolt-ZEVIP-Grant-Business-Plan.docx) | ZEVIP grant business plan (v1) |
+| [Renvolt-ZEVIP-Business-Plan.docx](./Accounting%20and%20Finance/Grant-Applications/Renvolt-ZEVIP-Business-Plan.docx) | ZEVIP business plan (alternate version) |
 
 ### 📊 Business-Plans
 | File | Description |
 |---|---|
-| [RBS-Comprehensive-Business-Plan.docx](./Accounting%20and%20Finance/Business-Plans/RBS-Comprehensive-Business-Plan.docx) | Full comprehensive business plan |
-| [RBS-Comprehensive-Business-Plan-Opus.docx](./Accounting%20and%20Finance/Business-Plans/RBS-Comprehensive-Business-Plan-Opus.docx) | Comprehensive business plan (Opus 4.6 draft) |
-| [RBS-Comprehensive-Business-Plan-Perplexity.docx](./Accounting%20and%20Finance/Business-Plans/RBS-Comprehensive-Business-Plan-Perplexity.docx) | Comprehensive business plan (Perplexity draft) |
+| [Renvolt-Comprehensive-Business-Plan.docx](./Accounting%20and%20Finance/Business-Plans/Renvolt-Comprehensive-Business-Plan.docx) | Full comprehensive business plan |
+| [Renvolt-Comprehensive-Business-Plan-Opus.docx](./Accounting%20and%20Finance/Business-Plans/Renvolt-Comprehensive-Business-Plan-Opus.docx) | Comprehensive business plan (Opus 4.6 draft) |
+| [Renvolt-Comprehensive-Business-Plan-Perplexity.docx](./Accounting%20and%20Finance/Business-Plans/Renvolt-Comprehensive-Business-Plan-Perplexity.docx) | Comprehensive business plan (Perplexity draft) |
 
 ### 💼 Investor-Materials
 | File | Description |
 |---|---|
-| [RBS-Investor-Pitch-Opus.docx](./Accounting%20and%20Finance/Investor-Materials/RBS-Investor-Pitch-Opus.docx) | Investor pitch deck (Opus 4.6 draft) |
-| [RBS-Investor-Pitch-Perplexity.docx](./Accounting%20and%20Finance/Investor-Materials/RBS-Investor-Pitch-Perplexity.docx) | Investor pitch — 4-section business case (Perplexity draft) |
-| [RBS-Pilot-Site-Financial-Summary.docx](./Accounting%20and%20Finance/Investor-Materials/RBS-Pilot-Site-Financial-Summary.docx) | Pilot site financial summary for investors |
+| [Renvolt-Investor-Pitch-Opus.docx](./Accounting%20and%20Finance/Investor-Materials/Renvolt-Investor-Pitch-Opus.docx) | Investor pitch deck (Opus 4.6 draft) |
+| [Renvolt-Investor-Pitch-Perplexity.docx](./Accounting%20and%20Finance/Investor-Materials/Renvolt-Investor-Pitch-Perplexity.docx) | Investor pitch — 4-section business case (Perplexity draft) |
+| [Renvolt-Pilot-Site-Financial-Summary.docx](./Accounting%20and%20Finance/Investor-Materials/Renvolt-Pilot-Site-Financial-Summary.docx) | Pilot site financial summary for investors |
 
 ### 📈 Financial-Models *(empty — ready)*
 > Revenue models, CapEx/OpEx spreadsheets, utilization sensitivity analysis, cash flow waterfall projections.

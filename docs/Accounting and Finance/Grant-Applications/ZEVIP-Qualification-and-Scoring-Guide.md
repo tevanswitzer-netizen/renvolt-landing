@@ -1,4 +1,4 @@
-﻿# ZEVIP Grant Qualification â€” RBS Action Plan
+﻿# ZEVIP Grant Qualification â€” Renvolt Action Plan
 
 > [!CAUTION]
 > **The current Call for Proposals closes March 20, 2026 â€” 14 days from now.**
@@ -8,7 +8,7 @@
 
 ## What Is ZEVIP?
 
-The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by Natural Resources Canada (NRCan). It funds the deployment of EV charging infrastructure across Canada. The "Public Places" stream is the one relevant to RBS.
+The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by Natural Resources Canada (NRCan). It funds the deployment of EV charging infrastructure across Canada. The "Public Places" stream is the one relevant to Renvolt.
 
 - **Portal:** [Transportation and Fuels Decarbonisation Programs](https://fuels-decarbonisation-carburants.canada.ca)
 - **Program page:** [NRCan ZEVIP](https://natural-resources.canada.ca/energy-efficiency/transportation-alternative-fuels/zero-emission-vehicle-infrastructure-program/21876)
@@ -16,7 +16,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ---
 
-## How Much Can RBS Get?
+## How Much Can Renvolt Get?
 
 ### Per-Charger Funding Caps
 
@@ -28,7 +28,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 | 200 kW+ | $100,000 |
 | Level 2 (co-located) | $5,000 per connector |
 
-### RBS Pilot Site Calculation
+### Renvolt Pilot Site Calculation
 
 | Your Setup | Funding |
 |---|---|
@@ -54,7 +54,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ---
 
-## Eligibility Checklist â€” Does RBS Qualify?
+## Eligibility Checklist â€” Does Renvolt Qualify?
 
 ### Applicant Requirements
 
@@ -68,7 +68,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 
 ### Site / Technical Requirements (Public Places Stream)
 
-| Requirement | RBS Status | Notes |
+| Requirement | Renvolt Status | Notes |
 |---|---|---|
 | At least **1 fast charger â‰¥ 100 kW** | âœ… | You're planning 4Ã— 100 kW |
 | **Total site output â‰¥ 150 kW** | âœ… | 4Ã— 100 kW = 400 kW total |
@@ -76,7 +76,7 @@ The **Zero-Emission Vehicle Infrastructure Program** is a federal program run by
 | Site in a **Priority Zone (Rank 4 or 5)** | âš ï¸ **Must verify** | Higher rank = more competitive application |
 | **Public access 24/7** | âš ï¸ **Depends on site** | Gas stations usually yes; some plazas lock lots at night |
 | Chargers must be **new** (not refurbished) | âœ… | You're buying new |
-| Chargers must be **purchased** (not leased) | âœ… | RBS owns the equipment |
+| Chargers must be **purchased** (not leased) | âœ… | Renvolt owns the equipment |
 | Chargers must be **networked** (OCPP compliant) | âš ï¸ **Verify with vendor** | Confirm OCPP support when requesting quotes |
 | Chargers must be **CSA or UL certified** for Canada | âš ï¸ **Verify with vendor** | All major brands (ABB, Tritium, ChargePoint) are certified |
 
@@ -137,7 +137,7 @@ Use this structure for the ZEVIP application narrative:
 
 ### Section 1: Project Overview (Â½ page)
 >
-> Renewable Battery Solutions Ltd. ("RBS") proposes to install a 4-station DC fast-charging site with co-located battery storage at (site address) in (Edmonton/Calgary), Alberta. The project will deploy four (4) 100 kW CCS-compatible DC fast chargers and a 100 kWh lithium iron phosphate (LFP) battery system for demand charge optimization, serving the public 24 hours a day, 7 days a week.
+> Renvolt Ltd. ("Renvolt") proposes to install a 4-station DC fast-charging site with co-located battery storage at (site address) in (Edmonton/Calgary), Alberta. The project will deploy four (4) 100 kW CCS-compatible DC fast chargers and a 100 kWh lithium iron phosphate (LFP) battery system for demand charge optimization, serving the public 24 hours a day, 7 days a week.
 >
 > Total project cost: $(amount). ZEVIP funding requested: $(50% of total).
 
@@ -172,7 +172,7 @@ Use this structure for the ZEVIP application narrative:
 > Estimated annual COâ‚‚ displacement: 175 tonnes (conservative, based on 10% utilization)
 > Over 10-year equipment life: 1,750 tonnes COâ‚‚
 >
-> RBS is committed to the long-term operation and maintenance of this site. Revenue from charging fees and energy optimization ensures financial sustainability beyond the ZEVIP funding period.
+> Renvolt is committed to the long-term operation and maintenance of this site. Revenue from charging fees and energy optimization ensures financial sustainability beyond the ZEVIP funding period.
 
 ---
 
@@ -183,7 +183,7 @@ Use this structure for the ZEVIP application narrative:
 
 ### Days 1-3 (March 6-8): Foundation
 
-- [ ] **Incorporate RBS** â€” Alberta Corporate Registry, online ($275)
+- [ ] **Incorporate Renvolt** â€” Alberta Corporate Registry, online ($275)
 - [ ] **Apply for CRA Business Number** â€” online, same day as incorporation
 - [ ] **Create portal account** at [fuels-decarbonisation-carburants.canada.ca](https://fuels-decarbonisation-carburants.canada.ca)
 - [ ] **Open the EV Charging Planning Map** â€” check Priority Zone ranking for your top 3 target sites
@@ -266,7 +266,7 @@ ZEVIP applications are scored on these criteria (focus your effort accordingly):
 
 | # | Action | Time |
 |---|---|---|
-| 1 | **Incorporate RBS online** | 30 min |
+| 1 | **Incorporate Renvolt online** | 30 min |
 | 2 | **Open Planning Map** â€” check if your target sites are in Rank 4/5 zones | 30 min |
 | 3 | **Create portal account** at fuels-decarbonisation-carburants.canada.ca | 15 min |
 | 4 | **Email ABB, Tritium, ChargePoint** for charger quotes (tell them deadline is March 14) | 30 min |

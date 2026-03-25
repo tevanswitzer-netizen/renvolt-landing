@@ -1,4 +1,4 @@
-# RBS 90-Day Launch Plan — First EV Charging Site
+# Renvolt 90-Day Launch Plan — First EV Charging Site
 
 *Your fractional co-founder playbook: from idea to signed LOIs and submitted grant application in 90 days.*
 
@@ -28,7 +28,7 @@
 
 ```mermaid
 gantt
-    title RBS 90-Day Launch Plan
+    title Renvolt 90-Day Launch Plan
     dateFormat  YYYY-MM-DD
     axisFormat  %b %d
 
@@ -67,7 +67,7 @@ gantt
 **Documents to Create:**
 - [ ] **Site Host Pitch One-Pager** (see template below)
 - [ ] **Basic Financial Model** — simple spreadsheet: CapEx, monthly revenue at 8/12/20% utilization, payback
-- [ ] **Company Overview** — 1-page about RBS for grant applications
+- [ ] **Company Overview** — 1-page about Renvolt for grant applications
 
 **Who to Talk To:**
 - **Alberta Corporate Registry** — incorporate ($275-$500 filing fee)
@@ -174,7 +174,7 @@ gantt
 > [!TIP]  
 > Print this. Check items off. This is your entire first week.
 
-1. **Register an Alberta corporation** — Alberta Corporate Registry, online, $275-$500. Name: "Renewable Battery Solutions Ltd." or similar
+1. **Register an Alberta corporation** — Alberta Corporate Registry, online, $275-$500. Name: "Renvolt Ltd." or similar
 2. **Open a business bank account** — you need this for grant applications. ATB Financial or RBC.
 3. **Call EPCOR (Edmonton) or ENMAX (Calgary)** — ask: *"What's the process, cost, and timeline to add 80-150 kW of commercial 3-phase load to an existing commercial property?"* Write down everything.
 4. **Call NRCan ZEVIP program office** (1-800-387-2000) — ask: *"When is your next intake? What are the eligibility requirements? Can I apply as a new company?"*
@@ -217,7 +217,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 
 ### Phone Script (90 seconds max)
 
-> *"Hi, my name is (Your Name). I run a company called Renewable Battery Solutions — we install EV fast-charging stations at commercial properties across Alberta.*
+> *"Hi, my name is (Your Name). I run a company called Renvolt — we install EV fast-charging stations at commercial properties across Alberta.*
 >
 > *I'm reaching out because your location on (street/highway) looks like a strong fit for an EV charging site. Here's the quick version:*
 >
@@ -233,7 +233,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 
 > Hi (Owner Name),
 >
-> My name is (Your Name), and I'm the founder of Renewable Battery Solutions. We install EV fast-charging stations at commercial properties in the Edmonton/Calgary area.
+> My name is (Your Name), and I'm the founder of Renvolt. We install EV fast-charging stations at commercial properties in the Edmonton/Calgary area.
 >
 > I noticed your property at (address) and think it could be a strong location for EV charging. Here's how it works:
 >
@@ -248,7 +248,7 @@ Use these in conversation — don't read them like a survey. **Listen more than 
 >
 > Best regards,
 > (Your Name)
-> Founder, Renewable Battery Solutions
+> Founder, Renvolt
 > (Phone) | (Email)
 
 ---
@@ -339,7 +339,7 @@ You need:
 > Date: ___________
 >
 > **Between:**
-> Renewable Battery Solutions Ltd. ("RBS")
+> Renvolt Ltd. ("Renvolt")
 > (Your address)
 >
 > **And:**
@@ -348,20 +348,20 @@ You need:
 >
 > **RE: Installation of EV Fast-Charging Equipment at (Site Address)**
 >
-> This Letter of Intent expresses the mutual interest of RBS and Host in the installation and operation of electric vehicle fast-charging equipment at the Host's property located at the above address.
+> This Letter of Intent expresses the mutual interest of Renvolt and Host in the installation and operation of electric vehicle fast-charging equipment at the Host's property located at the above address.
 >
 > **Proposed Terms (Non-Binding):**
-> 1. RBS will install, own, and maintain 4-6 DC fast-charging stations and associated battery storage equipment at the Host's property
-> 2. RBS will bear all costs of equipment, installation, permitting, and ongoing maintenance
+> 1. Renvolt will install, own, and maintain 4-6 DC fast-charging stations and associated battery storage equipment at the Host's property
+> 2. Renvolt will bear all costs of equipment, installation, permitting, and ongoing maintenance
 > 3. Host will provide designated parking spaces and access to electrical infrastructure
 > 4. Host will receive (10-15)% of gross charging revenue as a monthly payment
 > 5. Proposed term: 10 years with option to renew
-> 6. RBS will maintain comprehensive insurance covering all installed equipment
+> 6. Renvolt will maintain comprehensive insurance covering all installed equipment
 >
 > **This LOI is non-binding** and does not create any legal obligation. A definitive agreement will be negotiated and executed prior to any installation.
 >
 > ___________________________
-> (Your Name), CEO, Renewable Battery Solutions Ltd.
+> (Your Name), CEO, Renvolt Ltd.
 >
 > ___________________________
 > (Host Name), (Title), (Host Business)
@@ -372,7 +372,7 @@ You need:
 
 > ### Earn Monthly Revenue from EV Charging — At Zero Cost to You
 >
-> **Renewable Battery Solutions** installs and operates EV fast-charging stations at commercial properties across Alberta.
+> **Renvolt** installs and operates EV fast-charging stations at commercial properties across Alberta.
 >
 > **How It Works:**
 > - We install 4-6 DC fast chargers at your property
@@ -400,4 +400,4 @@ You need:
 >
 > **Contact:**
 > (Your Name) | (Phone) | (Email)
-> Renewable Battery Solutions Ltd. | Edmonton, AB
+> Renvolt Ltd. | Edmonton, AB

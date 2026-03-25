@@ -1,11 +1,11 @@
-# RBS Document Rewrite — Walkthrough
+# Renvolt Document Rewrite — Walkthrough
 
 ## What Was Done
 
 Two revised Word documents were generated and saved to your Desktop:
 
-1. **RBS Comprehensive Business Plan** — 12-section deep document (executive summary, three pillars, integration strategy, financials, investment case, team, risk analysis, roadmap, customer validation, conclusion, appendix)
-2. **RBS Investor Pitch** — Concise, compelling narrative version (~10 pages) designed to be read in one sitting
+1. **Renvolt Comprehensive Business Plan** — 12-section deep document (executive summary, three pillars, integration strategy, financials, investment case, team, risk analysis, roadmap, customer validation, conclusion, appendix)
+2. **Renvolt Investor Pitch** — Concise, compelling narrative version (~10 pages) designed to be read in one sitting
 
 ## Key Fixes Applied
 
@@ -35,5 +35,5 @@ Search both documents for text in **parentheses `()`** — these are your placeh
 
 ## Files
 
-- [Business Plan](file:///C:/Users/Nyasha/OneDrive/Desktop/RBS%20Comprehensive%20Business%20Plan%20-%20Renewable%20Battery%20Solutions.docx)
-- [Investor Pitch](file:///C:/Users/Nyasha/OneDrive/Desktop/RBS%20Investor%20Pitch%20-%20Renewable%20Battery%20Solutions.docx)
+- [Business Plan](file:///C:/Users/Nyasha/OneDrive/Desktop/Renvolt%20Comprehensive%20Business%20Plan%20-%20Renewable%20Battery%20Solutions.docx)
+- [Investor Pitch](file:///C:/Users/Nyasha/OneDrive/Desktop/Renvolt%20Investor%20Pitch%20-%20Renewable%20Battery%20Solutions.docx)

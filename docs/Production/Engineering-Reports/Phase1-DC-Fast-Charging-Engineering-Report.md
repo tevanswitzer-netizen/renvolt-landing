@@ -412,7 +412,7 @@ I = 75,000 / 400 = 187.5 A → 125% = 234 A
 | Permitting + inspection fees | 1 | $3,000 | $3,000 |
 | **TOTAL (pre-grant)** | | | **$207,300** |
 | **ZEVIP 75% (Indigenous partnership)** | | | **–$155,475** |
-| **NET COST TO RBS** | | | **$51,825** |
+| **NET COST TO Renvolt** | | | **$51,825** |
 
 > [!NOTE]
 > These are Q1 2026 estimates. Battery module prices are declining ~15%/year. Actual costs will vary by site conditions, utility requirements, and equipment vendor.
@@ -424,14 +424,14 @@ I = 75,000 / 400 = 187.5 A → 125% = 234 A
 | Step | Responsible | Timeline |
 |------|-------------|----------|
 | Electrical permit application (Alberta Safety Codes) | Master Electrician | Week 1 |
-| FortisAlberta service application (200A commercial) | RBS / Electrician | Weeks 1–4 |
+| FortisAlberta service application (200A commercial) | Renvolt / Electrician | Weeks 1–4 |
 | P.Eng. stamped drawings (single-line, site plan) | Contracted P.Eng. | Weeks 2–3 |
 | AHJ review (municipal planning, if applicable) | Municipality | Weeks 3–6 |
 | Foundation / concrete pour | Civil contractor | Week 5 |
-| Equipment installation | RBS Master Electrician | Weeks 6–8 |
+| Equipment installation | Renvolt Master Electrician | Weeks 6–8 |
 | Rough-in inspection | Safety Codes Officer | Week 7 |
-| Energization request to FortisAlberta | RBS / Utility | Week 8 |
-| Final inspection + system commissioning | Safety Codes Officer + RBS | Week 9 |
+| Energization request to FortisAlberta | Renvolt / Utility | Week 8 |
+| Final inspection + system commissioning | Safety Codes Officer + Renvolt | Week 9 |
 | CUL/CSA compliance verification | Equipment vendor | Pre-shipment |
 | **Total timeline: ~9–12 weeks** (from permit to energized) | | |
 

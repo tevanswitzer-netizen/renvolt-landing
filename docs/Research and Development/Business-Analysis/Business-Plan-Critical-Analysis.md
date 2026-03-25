@@ -1,4 +1,4 @@
-﻿# RBS (Renewable Battery Solutions) â€” Deep Analysis
+﻿# Renvolt (Renvolt) â€” Deep Analysis
 
 A critical review of the **Comprehensive Business Plan** and the **Investor Pitch (4-Section Business Case)**.
 
@@ -49,7 +49,7 @@ Both documents show good understanding of the ZEVIP program, provincial grants, 
 The Investor Pitch projects **66% profit margins** by Year 5 ($20.74M profit on $31.24M revenue). This is extremely aggressive. For context:
 - **Tesla Energy** runs ~25% gross margins
 - **Enphase Energy** (best-in-class) achieves ~42% gross margins
-- **SaaS companies** average 65-75% gross margins, but RBS is a *hardware-heavy* business
+- **SaaS companies** average 65-75% gross margins, but Renvolt is a *hardware-heavy* business
 
 A hardware + services business achieving 66% margins would be unprecedented. The Business Plan's 30% EBITDA margin is much more realistic but still optimistic for a Year 5 company.
 
@@ -152,7 +152,7 @@ This phased approach is more credible and more fundable.
 Before approaching investors, you need:
 - At least **1 paid pilot deployment** for Pillar 1 or 2
 - Real operational data (charging revenue, demand charge savings, uptime %)
-- A signed **customer letter** saying "We'd expand to X more sites if RBS can deliver"
+- A signed **customer letter** saying "We'd expand to X more sites if Renvolt can deliver"
 - This converts the entire plan from "theoretical" to "proven at small scale"
 
 ### 7. Address the Alberta EV Market Honestly
