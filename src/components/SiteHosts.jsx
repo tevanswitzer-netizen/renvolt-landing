@@ -1,10 +1,10 @@
-import React, { useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MapPin, Battery, DollarSign, Wrench, TrendingUp, Snowflake } from 'lucide-react';
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect';
 
 gsap.registerPlugin(ScrollTrigger);
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 const SiteHosts = () => {
     const container = useRef(null);

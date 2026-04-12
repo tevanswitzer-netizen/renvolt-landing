@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Map as MapIcon, Zap } from 'lucide-react';
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect';
 
 gsap.registerPlugin(ScrollTrigger);
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
 const DiagnosticShuffler = () => {
     const [cards, setCards] = useState([
         { id: 1, title: 'Hwy 2 Corridor', status: 'Priority Gap Identified', color: 'bg-primary/10 text-primary' },

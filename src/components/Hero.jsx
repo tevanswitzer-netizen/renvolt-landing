@@ -1,9 +1,8 @@
-import React, { useRef, useLayoutEffect, useEffect } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ArrowRight } from 'lucide-react';
 import { scrollToSection } from './Navbar';
-
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect';
 
 const Hero = () => {
     const container = useRef(null);
@@ -31,12 +30,16 @@ const Hero = () => {
 
     return (
         <section ref={container} className="relative h-[100dvh] w-full overflow-hidden bg-dark">
-            {/* Background Image: Dark Forest Road */}
+            {/* Background Image: Self-hosted highway scene */}
             <div className="absolute inset-0 w-full h-full">
                 <img
-                    src="https://images.unsplash.com/photo-1542223616-9b570e6e7d69?q=80&w=2000&auto=format&fit=crop"
-                    alt="Dark highway through forest"
+                    src="/hero-bg.webp"
+                    alt="Dark highway through Alberta wilderness at dusk"
                     className="w-full h-full object-cover scale-105"
+                    width={2000}
+                    height={2000}
+                    loading="eager"
+                    fetchpriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-transparent" />
             </div>
@@ -52,7 +55,7 @@ const Hero = () => {
                         </span>
                     </h1>
                     <p className="hero-text mt-8 text-background/80 font-sans text-lg md:text-xl max-w-xl text-balance">
-                        Fast EV charging for Alberta’s highway gaps, powered by smart battery‑backed infrastructure.
+                        Fast EV charging for Alberta's highway gaps, powered by smart battery‑backed infrastructure.
                     </p>
                     <div className="hero-btn mt-10 space-x-4">
                         <button onClick={() => scrollToSection('site-host-form')} className="relative overflow-hidden bg-accent text-background px-8 py-4 rounded-full font-sans text-base font-semibold hover:scale-[1.03] transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group inline-flex items-center gap-2">

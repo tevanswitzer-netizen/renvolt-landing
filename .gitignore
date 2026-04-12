@@ -24,3 +24,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Internal docs & dev artifacts
+cinematic_builder.md
+Renvolt_AI_Context_Master_Prompt.md
+generate_ad_screenshot.cjs
+NotebookLM_Sources/
+notebooklm/
+GEMINI.md/

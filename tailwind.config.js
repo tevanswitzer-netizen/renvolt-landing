@@ -20,7 +20,13 @@ export default {
             borderRadius: {
                 '4xl': '2rem',
                 '5xl': '3rem',
-            }
+            },
+            zIndex: {
+                nav: '40',
+                overlay: '50',
+                modal: '60',
+                skipLink: '100',
+            },
         },
     },
     plugins: [],

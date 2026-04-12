@@ -1,9 +1,12 @@
 import React from 'react';
 import { scrollToSection } from './Navbar';
+import { useModal } from '../context/ModalContext';
 
 const Footer = () => {
+    const { openPrivacy } = useModal();
+
     return (
-        <footer className="bg-dark text-background rounded-t-[4rem] px-8 py-16 md:py-24 pb-8 overflow-hidden relative z-20 mt-12">
+        <footer className="bg-dark text-background rounded-t-[4rem] px-8 py-16 md:py-24 pb-8 overflow-hidden relative z-overlay mt-12">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
 
                 <div className="max-w-md">
@@ -24,19 +27,15 @@ const Footer = () => {
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Platform</div>
                         <button onClick={() => scrollToSection('features')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Infrastructure</button>
-                        <button onClick={() => scrollToSection('comparison')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Why Renvolt</button>
                         <button onClick={() => scrollToSection('site-hosts')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Site Hosts</button>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Company</div>
-                        <button onClick={() => scrollToSection('philosophy')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">About</button>
-                        <button onClick={() => scrollToSection('pipeline')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Pipeline</button>
                         <button onClick={() => scrollToSection('site-host-form')} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px]">Contact</button>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="text-white font-bold tracking-wide mb-2">Legal</div>
-                        <span className="text-background/30 cursor-default">Privacy</span>
-                        <span className="text-background/30 cursor-default">Terms</span>
+                        <button onClick={openPrivacy} className="text-left hover:text-accent transition-colors hover:-translate-y-[1px] text-background/60">Privacy Policy</button>
                     </div>
                 </div>
 

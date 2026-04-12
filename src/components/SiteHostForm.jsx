@@ -1,16 +1,17 @@
-import React, { useRef, useLayoutEffect, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, CheckCircle2, AlertCircle, RotateCcw } from 'lucide-react';
 import { WEB3FORMS_ACCESS_KEY, WEB3FORMS_ENDPOINT } from '../config/emailConfig';
+import useIsomorphicLayoutEffect from '../hooks/useIsomorphicLayoutEffect';
 
 gsap.registerPlugin(ScrollTrigger);
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 const SiteHostForm = () => {
     const containerRef = useRef(null);
     const [formState, setFormState] = useState('idle'); // idle | sending | sent | error
     const [errorMessage, setErrorMessage] = useState('');
+    const [touched, setTouched] = useState({});
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -23,8 +24,31 @@ const SiteHostForm = () => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const handleBlur = (e) => {
+        setTouched(prev => ({ ...prev, [e.target.name]: true }));
+    };
+
+    const getFieldError = (field) => {
+        if (!touched[field]) return null;
+        if (field === 'name' && !formData.name.trim()) return 'Name is required';
+        if (field === 'email') {
+            if (!formData.email.trim()) return 'Email is required';
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Please enter a valid email';
+        }
+        return null;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Mark all required fields as touched
+        setTouched({ name: true, email: true });
+
+        // Validate before submitting
+        if (!formData.name.trim() || !formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            return;
+        }
+
         setFormState('sending');
         setErrorMessage('');
 
@@ -63,6 +87,7 @@ const SiteHostForm = () => {
     const handleRetry = () => {
         setFormState('idle');
         setErrorMessage('');
+        setTouched({});
     };
 
     useIsomorphicLayoutEffect(() => {
@@ -87,6 +112,10 @@ const SiteHostForm = () => {
         { value: '75%', label: 'Grant-funded CapEx' },
         { value: '18 mo', label: 'Est. payback period' }
     ];
+
+    const inputBaseClass = "w-full bg-white/5 border rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none transition-colors";
+    const inputNormalClass = `${inputBaseClass} border-white/10 focus:border-accent/50`;
+    const inputErrorClass = `${inputBaseClass} border-red-400/60 focus:border-red-400`;
 
     return (
         <section id="site-host-form" ref={containerRef} className="relative w-full py-24 md:py-32 px-6 overflow-hidden bg-dark text-background rounded-t-[3rem]">
@@ -130,57 +159,89 @@ const SiteHostForm = () => {
                                 </button>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmit} className="bg-white/5 border border-white/10 rounded-[2rem] p-8 md:p-10 space-y-5">
+                            <form onSubmit={handleSubmit} className="bg-white/5 border border-white/10 rounded-[2rem] p-8 md:p-10 space-y-5" noValidate>
                                 <h3 className="font-sans font-bold text-xl text-background mb-2">Site Partner Inquiry</h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Your Name"
-                                        required
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none focus:border-accent/50 transition-colors"
-                                    />
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Email Address"
-                                        required
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none focus:border-accent/50 transition-colors"
-                                    />
+                                    <div>
+                                        <label htmlFor="field-name" className="sr-only">Your Name</label>
+                                        <input
+                                            id="field-name"
+                                            type="text"
+                                            name="name"
+                                            placeholder="Your Name"
+                                            required
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            aria-invalid={!!getFieldError('name')}
+                                            aria-describedby={getFieldError('name') ? 'error-name' : undefined}
+                                            className={getFieldError('name') ? inputErrorClass : inputNormalClass}
+                                        />
+                                        {getFieldError('name') && (
+                                            <p id="error-name" className="mt-1 text-xs text-red-400 font-sans" role="alert">{getFieldError('name')}</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="field-email" className="sr-only">Email Address</label>
+                                        <input
+                                            id="field-email"
+                                            type="email"
+                                            name="email"
+                                            placeholder="Email Address"
+                                            required
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            aria-invalid={!!getFieldError('email')}
+                                            aria-describedby={getFieldError('email') ? 'error-email' : undefined}
+                                            className={getFieldError('email') ? inputErrorClass : inputNormalClass}
+                                        />
+                                        {getFieldError('email') && (
+                                            <p id="error-email" className="mt-1 text-xs text-red-400 font-sans" role="alert">{getFieldError('email')}</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <input
-                                        type="text"
-                                        name="business"
-                                        placeholder="Business / Location Name"
-                                        value={formData.business}
-                                        onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none focus:border-accent/50 transition-colors"
-                                    />
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        placeholder="Phone Number"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none focus:border-accent/50 transition-colors"
-                                    />
+                                    <div>
+                                        <label htmlFor="field-business" className="sr-only">Business / Location Name</label>
+                                        <input
+                                            id="field-business"
+                                            type="text"
+                                            name="business"
+                                            placeholder="Business / Location Name"
+                                            value={formData.business}
+                                            onChange={handleChange}
+                                            className={inputNormalClass}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="field-phone" className="sr-only">Phone Number</label>
+                                        <input
+                                            id="field-phone"
+                                            type="tel"
+                                            name="phone"
+                                            placeholder="Phone Number"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            className={inputNormalClass}
+                                        />
+                                    </div>
                                 </div>
 
-                                <textarea
-                                    name="message"
-                                    placeholder="Tell us about your location — highway, amenities, parking capacity..."
-                                    rows={4}
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-sans text-sm text-background placeholder:text-background/30 focus:outline-none focus:border-accent/50 transition-colors resize-none"
-                                />
+                                <div>
+                                    <label htmlFor="field-message" className="sr-only">Tell us about your location</label>
+                                    <textarea
+                                        id="field-message"
+                                        name="message"
+                                        placeholder="Tell us about your location — highway, amenities, parking capacity..."
+                                        rows={4}
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        className={`${inputNormalClass} resize-none`}
+                                    />
+                                </div>
 
                                 <button
                                     type="submit"
