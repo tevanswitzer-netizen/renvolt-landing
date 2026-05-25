@@ -1,0 +1,3484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renvolt | Mobile Electrical Design & Quoting Cockpit</title>
+  <!-- Google Fonts: Cormorant Garamond, IBM Plex Mono, and Plus Jakarta Sans (Branded) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       AESTHETIC STYLE SYSTEM: PREMIUM DARK GLASSMORPHISM
+       ========================================================================== */
+    :root {
+      --bg-main: #F2F0E9;
+      --bg-card: #FFFFFF;
+      --bg-input: #FFFFFF;
+      --border-color: rgba(46, 64, 54, 0.12);
+      
+      --color-text: #1A1A1A;
+      --color-muted: #5F7367;
+      
+      --color-primary: #2E4036;
+      --color-primary-glow: rgba(46, 64, 54, 0.12);
+      --color-accent: #CC5833;
+      --color-accent-glow: rgba(204, 88, 51, 0.15);
+      
+      --color-success: #22C55E;
+      --color-success-bg: rgba(34, 197, 150, 0.08);
+      --color-warning: #F97316;
+      --color-warning-bg: rgba(249, 115, 22, 0.08);
+      --color-danger: #EF4444;
+      --color-danger-bg: rgba(239, 68, 68, 0.08);
+      
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      
+      --shadow-sm: 0 2px 4px rgba(46, 64, 54, 0.04);
+      --shadow-md: 0 10px 30px rgba(46, 64, 54, 0.06);
+      --shadow-glow: 0 0 20px rgba(204, 88, 51, 0.15);
+      
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--color-text);
+      line-height: 1.5;
+      padding: 16px 20px;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(204, 88, 51, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(46, 64, 54, 0.03) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* SVG Noise Texture Overlay */
+    .noise-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+    }
+    .noise-overlay:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      filter: url(#noise);
+    }
+
+    /* APP SHELL — always side-by-side via flexbox wrapper */
+    .app-container {
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* Full-width rows (header, presets) */
+    .app-container > header,
+    .app-container > .presets-panel {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    /* Two-column body: material selection LEFT, pricing RIGHT */
+    .columns-wrapper {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .left-col {
+      flex: 1.2;
+      min-width: 0; /* prevent overflow */
+    }
+
+    .right-col {
+      flex: 0.8;
+      min-width: 340px;
+      position: sticky;
+      top: 16px;
+      align-self: flex-start;
+    }
+
+    /* HEADER & BRANDING */
+    header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      display: block;
+      margin-top: -2px;
+    }
+
+    .header-meta {
+      text-align: right;
+    }
+
+    .header-meta p {
+      font-size: 13px;
+      color: var(--color-muted);
+    }
+
+    .header-meta strong {
+      color: var(--color-text);
+    }
+
+    /* DATABASE / PRESETS ACTIONS PANEL */
+    .presets-panel {
+      grid-column: 1 / -1;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+      backdrop-filter: blur(10px);
+    }
+
+    .preset-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .presets-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-preset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-preset:hover {
+      background: rgba(0, 225, 255, 0.1);
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .db-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* PREMIUM CARD GLASSMORPHISM */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: var(--transition);
+      margin-bottom: 16px;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 225, 255, 0.2);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--color-text);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 10px;
+    }
+
+    .card-title span.badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid var(--color-accent);
+      color: #93c5fd;
+    }
+
+    /* TABBED SYSTEM UI */
+    .tabs-nav {
+      display: flex;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 5px;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--color-muted);
+      padding: 9px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      color: var(--color-primary);
+      background: rgba(46, 64, 54, 0.05);
+    }
+
+    .tab-btn.active {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(46, 64, 54, 0.15);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE SVG CIRCULAR GAUGES */
+    .gauges-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .gauge-wrapper {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .gauge-svg {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 10px auto;
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 8px;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke-width: 8px;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50px 50px;
+      transition: stroke-dashoffset 0.5s ease-out, stroke 0.3s ease;
+    }
+
+    .gauge-value {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      fill: var(--color-text);
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .gauge-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* INPUTS & TOGGLES */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(204, 88, 51, 0.15);
+    }
+
+    .btn-toggle-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .btn-toggle {
+      background: none;
+      border: none;
+      color: var(--color-muted);
+      padding: 10px 4px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .btn-toggle.active {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: var(--bg-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* SLIDERS */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      background: var(--bg-input);
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      background: var(--color-accent);
+    }
+
+    .slider-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-accent);
+      font-family: var(--font-mono);
+    }
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* DYNAMIC TOGGLE SWITCHES */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(255,255,255,0.01);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 14px;
+    }
+
+    .switch-label-desc {
+      font-size: 11px;
+      color: var(--color-muted);
+      margin-top: 2px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--color-muted);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(24px);
+      background-color: var(--color-primary);
+    }
+
+    /* FEEDBACK PANELS */
+    .status-panel {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      font-weight: 500;
+      font-size: 12.5px;
+    }
+
+    .status-panel.pass {
+      background-color: var(--color-success-bg);
+      border: 1px solid var(--color-success);
+      color: var(--color-success);
+    }
+
+    .status-panel.warning {
+      background-color: var(--color-warning-bg);
+      border: 1px solid var(--color-warning);
+      color: var(--color-warning);
+    }
+
+    .status-panel.fail {
+      background-color: var(--color-danger-bg);
+      border: 1px solid var(--color-danger);
+      color: var(--color-danger);
+    }
+
+    .status-icon {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* DYNAMIC MATERIALS TABLE */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12.5px;
+    }
+
+    th {
+      background-color: rgba(46, 64, 54, 0.04);
+      color: var(--color-primary);
+      padding: 10px 12px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 10.5px;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(46, 64, 54, 0.06);
+      color: var(--color-text);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table-actions {
+      color: var(--color-danger);
+      cursor: pointer;
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* TAKE-OFF EDITABLE CELLS */
+    .takeoff-input {
+      background: rgba(46, 64, 54, 0.04);
+      border: 1px dashed rgba(46, 64, 54, 0.2);
+      border-radius: 4px;
+      color: var(--color-text);
+      padding: 3px 6px;
+      font-size: 11.5px;
+      width: 70px;
+      text-align: right;
+      transition: all 0.2s ease;
+      font-family: var(--font-mono);
+    }
+    .takeoff-input:focus {
+      outline: none;
+      background: rgba(46, 64, 54, 0.06);
+      border: 1px solid var(--color-accent);
+      box-shadow: 0 0 5px rgba(204, 88, 51, 0.2);
+    }
+    .takeoff-input.overridden {
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(204, 88, 51, 0.04);
+    }
+    .btn-reset-item {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      cursor: pointer;
+      font-size: 11px;
+      padding: 0;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .btn-reset-item:hover {
+      opacity: 1;
+    }
+
+    /* SCOREBOARD SUMMARY METRICS */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .metric-box {
+      background-color: rgba(46, 64, 54, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 10px;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: var(--font-mono);
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-top: 2px;
+    }
+
+    .metric-val.profit {
+      color: var(--color-success);
+    }
+
+    .metric-val.total {
+      color: var(--color-accent);
+    }
+
+    .metric-label {
+      font-size: 9px;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+    }
+
+    /* PREMIUM ACTION BUTTONS */
+    .btn {
+      width: 100%;
+      background: var(--color-accent);
+      border: none;
+      color: white;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(204, 88, 51, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--color-primary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(46, 64, 54, 0.05);
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-success {
+      background: var(--color-success);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* EXPORTERS CODE TEXTAREAS */
+    .export-box {
+      width: 100%;
+      background-color: rgba(46, 64, 54, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--color-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 14px;
+      height: 160px;
+      resize: none;
+      outline: none;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--color-success);
+      color: var(--bg-main);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* PRINT LAYOUT PDF */
+    @media print {
+      body {
+        background-color: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+      .no-print, 
+      .btn, 
+      .btn-toggle-group,
+      .slider-container,
+      .switch-container,
+      .presets-panel,
+      .tabs-nav,
+      .gauges-container,
+      input, select, textarea {
+        display: none !important;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 20px !important;
+      }
+      .app-container,
+      .columns-wrapper {
+        display: block !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      table {
+        color: black !important;
+        border-color: #ccc !important;
+      }
+      th {
+        background-color: #f0f0f0 !important;
+        color: black !important;
+        border-bottom-color: #aaa !important;
+      }
+      td {
+        border-bottom-color: #eee !important;
+        color: black !important;
+      }
+      .metric-box {
+        border: 1px solid #ccc !important;
+        background: white !important;
+      }
+      .metric-val {
+        color: black !important;
+      }
+      header {
+        border-bottom-color: black !important;
+      }
+      .brand-logo {
+        border: none !important;
+      }
+      .brand-tag {
+        color: #555 !important;
+      }
+    }
+
+    .print-only {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Noise Filter for Visual Texture -->
+  <svg style="display: none;">
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+  </svg>
+  <div class="noise-overlay"></div>
+
+  <!-- Toast Message -->
+  <div id="toast" class="toast">Successfully copied to clipboard!</div>
+
+  <div class="app-container">
+
+    <!-- CO-FOUNDER OPERATIONAL HEADER -->
+    <header>
+      <div class="brand">
+        <img src="logo-transparent-dark.png" alt="Renvolt Logo" class="brand-logo">
+        <div>
+          <h1 class="brand-title">Renvolt</h1>
+          <span class="brand-tag">EV Installation Calculator</span>
+        </div>
+      </div>
+      <div class="header-meta no-print">
+        <p>CEC Code Edition: <strong>2024 (CSA C22.1-24)</strong></p>
+        <p>Market Zone: <strong>Edmonton & Greater Area</strong></p>
+      </div>
+    </header>
+
+    <!-- TOP CONTROL PANEL: INSTALL PROFILES & LOCAL DATABASE -->
+    <div class="presets-panel no-print">
+      <div>
+        <div class="preset-label">Quick Installation Profiles</div>
+        <div class="presets-row" style="margin-top: 6px;">
+          <button class="btn-preset" onclick="loadPresetProfile('attached')">⚡ Standard Attached</button>
+          <button class="btn-preset" onclick="loadPresetProfile('detached')">🚜 Detached Laneway</button>
+          <button class="btn-preset" onclick="loadPresetProfile('evems')">🛡️ Smart EVEMS</button>
+        </div>
+      </div>
+      <div>
+        <div class="preset-label">Saved Project Database</div>
+        <div class="db-controls" style="margin-top: 6px;">
+          <input type="text" id="quoteNameInput" placeholder="Client name (e.g. John Doe)" style="padding: 8px 12px; font-size: 13px; max-width: 160px;">
+          <select id="quoteStatusSelect" onchange="updateQuoteStatusBadge()" style="padding: 8px 10px; font-size: 13px; width: 140px; font-weight: 600;">
+            <option value="pending" style="color: #f97316;">⏳ Pending</option>
+            <option value="sent" style="color: #00e1ff;">📤 Sent</option>
+            <option value="accepted" style="color: #10b981;">✅ Accepted</option>
+            <option value="declined" style="color: #ef4444;">❌ Declined</option>
+            <option value="invoiced" style="color: #a78bfa;">🧾 Invoiced</option>
+          </select>
+          <button class="btn-preset" onclick="saveQuoteToDB()" style="background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success);">💾 Save</button>
+          <select id="savedQuotesDropdown" onchange="loadQuoteFromDB(this.value)" style="padding: 8px 12px; font-size: 13px; width: 160px;">
+            <option value="">-- Load Saved Quote --</option>
+          </select>
+          <button class="btn-preset" onclick="deleteQuoteFromDB()" style="background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger); padding: 8px 10px;">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO-COLUMN LAYOUT: material selection LEFT, pricing RIGHT -->
+    <div class="columns-wrapper">
+
+    <!-- LEFT COLUMN: TABS PANEL & CODE SPECIFICATIONS -->
+    <div class="left-col no-print">
+      
+      <!-- NAV TABS -->
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('sizingTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-16h-9l1-4z"/></svg>
+          CEC Sizer
+        </button>
+        <button class="tab-btn" onclick="switchTab('trenchingTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          Trenching
+        </button>
+        <button class="tab-btn" onclick="switchTab('loadsTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          Demand Calculation
+        </button>
+        <button class="tab-btn" onclick="switchTab('exportsTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+          Exporters
+        </button>
+        <button class="tab-btn" onclick="switchTab('crmTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          CRM Workspace
+        </button>
+      </div>
+
+      <!-- TAB 1: CEC SIZING -->
+      <div id="sizingTab" class="tab-content active">
+        
+        <!-- Live Visual Gauges -->
+        <div class="gauges-container">
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+              <circle class="gauge-fill" id="capacityGauge" cx="50" cy="50" r="40" stroke="var(--color-success)" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+              <text class="gauge-value" id="capacityGaugeText" x="50" y="52">0%</text>
+            </svg>
+            <div class="gauge-label">Panel Load Demand</div>
+          </div>
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+              <circle class="gauge-fill" id="vdropGauge" cx="50" cy="50" r="40" stroke="var(--color-primary)" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+              <text class="gauge-value" id="vdropGaugeText" x="50" y="52">0%</text>
+            </svg>
+            <div class="gauge-label">Voltage Drop</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Step 1: Continuous Charging Sizing
+            <span class="badge">Rule 86-306</span>
+          </div>
+          <div class="form-group">
+            <label>EVSE Charger Hardware</label>
+            <select id="chargerHardwareSelect" onchange="selectEVSEHardware(this.value)">
+              <option value="tesla" selected>Tesla Universal Wall Connector ($850 - Max 48A)</option>
+              <option value="chargepoint">ChargePoint Home Flex ($950 - Max 50A)</option>
+              <option value="grizzle">Grizzl-E Classic ($550 - Max 40A)</option>
+              <option value="flo">Flo Home G5 & X5 ($995 - Fixed 30A)</option>
+              <option value="wallbox">Wallbox Pulsar Plus ($825 - Max 48A)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Continuous Charging Current</label>
+            <div class="btn-toggle-group" id="ampsButtonContainer">
+              <!-- Rendered dynamically in JS -->
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Continuous Load Amps</label>
+              <input type="number" id="continuousAmps" value="32" readonly>
+            </div>
+            <div class="form-group">
+              <label>CEC Overcurrent Breaker (125%)</label>
+              <select id="calculatedBreaker" onchange="runElectricalMath()">
+                <option value="30">30A 2-Pole</option>
+                <option value="40" selected>40A 2-Pole (Standard Baseline)</option>
+                <option value="50">50A 2-Pole</option>
+                <option value="60">60A 2-Pole (Max Hardwired)</option>
+                <option value="100">100A 2-Pole (Legacy High-Power)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Step 2: Conductor & Voltage Drop Math
+            <span class="badge">Rule 8-102</span>
+          </div>
+          <div class="input-row">
+            <div class="form-group">
+              <label>Conductor Core Material</label>
+              <select id="wireMaterial" onchange="runElectricalMath()">
+                <option value="Cu" selected>Copper (Cu) - Low Resistance</option>
+                <option value="Al">Aluminum (Al)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Branch Wiring Method</label>
+              <select id="runType" onchange="runElectricalMath()">
+                <option value="NMD90" selected>NMD90 (Dry / Attached Garage)</option>
+                <option value="Teck90">Teck90 Armored Cable (Exposed / High Safety)</option>
+                <option value="Conduit">Single Conductors in Conduit (PVC / EMT)</option>
+              </select>
+            </div>
+            <div class="form-group" id="conduitTypeGroup" style="display: none;">
+              <label>Conduit Pipe Material</label>
+              <select id="conduitType" onchange="runElectricalMath()">
+                <option value="PVC" selected>Rigid PVC (Schedule 40 - Corrosion Resistant)</option>
+                <option value="EMT">EMT (Electrical Metallic Tubing - Metal)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 15px;">
+            <label>One-Way Cable Branch Length</label>
+            <div class="slider-container">
+              <input type="range" id="runLength" min="5" max="150" step="5" value="30" oninput="updateRunLength(this.value)">
+              <span class="slider-val" id="runLengthVal">30 ft</span>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="form-group">
+              <label>Code Ampacity Gauge</label>
+              <input type="text" id="initialGauge" value="#8 AWG" readonly style="color: var(--color-muted);">
+            </div>
+            <div class="form-group">
+              <label>Final Compliant Gauge</label>
+              <input type="text" id="finalGauge" value="#8 AWG" readonly style="font-weight: 700; color: var(--color-primary);">
+            </div>
+          </div>
+
+          <div class="card-subtitle" style="margin-top: 20px; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; color: var(--color-primary);">
+            🛠️ Professional Installation Specs
+          </div>
+          
+          <div class="input-row" style="margin-top: 10px;">
+            <div class="form-group">
+              <label>Connection Archetype</label>
+              <select id="chargerConnectionType" onchange="runElectricalMath()">
+                <option value="hardwired" selected>Hardwired (Safest / Direct connection)</option>
+                <option value="plugin-nema">NEMA 14-50 Plug-In (Heavy-Duty Industrial)</option>
+              </select>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+              <div>
+                <span style="font-weight: 600; font-size: 13px;">GFCI Breaker Required?</span>
+                <div style="font-size: 10px; color: var(--color-muted);">CEC Rule 86-306 GFCI protection</div>
+              </div>
+              <label class="switch" style="width: 52px; height: 28px; margin-left: 10px;">
+                <input type="checkbox" id="gfciRequired" onchange="runElectricalMath()">
+                <span class="slider-switch"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="input-row" style="margin-top: 10px;">
+            <div class="form-group">
+              <label>Interior Drywall Routing Surcharge</label>
+              <select id="drywallSurcharge" onchange="runElectricalMath()">
+                <option value="none" selected>None (Open framing / surface conduit)</option>
+                <option value="simple">Simple Routing (Minor patching/taping - +$250)</option>
+                <option value="complex">Complex Finished Ceiling & Paint - +$650</option>
+              </select>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+              <div>
+                <span style="font-weight: 600; font-size: 13px;">Concrete Foundation Boring?</span>
+                <div style="font-size: 10px; color: var(--color-muted);">Core drilling through concrete</div>
+              </div>
+              <label class="switch" style="width: 52px; height: 28px; margin-left: 10px;">
+                <input type="checkbox" id="concreteBoring" onchange="runElectricalMath()">
+                <span class="slider-switch"></span>
+              </label>
+            </div>
+          </div>
+
+          <div id="vdropStatus" class="status-panel pass">
+            <div class="status-icon">✓</div>
+            <div id="vdropStatusText">Voltage drop values are fully within CEC limits.</div>
+          </div>
+
+          <div id="terminalStatus" class="status-panel pass" style="margin-top: 12px;">
+            <div class="status-icon">✓</div>
+            <div id="terminalStatusText">Charger terminal limits verified.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: TRENCHING -->
+      <div id="trenchingTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            Rear Lane / Detached Trench Sizing
+            <span class="badge">Rule 12-012</span>
+          </div>
+          
+          <div class="switch-container">
+            <div>
+              <span style="font-weight: 700; font-size: 15px;">Detached Garage Install?</span>
+              <div class="switch-label-desc">Requires underground excavation and Schedule 40 PVC encasement</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="isDetached" onchange="toggleDetached(this.checked)">
+              <span class="slider-switch"></span>
+            </label>
+          </div>
+
+          <div id="detachedFields" style="display: none;">
+            <div class="form-group">
+              <label>Trench Run Length (ft)</label>
+              <div class="slider-container">
+                <input type="range" id="trenchLength" min="5" max="120" step="5" value="30" oninput="updateTrenchLength(this.value)">
+                <span class="slider-val" id="trenchLengthVal">30 ft</span>
+              </div>
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>Burial Digging Method</label>
+                <select id="digMethod" onchange="runElectricalMath()">
+                  <option value="hand" selected>Hand Shovel (High Labour / Sensitive Landscaping)</option>
+                  <option value="trench">Mini-Excavator Trenching (Fast / Large Open Yards)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Minimum CEC Depth</label>
+                <input type="text" value="18 inches (450mm)" readonly style="font-weight: 700; color: var(--color-warning);">
+              </div>
+            </div>
+
+            <div class="status-panel warning" style="margin-top: 16px;">
+              <div class="status-icon">⚠️</div>
+              <div><strong>Permit Notice:</strong> Soil digging in Alberta legally requires utility checks. Prior to break-ground, clear locates with Alberta One-Call (AB811).</div>
+            </div>
+          </div>
+          <div id="detachedDisabledNotice" style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">
+            Select "Detached Garage Install" above to configure underground trench specifications.
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: DEMAND CALCULATION -->
+      <div id="loadsTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            Panel Capacity Sizing Check
+            <span class="badge">Rule 8-200</span>
+          </div>
+
+          <div class="switch-container">
+            <div>
+              <span style="font-weight: 700; font-size: 15px;">Smart Load Management (EVEMS)?</span>
+              <div class="switch-label-desc">Bypasses charger Continuous demand from panel sizing under Rule 8-106</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="useEVEMS" onchange="toggleEVEMS(this.checked)">
+              <span class="slider-switch"></span>
+            </label>
+          </div>
+
+          <div id="panelCalcFields">
+            <div class="input-row">
+              <div class="form-group">
+                <label>Main Service Rating (Amps)</label>
+                <select id="serviceAmps" onchange="runElectricalMath()">
+                  <option value="60">60A Main Service (Vintage / Mandates EVEMS)</option>
+                  <option value="100" selected>100A Main Service (Standard Residential)</option>
+                  <option value="125">125A Main Service</option>
+                  <option value="150">150A Main Service</option>
+                  <option value="200">200A Main Service</option>
+                  <option value="225">225A Main Service (High Capacity)</option>
+                  <option value="400">400A Main Service (Dual Feed Estate)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Total Floor Area (sq meters)</label>
+                <select id="floorArea" onchange="runElectricalMath()">
+                  <option value="80">Under 90 m² (~960 sq ft)</option>
+                  <option value="150" selected>90 m² to 180 m² (Standard Bungalow/Two-Storey)</option>
+                  <option value="220">Over 180 m² (Large Executive Home)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin: 15px 0 10px 0; font-size: 11px; color: var(--color-muted); font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 6px; letter-spacing: 0.5px;">
+              HOUSEHOLD APPLIANCES LOADS
+            </div>
+
+            <div class="input-row" style="grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
+                <input type="checkbox" id="loadStove" checked onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
+                Range / Oven (Rule 8-200: 6kW)
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
+                <input type="checkbox" id="loadDryer" checked onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
+                Clothes Dryer (Rule 8-200: 2.5kW)
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
+                <input type="checkbox" id="loadWater" checked onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
+                Hot Water Tank (3kW)
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
+                <input type="checkbox" id="loadAC" onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
+                Central A/C (100% Demand)
+              </label>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label>Electric Heating System Capacity</label>
+                <select id="loadHeating" onchange="runElectricalMath()">
+                  <option value="0" selected>No Electric Space Heating (Gas Furnace)</option>
+                  <option value="5000">5 kW Electric Space Heat</option>
+                  <option value="10000">10 kW Electric Space Heat</option>
+                  <option value="15000">15 kW Electric Space Heat</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-row" style="margin-top: 8px;">
+              <div class="form-group">
+                <label>Main Service & Panel Upgrades</label>
+                <select id="serviceUpgradeSelect" onchange="runElectricalMath()">
+                  <option value="none" selected>No Service Upgrade (Standard Installation)</option>
+                  <option value="upgrade200a">100A to 200A Full Service Upgrade (+$1,200.00 Materials / +14 hrs)</option>
+                  <option value="subpanel">100A Garage Subpanel Installation (+$250.00 Materials / +5 hrs)</option>
+                  <option value="rejuvenation">Panel Rejuvenation & Swaps (+$350.00 Materials / +6 hrs)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Main Panel Brand / Manufacturer</label>
+                <select id="panelBrandSelect" onchange="runElectricalMath()">
+                  <option value="standard" selected>Siemens / Eaton Homeline / GE (Standard Breaker - $45.00)</option>
+                  <option value="squared-qo">Square D QO (Premium diagnostic window - $65.00)</option>
+                  <option value="cutler-hammer">Cutler-Hammer (Tan CH series - $55.00)</option>
+                  <option value="fpe">Federal Pioneer Stab-lok (Vintage - $150.00 / +1 hr Safety check)</option>
+                  <option value="commander">Commander / CEB (Vintage - $120.00)</option>
+                  <option value="ite-gould">ITE / Gould (Legacy vintage - $75.00 / +0.5 hr Safety check)</option>
+                  <option value="sylvania">Sylvania (Vintage Stab-lok compatible - $120.00 / +1 hr Safety check)</option>
+                  <option value="leviton">Leviton (Modern Premium Smart-Ready - $60.00)</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-row" style="margin-top: 8px;">
+              <div class="form-group">
+                <label>Utility Operator (Disconnect/Reconnect)</label>
+                <select id="utilityOperatorSelect" onchange="updateUtilityOperatorFee()">
+                  <option value="none" selected>No Shutdown Required</option>
+                  <option value="epcor">EPCOR (Edmonton City — $450.00)</option>
+                  <option value="fortis">FortisAlberta (Surrounding Areas — $600.00)</option>
+                  <option value="other">Other Utility — $500.00 Baseline</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Garage Subpanel Configuration Section -->
+          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06);">
+            <div style="font-size: 11px; color: var(--color-primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+              🔌 Garage Subpanel Configuration
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label>Subpanel Scenario</label>
+                <select id="subpanelScenarioSelect" onchange="onSubpanelScenarioChange()">
+                  <option value="none" selected>No Subpanel Involved</option>
+                  <option value="existing">Connect to Existing Garage Subpanel</option>
+                  <option value="new">Install New Garage Subpanel</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Existing Subpanel Fields -->
+            <div id="existingSubpanelFields" style="display: none;">
+              <div class="input-row" style="margin-top: 8px;">
+                <div class="form-group">
+                  <label>Existing Subpanel Rating</label>
+                  <select id="existingSubpanelRating" onchange="runElectricalMath()">
+                    <option value="60">60A Subpanel</option>
+                    <option value="100" selected>100A Subpanel</option>
+                    <option value="125">125A Subpanel</option>
+                    <option value="200">200A Subpanel</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Available Breaker Slots</label>
+                  <select id="existingSubpanelSlots" onchange="runElectricalMath()">
+                    <option value="plenty">Plenty of Space (2+ slots free)</option>
+                    <option value="tight">Tight (1 slot free — tandem may be needed)</option>
+                    <option value="full">Full — Tandem / Piggyback breaker required</option>
+                    <option value="unknown">Unknown (Site assessment required)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="status-panel pass" style="margin-top: 8px; font-size: 12px;">
+                <div class="status-icon" style="font-size: 14px;">⚡</div>
+                <div>Connecting to existing subpanel. <strong>+1.5 hrs</strong> labour for subpanel breaker install and load verification. No new enclosure materials required.</div>
+              </div>
+            </div>
+
+            <!-- New Subpanel Fields -->
+            <div id="newSubpanelFields" style="display: none;">
+              <div class="input-row" style="margin-top: 8px;">
+                <div class="form-group">
+                  <label>New Subpanel Rating</label>
+                  <select id="newSubpanelRating" onchange="runElectricalMath()">
+                    <option value="60">60A Subpanel (Light loads — 2–4 circuits)</option>
+                    <option value="100" selected>100A Subpanel (Standard garage — 6–8 circuits)</option>
+                    <option value="125">125A Subpanel (Heavy loads / workshop)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Subpanel Feed Wire Method</label>
+                  <select id="subpanelFeedMethod" onchange="runElectricalMath()">
+                    <option value="NMD90">NMD90 Cable (Dry interior route)</option>
+                    <option value="Teck90">Teck90 Armored (Exposed / outdoor)</option>
+                    <option value="Conduit">Conductors in Conduit (PVC / EMT)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="status-panel warning" style="margin-top: 8px; font-size: 12px;">
+                <div class="status-icon" style="font-size: 14px;">🔧</div>
+                <div>New subpanel install: <strong>+$280 materials</strong> (enclosure, main breaker, feed cable, hardware) and <strong>+4 hrs</strong> labour. Requires its own 2-pole feed breaker at the main panel.</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+              <label>Subpanel Site Notes</label>
+              <textarea id="subpanelNotes" placeholder="e.g. Existing 100A sub in detached garage, 2 slots free, Square D QO panel, breaker accessible from south wall..." style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: var(--radius-sm); padding: 10px; height: 68px; font-size: 12px; outline: none; resize: none;"></textarea>
+            </div>
+          </div>
+          <!-- end panelCalcFields -->
+
+          <div class="input-row">
+            <div class="form-group">
+              <label>Calculated CEC Panel Demand</label>
+              <input type="text" id="totalCalcLoad" value="54.2 A" readonly style="font-weight: 700; color: var(--color-text);">
+            </div>
+            <div class="form-group">
+              <label>Service Headroom Available</label>
+              <input type="text" id="availableCapacity" value="45.8 A" readonly style="font-weight: 700; color: var(--color-text);">
+            </div>
+          </div>
+
+          <div id="panelCalcResult" class="status-panel pass">
+            <div class="status-icon" id="panelCalcIcon">✓</div>
+            <div id="panelCalcText">Calculation complete. Panel has adequate capacity.</div>
+          </div>
+        </div><!-- end card -->
+      </div><!-- end loadsTab -->
+
+      <!-- TAB 4: EXPORTERS -->
+      <div id="exportsTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            Communications & Permitting Summaries
+            <span class="badge">Output</span>
+          </div>
+          
+          <div class="form-group">
+            <label>Customer SMS Quote Copy</label>
+            <textarea class="export-box" id="smsQuoteBox" readonly></textarea>
+            <button class="btn btn-secondary" onclick="copyText('smsQuoteBox')" style="margin-top: 10px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy SMS Text Message
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-top: 24px;">
+            <label>Edmonton Electrical Permit Application Notes</label>
+            <textarea class="export-box" id="permitSummaryBox" readonly></textarea>
+            <button class="btn btn-secondary" onclick="copyText('permitSummaryBox')" style="margin-top: 10px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Permit Application Specs
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: LEAD CRM WORKSPACE -->
+      <div id="crmTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            Renvolt Premium Lead CRM
+            <span class="badge" style="background-color: var(--color-accent); border-color: var(--color-accent); color: white;">Operational</span>
+          </div>
+
+          <!-- CRM Actions Bar -->
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <input type="text" id="crmSearchInput" placeholder="Search leads by name, phone, or address..." oninput="renderCRMLeads()" style="flex: 1; padding: 10px 14px; font-size: 13.5px;">
+            <button class="btn btn-success" onclick="openCRMLeadDrawer('add')" style="width: auto; padding: 0 18px; font-size: 13.5px; white-space: nowrap;">
+              ➕ Add Lead
+            </button>
+          </div>
+
+          <!-- Lead Detail Overlay Drawer Form (Embedded inside CRM for sleek workflow) -->
+          <div id="crmLeadDrawer" class="card" style="display: none; border-color: var(--color-accent); background: #FFFFFF; margin-top: 15px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(46, 64, 54, 0.15);">
+            <div class="card-title" id="crmDrawerTitle" style="border-bottom-color: var(--border-color); color: var(--color-primary);">Add New CRM Lead</div>
+            <input type="hidden" id="crmLeadIndex">
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>Client Full Name</label>
+                <input type="text" id="crmLeadName" placeholder="e.g. David Miller">
+              </div>
+              <div class="form-group">
+                <label>Status Pipeline</label>
+                <select id="crmLeadStatus">
+                  <option value="Lead" selected>Lead (Received)</option>
+                  <option value="Assessed">Assessed (Site check done)</option>
+                  <option value="Quoted">Quoted (Estimate sent)</option>
+                  <option value="Scheduled">Scheduled (Installation booked)</option>
+                  <option value="Completed">Completed (Permit signed off)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="crmLeadPhone" placeholder="780-555-0199">
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" id="crmLeadEmail" placeholder="david.m@gmail.com">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Installation Site Address</label>
+              <input type="text" id="crmLeadAddress" placeholder="10432 82 Ave NW, Edmonton, AB">
+            </div>
+            
+            <div style="font-size: 10px; color: var(--color-accent); font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin: 15px 0 10px 0; letter-spacing: 0.5px; text-transform: uppercase;">
+              🔧 Technical Sizing Specs (Preloads into CEC Sizer)
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>EVSE Hardware Preset</label>
+                <select id="crmLeadHardware">
+                  <option value="tesla">Tesla Wall Connector ($850)</option>
+                  <option value="chargepoint">ChargePoint Home Flex ($950)</option>
+                  <option value="grizzle">Grizzl-E Classic ($550)</option>
+                  <option value="flo">Flo Home G5/X5 ($995)</option>
+                  <option value="wallbox">Wallbox Pulsar Plus ($825)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Continuous Amps Sizing</label>
+                <select id="crmLeadAmps">
+                  <option value="24">24A continuous (30A breaker)</option>
+                  <option value="30">30A continuous (40A breaker - Flo G5/X5)</option>
+                  <option value="32" selected>32A continuous (40A breaker)</option>
+                  <option value="40">40A continuous (50A breaker)</option>
+                  <option value="48">48A continuous (60A breaker)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>Branch Run Length (ft)</label>
+                <input type="number" id="crmLeadRunLength" value="30">
+              </div>
+              <div class="form-group">
+                <label>Trench Length (ft / 0 if attached)</label>
+                <input type="number" id="crmLeadTrenchLength" value="0">
+              </div>
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label>Main Service Upgrade</label>
+                <select id="crmLeadServiceUpgrade">
+                  <option value="none" selected>No Service Upgrade</option>
+                  <option value="upgrade200a">100A to 200A Full Service Upgrade</option>
+                  <option value="subpanel">100A Garage Subpanel Installation</option>
+                  <option value="rejuvenation">Panel Rejuvenation & swaps</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Service Ceiling rating</label>
+                <select id="crmLeadPanelCapacity">
+                  <option value="100" selected>100A Main Service</option>
+                  <option value="125">125A Main Service</option>
+                  <option value="150">150A Main Service</option>
+                  <option value="200">200A Main Service</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-row" style="margin-bottom: 15px;">
+              <div class="form-group">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" id="crmLeadEVEMS" style="width: 16px; height: 16px; cursor: pointer;">
+                  Smart Energy Management System (EVEMS)
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Internal Lead Notes & Site Assessment logs</label>
+              <textarea id="crmLeadNotes" placeholder="Enter custom notes about basement finishes, federal pioneer panels, trench obstacles, and client scheduling preferences..." style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: var(--radius-sm); padding: 10px; height: 80px; font-size: 13px; outline: none; resize: none;"></textarea>
+            </div>
+            
+            <div class="btn-row" style="margin-top: 15px;">
+              <button class="btn btn-success" onclick="saveCRMLead()">💾 Save Lead Details</button>
+              <button class="btn btn-secondary" onclick="closeCRMLeadDrawer()">Cancel</button>
+            </div>
+          </div>
+
+          <!-- CRM Pipeline leads list container -->
+          <div id="crmLeadsContainer" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Rendered dynamically in JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: FINANCIALS & active TAKEOFF SHEET -->
+    <div class="right-col">
+      <div class="card">
+        <div class="card-title">
+          T&M Quoting Engine & Takeoff Sheet
+          <span class="badge" style="background-color: var(--color-success); border-color: var(--color-success); color: var(--bg-main);">Interactive</span>
+        </div>
+
+        <div class="input-row">
+          <div class="form-group">
+            <label>Hourly Labour Rate</label>
+            <input type="number" id="labourRate" value="100" onchange="runElectricalMath()">
+          </div>
+          <div class="form-group">
+            <label>Base Install Hours</label>
+            <div class="slider-container" style="margin-top: 8px;">
+              <input type="range" id="labourHours" min="2" max="20" step="1" value="6" oninput="updateLabourHours(this.value)">
+              <span class="slider-val" id="labourHoursVal">6 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Materials Trade Markup</label>
+          <div class="slider-container">
+            <input type="range" id="materialMarkup" min="0" max="50" step="5" value="20" oninput="updateMarkup(this.value)">
+            <span class="slider-val" id="markupVal">20%</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <label style="margin-bottom: 0;">Material Takeoff List</label>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-preset" onclick="resetAllOverrides()" style="padding: 4px 8px; font-size: 11px; background: rgba(255, 0, 100, 0.05); border-color: rgba(255, 0, 100, 0.2); color: #ff0055;">
+              🔄 Reset Takeoff
+            </button>
+            <button class="btn-preset" onclick="addNewCustomMaterialRow()" style="padding: 4px 8px; font-size: 11px; background: rgba(46, 64, 54, 0.04); border-color: rgba(46, 64, 54, 0.2); color: var(--color-primary);">
+              ➕ Add Custom Item
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="materialsTable">
+            <thead>
+              <tr>
+                <th>Item Specs</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Cost</th>
+                <th class="text-right">Total</th>
+                <th class="no-print" style="width: 30px; text-align: center;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="input-row" style="margin-top: 10px;">
+          <div class="form-group">
+            <label>Edmonton Electrical Permit</label>
+            <input type="text" id="permitCostBox" value="$166.40" readonly style="color: var(--color-muted);">
+          </div>
+          <div class="form-group">
+            <label>Utility Connection Fees</label>
+            <input type="number" id="utilitySurcharge" value="0" onchange="runElectricalMath()">
+          </div>
+        </div>
+        <div class="input-row" id="upgradePermitRow" style="display: none; margin-top: 4px;">
+          <div class="form-group" style="max-width: 340px;">
+            <label style="color: var(--color-warning);">⚡ Service Upgrade Permit (City of Edmonton)</label>
+            <input type="text" id="upgradePermitCostBox" value="$175.00" readonly style="color: var(--color-warning); font-weight: 600;">
+          </div>
+        </div>
+
+        <!-- Profit Summary Metrics -->
+        <div class="metric-grid">
+          <div class="metric-box">
+            <div class="metric-label">Internal Cost (@ $45/hr)</div>
+            <div class="metric-val" id="actualProjectCost">$0.00</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Subtotal (Before Tax)</div>
+            <div class="metric-val total" id="quotedPriceVal">$0.00</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">GST (5% Alberta)</div>
+            <div class="metric-val" id="gstVal" style="color: var(--color-warning);">$0.00</div>
+          </div>
+          <div class="metric-box" style="border-color: var(--color-primary); box-shadow: 0 0 12px rgba(0,225,255,0.1);">
+            <div class="metric-label" style="color: var(--color-primary);">Total With GST</div>
+            <div class="metric-val total" id="grandTotalVal" style="color: var(--color-primary);">$0.00</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Estimated Gross Profit</div>
+            <div class="metric-val profit" id="profitVal">$0.00</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Gross Margin %</div>
+            <div class="metric-val profit" id="marginVal">0%</div>
+          </div>
+        </div>
+
+        <div class="btn-row no-print" style="margin-top: 20px;">
+          <button class="btn btn-success" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print Executive Proposal PDF
+          </button>
+        </div>
+      </div>
+    </div>
+    </div><!-- end columns-wrapper -->
+
+    <!-- ==========================================================================
+         PRINT ONLY LAYOUT (Highly clean Corporate PDF Sheet)
+         ========================================================================== -->
+    <div class="print-only" style="width: 100%; padding: 30px; color: black; background: white;">
+      <h2 style="font-family: var(--font-display); font-size: 28px; border-bottom: 2px solid black; padding-bottom: 8px; margin-bottom: 24px;">
+        RENVOLT SITE ASSESSMENT & TECHNICAL PROPOSAL
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+        <div>
+          <h3 style="font-size: 14px; text-transform: uppercase; color: #555; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">CLIENT & PROJECT GENERAL INFO</h3>
+          <p style="margin-bottom: 5px;"><strong>Project Jurisdiction:</strong> Edmonton & Greater Area, AB</p>
+          <p style="margin-bottom: 5px;"><strong>Target Schedule:</strong> Weekend Installation Operations (Fri - Sun)</p>
+          <p style="margin-bottom: 5px;"><strong>Permitting Standard:</strong> CSA C22.1-24 (CEC 2024 Edition)</p>
+          <p id="printInstallationType" style="margin-bottom: 5px;"><strong>Installation Archetype:</strong> Attached Garage Install</p>
+        </div>
+        <div>
+          <h3 style="font-size: 14px; text-transform: uppercase; color: #555; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">TECHNICAL LOAD DESIGN</h3>
+          <p id="printBreaker" style="margin-bottom: 5px;"><strong>Breaker Size:</strong> 40A 2-Pole (Continuous Sizing Rule 86-306)</p>
+          <p id="printWire" style="margin-bottom: 5px;"><strong>Circuit Conductors:</strong> #8 AWG Copper (75C terminal compliance)</p>
+          <p id="printVD" style="margin-bottom: 5px;"><strong>Calculated Voltage Drop:</strong> 0.85% (Compliant &le; 3% Rule 8-102)</p>
+          <p id="printCalculatedLoad" style="margin-bottom: 5px;"><strong>Calculated Panel Demand:</strong> 54.2 A (Headroom Calculation check)</p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 16px; border-bottom: 1px solid #999; padding-bottom: 4px; margin-bottom: 12px; text-transform: uppercase;">MATERIALS & TRADE ESTIMATE</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;" id="printMaterialsTable">
+        <thead>
+          <tr style="border-bottom: 1.5px solid black;">
+            <th style="text-align: left; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px;">Material / Service Specification</th>
+            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 80px;">Quantity</th>
+            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 100px;">Unit Price</th>
+            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 120px;">Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated dynamically via JS -->
+        </tbody>
+      </table>
+
+      <!-- CLIENT-SAFE totals block: subtotal, permit passthrough, GST, grand total -->
+      <div style="display: flex; justify-content: flex-end; margin-top: 16px; margin-bottom: 30px;">
+        <table style="border-collapse: collapse; min-width: 320px; font-size: 12px;">
+          <tr>
+            <td style="padding: 6px 16px 6px 0; color: #555;">Labour &amp; Materials Subtotal</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printSubtotal">$0.00</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 16px 6px 0; color: #555;">Electrical Permit (City of Edmonton)</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printPermitLine">$166.40</td>
+          </tr>
+          <tr id="printUpgradePermitLine" style="display: none;">
+            <td style="padding: 6px 16px 6px 0; color: #555;">Service Upgrade Permit</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">$175.00</td>
+          </tr>
+          <tr id="printUtilityLine" style="display: none;">
+            <td style="padding: 6px 16px 6px 0; color: #555;" id="printUtilityLabel">Utility Disconnect/Reconnect Fee</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printUtilityFee">$0.00</td>
+          </tr>
+          <tr style="border-top: 1px solid #ccc;">
+            <td style="padding: 8px 16px 4px 0; color: #555;">GST (5%)</td>
+            <td style="padding: 8px 0 4px 0; text-align: right; font-weight: 600;" id="printGST">$0.00</td>
+          </tr>
+          <tr style="border-top: 2px solid black;">
+            <td style="padding: 10px 16px 0 0; font-size: 14px; font-weight: 800; text-transform: uppercase;">Total (Including GST)</td>
+            <td style="padding: 10px 0 0 0; text-align: right; font-size: 20px; font-weight: 800;" id="printTotalEstimate">$0.00</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; page-break-inside: avoid;">
+        <div>
+          <h3 style="font-size: 12px; text-transform: uppercase; color: #555; margin-bottom: 6px;">COMPLIANCE &amp; ENGINEERING CODE ATTESTATION</h3>
+          <p style="font-size: 11px; line-height: 1.5; color: #444;">
+            All branch circuit designs, wire sizing configurations, and panel load demand assessments strictly adhere to the Canadian Electrical Code (CEC) 2024 Edition. All work is legally filed and permitted by a licensed Master Electrician of record with the City of Edmonton digital safety portal. Standard safety code inspections booked upon installation completion.
+          </p>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 14px; font-size: 11px; color: #555;">
+          <p style="font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">Payment Terms</p>
+          <p style="margin-bottom: 4px;">50% deposit due upon booking confirmation.</p>
+          <p style="margin-bottom: 4px;">Balance due upon installation completion.</p>
+          <p>E-transfer: renvolt@gmail.com</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
+        <div style="border-top: 1px solid black; padding-top: 8px;">
+          <p style="font-size: 11px; color: #555; margin-bottom: 20px;">Renvolt Authorized Representative</p>
+          <p style="font-size: 13px; font-weight: 600;">Renvolt Electrical Ltd.</p>
+        </div>
+        <div style="border-top: 1px solid black; padding-top: 8px;">
+          <p style="font-size: 11px; color: #555; margin-bottom: 20px;">Client Agreement &amp; Authorization</p>
+          <p style="font-size: 13px; font-weight: 600;">Date: ________________________</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       CORE JAVASCRIPT: ADVANCED CEC 2024 LOGIC & ON-SITE quote persistencE
+       ========================================================================== -->
+  <script>
+    // State Variables
+    let chargerAmps = 32;
+    let runLength = 30;
+    let trenchLength = 30;
+    let isDetached = false;
+    let useEVEMS = false;
+    let materialMarkup = 20;
+    let labourHours = 6;
+    let customItems = []; // Array to store injected custom line items
+    let manualOverrides = {}; // Map to store manual price/qty overrides
+    let requiresJunctionBox = false;
+
+    // EVSE Charger Engineering Specification Matrix
+    const EVSE_SPECS = {
+      tesla: { name: "Tesla Universal Wall Connector", msrp: 850.00, minAWG: 12, maxAWG: 4, maxAmps: 48, defaultAmps: 48, torque: "50 in-lbs (5.6 Nm)" },
+      chargepoint: { name: "ChargePoint Home Flex", msrp: 699.00, minAWG: 14, maxAWG: 6, maxAmps: 50, defaultAmps: 40, torque: "Push-Pin Terminals (no screw torque)" },
+      grizzle: { name: "Grizzl-E Classic", msrp: 550.00, minAWG: 8, maxAWG: 6, maxAmps: 40, defaultAmps: 40, torque: "16 in-lbs (1.8 Nm)" },
+      flo: { name: "Flo Home G5 & X5", msrp: 995.00, minAWG: 8, maxAWG: 6, maxAmps: 30, defaultAmps: 30, torque: "Power: 16 in-lbs, GND: 40-45 in-lbs" },
+      wallbox: { name: "Wallbox Pulsar Plus", msrp: 825.00, minAWG: 10, maxAWG: 6, maxAmps: 48, defaultAmps: 40, torque: "11.5 in-lbs (1.3 Nm)" }
+    };
+    
+    // Core Edmonton Pricing Presets (Tradesperson Wholesaler cost indexes)
+    const MATERIALS_PRESETS = {
+      breaker40: { name: "2-Pole Breaker 40A (Siemens/Schneider)", cost: 45.00 },
+      breaker60: { name: "2-Pole Breaker 60A (High-Amp L2 Charger)", cost: 65.00 },
+      nmd8_2: { name: "NMD90 Copper wire #8/2 (per foot)", cost: 3.00 },
+      nmd6_2: { name: "NMD90 Copper wire #6/2 (per foot)", cost: 4.50 },
+      teck8_3: { name: "Armored Teck90 #8/3 cable (per foot)", cost: 4.75 },
+      teck6_3: { name: "Armored Teck90 #6/3 cable (per foot)", cost: 8.00 },
+      pvc1: { name: "1\" Rigid PVC Sched. 40 Conduit (per foot)", cost: 2.00 },
+      pvcSweeps: { name: "1\" PVC 90° Sweeps", cost: 8.50 },
+      lbCondulet: { name: "1\" Weatherproof LB Condulet box", cost: 22.00 },
+      warningTape: { name: "Underground electrical warning tape (100ft roll)", cost: 18.00 },
+      evemsUnit: { name: "RVE DCC-9-40A Smart Energy Manager", cost: 1725.00 },
+      sundries: { name: "Mounting hardware, code labels, junction fittings", cost: 30.00 }
+    };
+
+    // Circular Mils Table for Exact Voltage Drop (Rule 8-102 / Table 5A)
+    const CIRCULAR_MILS = {
+      10: 10380,
+      8: 16510,
+      6: 26240,
+      4: 41740,
+      2: 66360
+    };
+
+    // Standard local storage initialization
+    window.onload = function() {
+      // Load saved quotes database into UI dropdown
+      refreshSavedQuotesDropdown();
+      
+      // Load standard "attached" preset on startup
+      loadPresetProfile('attached');
+      
+      // Initialize and render CRM Leads
+      initializeCRMLeads();
+    };
+
+    // EVSE Hardware Selection Trigger
+    function selectEVSEHardware(brand, triggerMath = true) {
+      const spec = EVSE_SPECS[brand];
+      if (!spec) return;
+      
+      renderAmpButtons();
+      
+      if (triggerMath) {
+        runElectricalMath();
+      }
+    }
+
+    // Dynamic amp options button group renderer
+    function renderAmpButtons() {
+      const container = document.getElementById('ampsButtonContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const selectedHardware = document.getElementById('chargerHardwareSelect').value;
+      const spec = EVSE_SPECS[selectedHardware];
+      
+      let ampOptions = [24, 32, 40, 48];
+      if (selectedHardware === 'flo') {
+        ampOptions = [30];
+      } else if (selectedHardware === 'grizzle') {
+        ampOptions = [24, 32, 40];
+      }
+      
+      // Keep chargerAmps compliant with options
+      if (!ampOptions.includes(chargerAmps)) {
+        if (selectedHardware === 'flo') {
+          chargerAmps = 30;
+        } else if (chargerAmps > spec.maxAmps) {
+          chargerAmps = spec.maxAmps;
+        } else {
+          chargerAmps = 32;
+        }
+      }
+      
+      document.getElementById('continuousAmps').value = chargerAmps;
+      
+      // Auto-update breaker dropdown value to recommended baseline size
+      let recommendedBreaker = getRecommendedBreaker(chargerAmps);
+      document.getElementById('calculatedBreaker').value = recommendedBreaker;
+      
+      ampOptions.forEach(amps => {
+        const btn = document.createElement('button');
+        btn.className = `btn-toggle ${chargerAmps === amps ? 'active' : ''}`;
+        const kw = ((amps * 240) / 1000).toFixed(1);
+        btn.innerText = `${amps}A (${kw}kW)`;
+        btn.onclick = function() {
+          setChargerAmps(amps, btn);
+        };
+        container.appendChild(btn);
+      });
+      
+      container.style.gridTemplateColumns = `repeat(${ampOptions.length}, 1fr)`;
+    }
+
+    // Profile Presets Loader
+    function loadPresetProfile(type) {
+      if (type === 'attached') {
+        chargerAmps = 32;
+        runLength = 30;
+        isDetached = false;
+        useEVEMS = false;
+        labourHours = 6;
+        materialMarkup = 20;
+        document.getElementById('isDetached').checked = false;
+        document.getElementById('useEVEMS').checked = false;
+        document.getElementById('runType').value = "NMD90";
+      } 
+      else if (type === 'detached') {
+        chargerAmps = 32;
+        runLength = 60;
+        trenchLength = 30;
+        isDetached = true;
+        useEVEMS = false;
+        labourHours = 10;
+        materialMarkup = 20;
+        document.getElementById('isDetached').checked = true;
+        document.getElementById('useEVEMS').checked = false;
+        document.getElementById('runType').value = "Teck90";
+      } 
+      else if (type === 'evems') {
+        chargerAmps = 48;
+        runLength = 20;
+        isDetached = false;
+        useEVEMS = true;
+        labourHours = 8;
+        materialMarkup = 15;
+        document.getElementById('isDetached').checked = false;
+        document.getElementById('useEVEMS').checked = true;
+        document.getElementById('runType').value = "Teck90";
+      }
+
+      customItems = []; // Reset custom items on preset load
+      manualOverrides = {}; // Reset overrides on preset load
+      
+      // Update UI Toggles & Sliders
+      document.getElementById('chargerHardwareSelect').value = 'tesla';
+      selectEVSEHardware('tesla', false);
+
+      document.getElementById('runLength').value = runLength;
+      document.getElementById('runLengthVal').innerText = runLength + " ft";
+      
+      document.getElementById('trenchLength').value = trenchLength;
+      document.getElementById('trenchLengthVal').innerText = trenchLength + " ft";
+      
+      document.getElementById('labourHours').value = labourHours;
+      document.getElementById('labourHoursVal').innerText = labourHours + " hrs";
+      
+      document.getElementById('materialMarkup').value = materialMarkup;
+      document.getElementById('markupVal').innerText = materialMarkup + "%";
+      
+      // Show/Hide detached specific fields
+      document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
+      document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
+      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
+      
+      runElectricalMath();
+    }
+
+    // Interactive Tab Controller
+    function switchTab(tabId, btnElement) {
+      // Hide all tabs
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(tab => tab.classList.remove('active'));
+      
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show target tab
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    function getRecommendedBreaker(amps) {
+      let calculatedBreakerAmps = Math.ceil(amps * 1.25);
+      if (calculatedBreakerAmps > 60) return 100;
+      if (calculatedBreakerAmps > 50) return 60;
+      if (calculatedBreakerAmps > 40) return 50;
+      if (calculatedBreakerAmps > 30) return 40;
+      return 30;
+    }
+
+    // Input handlers
+    function setChargerAmps(amps, elem) {
+      chargerAmps = parseInt(amps);
+      
+      const buttons = elem.parentNode.getElementsByClassName('btn-toggle');
+      for (let btn of buttons) {
+        btn.classList.remove('active');
+      }
+      elem.classList.add('active');
+      
+      document.getElementById('continuousAmps').value = chargerAmps;
+      
+      // Auto-update breaker dropdown value to recommended baseline size
+      let recommendedBreaker = getRecommendedBreaker(chargerAmps);
+      document.getElementById('calculatedBreaker').value = recommendedBreaker;
+      
+      runElectricalMath();
+    }
+
+    function updateUtilityOperatorFee() {
+      const op = document.getElementById('utilityOperatorSelect').value;
+      let fee = 0;
+      if (op === 'epcor') fee = 450;
+      else if (op === 'fortis') fee = 600;
+      else if (op === 'other') fee = 500;
+
+      document.getElementById('utilitySurcharge').value = fee;
+
+      // Show/hide the service upgrade permit row
+      const upgradePermitRow = document.getElementById('upgradePermitRow');
+      if (upgradePermitRow) {
+        upgradePermitRow.style.display = (op !== 'none') ? 'flex' : 'none';
+      }
+
+      runElectricalMath();
+    }
+
+    function onSubpanelScenarioChange() {
+      const scenario = document.getElementById('subpanelScenarioSelect').value;
+      document.getElementById('existingSubpanelFields').style.display = scenario === 'existing' ? 'block' : 'none';
+      document.getElementById('newSubpanelFields').style.display = scenario === 'new' ? 'block' : 'none';
+      runElectricalMath();
+    }
+
+    function updateRunLength(val) {
+      runLength = parseInt(val);
+      document.getElementById('runLengthVal').innerText = val + " ft";
+      runElectricalMath();
+    }
+
+    function updateTrenchLength(val) {
+      trenchLength = parseInt(val);
+      document.getElementById('trenchLengthVal').innerText = val + " ft";
+      runElectricalMath();
+    }
+
+    function updateLabourHours(val) {
+      labourHours = parseInt(val);
+      document.getElementById('labourHoursVal').innerText = val + " hrs";
+      runElectricalMath();
+    }
+
+    function updateMarkup(val) {
+      materialMarkup = parseInt(val);
+      document.getElementById('markupVal').innerText = val + "%";
+      runElectricalMath();
+    }
+
+    function toggleDetached(checked) {
+      isDetached = checked;
+      document.getElementById('detachedFields').style.display = checked ? 'block' : 'none';
+      document.getElementById('detachedDisabledNotice').style.display = checked ? 'none' : 'block';
+      
+      const runTypeSelect = document.getElementById('runType');
+      if (checked) {
+        runTypeSelect.value = "Teck90";
+      } else {
+        runTypeSelect.value = "NMD90";
+      }
+      
+      runElectricalMath();
+    }
+
+    function toggleEVEMS(checked) {
+      useEVEMS = checked;
+      document.getElementById('panelCalcFields').style.display = checked ? 'none' : 'block';
+      
+      // Auto-adjust labor hours to EVEMS minimum (8 hours) when checked
+      if (checked) {
+        if (labourHours < 8) {
+          labourHours = 8;
+          document.getElementById('labourHours').value = 8;
+          document.getElementById('labourHoursVal').innerText = "8 hrs";
+        }
+      }
+      
+      runElectricalMath();
+    }
+
+    // Radial SVG Gauges UI Renderer
+    function updateSVGVisualGauges(vDropPercent, panelDemandAmps, serviceCeiling) {
+      // 1. Voltage Drop Dial
+      const vdropCircle = document.getElementById('vdropGauge');
+      const vdropText = document.getElementById('vdropGaugeText');
+      const vdMaxPercent = 3.0; // CEC limit is 3.0%
+      
+      let vdDashValue = (vDropPercent / vdMaxPercent) * 251.2;
+      if (vdDashValue > 251.2) vdDashValue = 251.2;
+      vdropCircle.style.strokeDashoffset = 251.2 - vdDashValue;
+      vdropText.textContent = vDropPercent.toFixed(1) + "%";
+
+      if (vDropPercent <= 3.0) {
+        vdropCircle.setAttribute('stroke', 'var(--color-primary)');
+      } else {
+        vdropCircle.setAttribute('stroke', 'var(--color-danger)');
+      }
+
+      // 2. Panel Load Capacity Dial
+      const capacityCircle = document.getElementById('capacityGauge');
+      const capacityText = document.getElementById('capacityGaugeText');
+      
+      let panelPercent = (panelDemandAmps / serviceCeiling) * 100;
+      if (panelPercent > 100) panelPercent = 100;
+      
+      let capDashValue = (panelPercent / 100) * 251.2;
+      capacityCircle.style.strokeDashoffset = 251.2 - capDashValue;
+      capacityText.textContent = panelPercent.toFixed(0) + "%";
+
+      // Color coding thresholds matching CEC limits
+      if (panelPercent <= 80) {
+        capacityCircle.setAttribute('stroke', 'var(--color-success)'); // Compliant headroom
+      } else if (panelPercent <= 100) {
+        capacityCircle.setAttribute('stroke', 'var(--color-warning)'); // Borderline capacity
+      } else {
+        capacityCircle.setAttribute('stroke', 'var(--color-danger)');  // Violates service rating
+      }
+    }
+
+    // dynamic custom materials injection
+    function addNewCustomMaterialRow() {
+      let itemName = prompt("Enter custom material item description:", "Additional drywall repair / patching");
+      if (!itemName) return;
+      let itemCost = parseFloat(prompt("Enter wholesale unit cost ($):", "50.00"));
+      if (isNaN(itemCost) || itemCost < 0) return;
+      let itemQty = parseInt(prompt("Enter quantity:", "1"));
+      if (isNaN(itemQty) || itemQty <= 0) return;
+
+      customItems.push({
+        name: itemName,
+        qty: itemQty,
+        cost: itemCost,
+        isCustom: true
+      });
+
+      runElectricalMath();
+    }
+
+    function removeCustomItem(index) {
+      customItems.splice(index, 1);
+      runElectricalMath();
+    }
+
+    // CORE COMPLIANCE CALCULATION ENGINE
+    function runElectricalMath() {
+      // Toggle secondary conduit selector dropdown
+      const runTypeVal = document.getElementById('runType').value;
+      const conduitGroup = document.getElementById('conduitTypeGroup');
+      if (conduitGroup) {
+        conduitGroup.style.display = runTypeVal === 'Conduit' ? 'block' : 'none';
+      }
+
+      // 1. Determine Breaker Overcurrent Protection (Rule 86-306: minimum 125% contin load)
+      let calculatedBreakerAmps = Math.ceil(chargerAmps * 1.25);
+      let standardBreaker = parseInt(document.getElementById('calculatedBreaker').value) || 40;
+
+      // CEC Code Compliance Safety Warning Styling
+      const breakerSelect = document.getElementById('calculatedBreaker');
+      if (breakerSelect) {
+        if (standardBreaker < calculatedBreakerAmps) {
+          breakerSelect.style.borderColor = "var(--color-danger)";
+          breakerSelect.style.color = "var(--color-danger)";
+        } else {
+          breakerSelect.style.borderColor = "";
+          breakerSelect.style.color = "";
+        }
+      }
+
+      // 2. Initial wire size gauge baseline check (Table 2 - 75C terminals)
+      let initialGaugeNum = 8;
+      if (standardBreaker <= 30) initialGaugeNum = 10;
+      else if (standardBreaker <= 40) initialGaugeNum = 8;
+      else if (standardBreaker <= 50) initialGaugeNum = 6;
+      else if (standardBreaker <= 60) initialGaugeNum = 4;
+      else initialGaugeNum = 2; // 100A uses #2 AWG copper
+
+      document.getElementById('initialGauge').value = "#" + initialGaugeNum + " AWG";
+
+      // 3. Exact Voltage Drop (Formula: Vd = 2 * K * I * L / CM)
+      const wireMaterial = document.getElementById('wireMaterial').value;
+      const K = wireMaterial === "Cu" ? 12.9 : 21.2;
+      
+      let finalGaugeNum = initialGaugeNum;
+      let vDropPercent = 0;
+      let iterationCount = 0;
+      
+      // Auto-upsizing iterative loop to meet Rule 8-102 (Max 3% branch drop)
+      while (iterationCount < 5) {
+        let cm = CIRCULAR_MILS[finalGaugeNum] || 16510;
+        let vd = (2 * K * chargerAmps * runLength) / cm;
+        vDropPercent = (vd / 240) * 100;
+        
+        if (vDropPercent <= 3.0) {
+          break; // Voltage drop is compliant!
+        }
+        
+        // Dynamic Conductor Sizing adjustment
+        if (finalGaugeNum === 10) finalGaugeNum = 8;
+        else if (finalGaugeNum === 8) finalGaugeNum = 6;
+        else if (finalGaugeNum === 6) finalGaugeNum = 4;
+        else if (finalGaugeNum === 4) finalGaugeNum = 2;
+        else break; // Max sizing index reached
+        
+        iterationCount++;
+      }
+
+      // 3.5. Terminal Sizing & Hardware Constraints Check
+      const selectedHardware = document.getElementById('chargerHardwareSelect').value;
+      const spec = EVSE_SPECS[selectedHardware];
+      
+      requiresJunctionBox = false;
+      let terminalAlertText = "";
+      let terminalAlertClass = "pass";
+      let terminalAlertIcon = "✓";
+      
+      // Under min check
+      if (finalGaugeNum > spec.minAWG) {
+        finalGaugeNum = spec.minAWG;
+        terminalAlertClass = "warning";
+        terminalAlertIcon = "⚠️";
+        terminalAlertText = `<strong>Terminal Size Compliance Alert:</strong> Standard calculations suggest #${finalGaugeNum} AWG, but the <strong>${spec.name}</strong> terminals require a minimum conductor size of <strong>#${spec.minAWG} AWG</strong>. Wire size has been automatically upsized for hardware compatibility.`;
+      }
+      
+      // Over max check
+      if (finalGaugeNum < spec.maxAWG) {
+        requiresJunctionBox = true;
+        terminalAlertClass = "warning";
+        terminalAlertIcon = "⚠️";
+        terminalAlertText = `<strong>Physical Terminal Limit Alert:</strong> Cable run requires <strong>#${finalGaugeNum} AWG</strong> for voltage drop, but the <strong>${spec.name}</strong> terminals strictly max out at <strong>#${spec.maxAWG} AWG</strong>. A weatherproof external splicing junction box is required adjacent to the charger to transition down to #${spec.maxAWG} AWG for termination.`;
+      }
+      
+      if (!terminalAlertText) {
+        terminalAlertText = `<strong>Terminal Sizing Compliant:</strong> The final wire size <strong>#${finalGaugeNum} AWG</strong> fits perfectly within the <strong>${spec.name}</strong> terminals range (<strong>#${spec.minAWG} - #${spec.maxAWG} AWG</strong>). Terminals screw torque rating: <strong>${spec.torque}</strong>.`;
+      }
+
+      document.getElementById('finalGauge').value = "#" + finalGaugeNum + " AWG";
+
+      // Visual Voltage Drop Feedback Card
+      const vdropStatus = document.getElementById('vdropStatus');
+      const vdropStatusText = document.getElementById('vdropStatusText');
+      if (vDropPercent <= 3.0) {
+        vdropStatus.className = "status-panel pass";
+        vdropStatus.querySelector('.status-icon').innerText = "✓";
+        vdropStatusText.innerHTML = `Voltage drop is **${vDropPercent.toFixed(2)}%** (CEC standard &le; 3%). Wire size #${finalGaugeNum} AWG is fully compliant.`;
+      } else {
+        vdropStatus.className = "status-panel warning";
+        vdropStatus.querySelector('.status-icon').innerText = "⚠️";
+        vdropStatusText.innerHTML = `Voltage drop is **${vDropPercent.toFixed(2)}%**. Conductor max limit reached. Sizing up is recommended or shift placement closer.`;
+      }
+
+      // Visual Terminal Sizing Feedback Card
+      const terminalStatus = document.getElementById('terminalStatus');
+      const terminalStatusText = document.getElementById('terminalStatusText');
+      if (terminalStatus && terminalStatusText) {
+        terminalStatus.className = `status-panel ${terminalAlertClass}`;
+        terminalStatus.querySelector('.status-icon').innerText = terminalAlertIcon;
+        terminalStatusText.innerHTML = terminalAlertText;
+      }
+
+      // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200)
+      let panelDemandAmps = 0;
+      let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
+      
+      const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
+      const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
+
+      // Utility operator dropdown is always visible — no toggle logic needed
+      
+      if (useEVEMS) {
+        // Smart Energy Management System (Rule 8-106 bypass)
+        panelDemandAmps = 45; // Nominal base load simulation
+        document.getElementById('totalCalcLoad').value = "45.0 A";
+        document.getElementById('availableCapacity').value = (effectiveServiceCeiling - 45).toFixed(1) + " A";
+        
+        const panelBox = document.getElementById('panelCalcResult');
+        panelBox.className = "status-panel pass";
+        document.getElementById('panelCalcIcon').innerText = "⚡";
+        document.getElementById('panelCalcText').innerHTML = "<strong>Smart EVEMS Controller Active:</strong> Dynamically loads continuous demand. Sizing calculations safely bypassed under <strong>CEC Rule 8-106</strong>.";
+      } else {
+        // Exact 2024 Canadian Electrical Code Panel Math
+        let calculatedWatts = 0;
+        
+        // A. Basic Floor Area Demand (Rule 8-200(1)(a)(i))
+        let floorAreaValue = parseInt(document.getElementById('floorArea').value);
+        calculatedWatts += 5000; // First 90 sq meters demand load is 5000W
+        if (floorAreaValue > 90) {
+          calculatedWatts += Math.ceil((floorAreaValue - 90) / 90) * 1000;
+        }
+
+        // B. Electric Range/Stove Load (Rule 8-200(1)(a)(ii) & Table 14)
+        if (document.getElementById('loadStove').checked) {
+          calculatedWatts += 6000; // First 12kW demand is 6000W
+        }
+
+        // C. Domestic Dryer (Rule 8-200(1)(a)(vi) / Table 28)
+        if (document.getElementById('loadDryer').checked) {
+          calculatedWatts += 2500; // Standard nominal dryer load
+        }
+
+        // D. Hot Water tank (Rule 8-200(1)(a)(vi))
+        if (document.getElementById('loadWater').checked) {
+          calculatedWatts += 3000; // Standard nameplate
+        }
+
+        // E. Thermal loads space cooling vs space heating (Larger of AC vs Heat - Rule 8-200(1)(a)(iv))
+        let acWatts = document.getElementById('loadAC').checked ? 4000 : 0;
+        
+        let rawHeatingInput = parseInt(document.getElementById('loadHeating').value);
+        let heatingWatts = 0;
+        if (rawHeatingInput > 0) {
+          // First 10kW heating load calculated at 100%, balance at 75%
+          if (rawHeatingInput <= 10000) {
+            heatingWatts = rawHeatingInput;
+          } else {
+            heatingWatts = 10000 + (rawHeatingInput - 10000) * 0.75;
+          }
+        }
+        
+        // Select larger of thermal loads
+        calculatedWatts += Math.max(acWatts, heatingWatts);
+
+        // F. Electric Vehicle Charging StationContinuous Load (Rule 86-306 / 8-200(1)(a)(vi))
+        calculatedWatts += (chargerAmps * 240); // Continuous load evaluated at 100%
+
+        // Convert total calculated Watts to panel demand Amperage at 240V
+        panelDemandAmps = calculatedWatts / 240;
+        let availableAmps = effectiveServiceCeiling - panelDemandAmps;
+
+        document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
+        document.getElementById('availableCapacity').value = availableAmps.toFixed(1) + " A";
+
+        // Panel Compliance Visual Feed
+        const panelBox = document.getElementById('panelCalcResult');
+        const panelIcon = document.getElementById('panelCalcIcon');
+        const panelText = document.getElementById('panelCalcText');
+
+        if (availableAmps >= 0) {
+          if (serviceUpgradeType === 'upgrade200a') {
+            panelBox.className = "status-panel pass";
+            panelIcon.innerText = "⚡";
+            panelText.innerHTML = `<strong>200A Service Upgrade Configured:</strong> Adequate headroom established. Calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> under new 200A ceiling limit.`;
+          } else if (availableAmps <= 10) {
+            panelBox.className = "status-panel warning";
+            panelIcon.innerText = "⚠️";
+            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel headroom is tight. Smart EVEMS recommended to avoid utility connection upgrades.`;
+          } else {
+            panelBox.className = "status-panel pass";
+            panelIcon.innerText = "✓";
+            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel has compliant headroom under <strong>Rule 8-200</strong>.`;
+          }
+        } else {
+          panelBox.className = "status-panel fail";
+          panelIcon.innerText = "✕";
+          panelText.innerHTML = `Calculated load is <strong>${panelDemandAmps.toFixed(1)}A</strong>, which exceeds your ${effectiveServiceCeiling}A main service capacity! <strong>Service upgrade or EVEMS required.</strong>`;
+        }
+      }
+
+      // Update gauges
+      updateSVGVisualGauges(vDropPercent, panelDemandAmps, effectiveServiceCeiling);
+
+      // 5. Generate Takeoff & Quoting Sheet
+      populateTakeoffPricingSheet(finalGaugeNum, standardBreaker);
+    }
+
+    function populateTakeoffPricingSheet(gauge, breaker) {
+      let materialsList = [];
+      const runType = document.getElementById('runType').value;
+      const markupFactor = 1 + (materialMarkup / 100);
+
+      // Fetch Form Surcharges / Brands
+      const connectionType = document.getElementById('chargerConnectionType').value;
+      const gfciActive = document.getElementById('gfciRequired').checked;
+      const drywallVal = document.getElementById('drywallSurcharge').value;
+      const concreteBoringActive = document.getElementById('concreteBoring').checked;
+      const panelBrand = document.getElementById('panelBrandSelect').value;
+
+      // A. Charger Hardware Model Row
+      const selectedHardware = document.getElementById('chargerHardwareSelect').value;
+      const spec = EVSE_SPECS[selectedHardware];
+      materialsList.push({ key: "charger", name: `${spec.name} (EVSE Charger Hardware)`, qty: 1, cost: spec.msrp });
+
+      // A1. Service / Panel Upgrade Material Row
+      const serviceUpgrade = document.getElementById('serviceUpgradeSelect').value;
+      if (serviceUpgrade === 'upgrade200a') {
+        materialsList.push({ key: "serviceUpgrade", name: "200A Main Service Panel & Meter Mast Kit (Edmonton Whls)", qty: 1, cost: 1200.00 });
+      } else if (serviceUpgrade === 'subpanel') {
+        materialsList.push({ key: "serviceUpgrade", name: "100A Garage Subpanel Enclosure & Breakers (Gescan Whls)", qty: 1, cost: 250.00 });
+      } else if (serviceUpgrade === 'rejuvenation') {
+        materialsList.push({ key: "serviceUpgrade", name: "Replacement Standard Breakers & Clean busbars (Gescan Whls)", qty: 1, cost: 350.00 });
+      }
+
+      // A1b. Garage Subpanel Configuration Materials
+      const subpanelScenario = document.getElementById('subpanelScenarioSelect')?.value || 'none';
+      if (subpanelScenario === 'new') {
+        const subRating = document.getElementById('newSubpanelRating')?.value || '100';
+        const subCost = subRating === '60' ? 180.00 : subRating === '125' ? 340.00 : 280.00;
+        materialsList.push({ key: "subpanelEnclosure", name: `${subRating}A Garage Subpanel Enclosure, Main Breaker & Feed Breaker (Gescan)`, qty: 1, cost: subCost });
+        // Feed wire from main to subpanel (assume same run length, sized to subpanel rating)
+        const subFeedMethod = document.getElementById('subpanelFeedMethod')?.value || 'NMD90';
+        if (subFeedMethod === 'NMD90') {
+          materialsList.push({ key: "subpanelFeedWire", name: `NMD90 #${subRating >= 100 ? '3' : '6'}/3 Feed Cable to Subpanel (per foot)`, qty: runLength, cost: subRating >= 100 ? 5.50 : 4.50 });
+        } else if (subFeedMethod === 'Teck90') {
+          materialsList.push({ key: "subpanelFeedWire", name: `Teck90 #${subRating >= 100 ? '3' : '6'}/3 Armored Feed Cable to Subpanel (per foot)`, qty: runLength, cost: subRating >= 100 ? 8.00 : 6.50 });
+        } else {
+          materialsList.push({ key: "subpanelFeedWire", name: `RW90 Conductors in Conduit — Subpanel Feed (per foot)`, qty: runLength * 3, cost: 1.80 });
+        }
+      } else if (subpanelScenario === 'existing') {
+        const slots = document.getElementById('existingSubpanelSlots')?.value || 'plenty';
+        if (slots === 'full') {
+          materialsList.push({ key: "subpanelTandem", name: "Tandem / Piggyback Breaker (Full Panel — Slim double required)", qty: 1, cost: 65.00 });
+        }
+      }
+
+      // A2. Weatherproof Splicing Junction Box Row (if required)
+      if (requiresJunctionBox) {
+        materialsList.push({ key: "junctionBox", name: "Weatherproof Splicing Junction Box (NEMA 3R)", qty: 1, cost: 25.00 });
+      }
+
+      // A3. Overcurrent Breaker Sizing Row (depends on GFCI, panel brand, and rating)
+      let breakerName = "";
+      let breakerCost = 0;
+      if (gfciActive) {
+        breakerName = `2-Pole ${breaker}A Class A GFCI Breaker (Specialized outdoor/plug-in)`;
+        breakerCost = 250.00;
+      } else if (panelBrand === 'fpe') {
+        breakerName = `2-Pole ${breaker}A Federal Pioneer (Stab-lok compatible) Breaker`;
+        breakerCost = 150.00;
+      } else if (panelBrand === 'commander') {
+        breakerName = `2-Pole ${breaker}A Commander/CEB vintage compatible Breaker`;
+        breakerCost = 120.00;
+      } else if (panelBrand === 'sylvania') {
+        breakerName = `2-Pole ${breaker}A Sylvania vintage compatible Breaker`;
+        breakerCost = 120.00;
+      } else if (panelBrand === 'ite-gould') {
+        breakerName = `2-Pole ${breaker}A ITE/Gould legacy compatible Breaker`;
+        breakerCost = 75.00;
+      } else if (panelBrand === 'squared-qo') {
+        breakerName = `2-Pole ${breaker}A Square D QO Premium Breaker`;
+        breakerCost = 65.00;
+      } else if (panelBrand === 'leviton') {
+        breakerName = `2-Pole ${breaker}A Leviton Premium Smart-Ready Breaker`;
+        breakerCost = 60.00;
+      } else if (panelBrand === 'cutler-hammer') {
+        breakerName = `2-Pole ${breaker}A Cutler-Hammer CH Premium Breaker`;
+        breakerCost = 55.00;
+      } else {
+        breakerName = breaker <= 40 ? MATERIALS_PRESETS.breaker40.name : MATERIALS_PRESETS.breaker60.name;
+        breakerCost = breaker <= 40 ? MATERIALS_PRESETS.breaker40.cost : MATERIALS_PRESETS.breaker60.cost;
+      }
+      materialsList.push({ key: "breaker", name: breakerName, qty: 1, cost: breakerCost });
+
+      // A4. Connection Archetype Receptacle Row
+      if (connectionType === 'plugin-nema') {
+        materialsList.push({ key: "receptacle", name: "Hubbell Heavy-Duty Industrial NEMA 14-50 Receptacle & Weatherproof Box", qty: 1, cost: 95.00 });
+      }
+
+      // A5. Drywall finished routing surcharge row
+      if (drywallVal === 'simple') {
+        materialsList.push({ key: "drywall", name: "Drywall cutting, wire route & tape patch kit", qty: 1, cost: 250.00 });
+      } else if (drywallVal === 'complex') {
+        materialsList.push({ key: "drywall", name: "Drywall ceiling routing, multi-hole patching & finished sanding", qty: 1, cost: 650.00 });
+      }
+
+      // A6. Concrete core boring surcharge row
+      if (concreteBoringActive) {
+        materialsList.push({ key: "concreteBoring", name: "Concrete Foundation Core Drill rig rental & diamond bit surcharge", qty: 1, cost: 150.00 });
+      }
+
+      // B. Circuit Wire Conductors Sizing Row
+      if (runType === "NMD90") {
+        if (gauge === 10) materialsList.push({ key: "wire", name: "NMD90 Copper wire #10/2 (per foot)", qty: runLength, cost: 2.20 });
+        else if (gauge === 8) materialsList.push({ key: "wire", name: MATERIALS_PRESETS.nmd8_2.name, qty: runLength, cost: MATERIALS_PRESETS.nmd8_2.cost });
+        else materialsList.push({ key: "wire", name: MATERIALS_PRESETS.nmd6_2.name, qty: runLength, cost: MATERIALS_PRESETS.nmd6_2.cost });
+      } else if (runType === "Teck90") {
+        if (gauge === 10) materialsList.push({ key: "wire", name: "Armored Teck90 #10/3 cable (per foot)", qty: runLength, cost: 3.50 });
+        else if (gauge === 8) materialsList.push({ key: "wire", name: MATERIALS_PRESETS.teck8_3.name, qty: runLength, cost: MATERIALS_PRESETS.teck8_3.cost });
+        else materialsList.push({ key: "wire", name: MATERIALS_PRESETS.teck6_3.name, qty: runLength, cost: MATERIALS_PRESETS.teck6_3.cost });
+      } else if (runType === "Conduit") {
+        const conduitType = document.getElementById('conduitType').value;
+        const conduitPrice = conduitType === 'EMT' ? 3.50 : 2.00;
+        const conduitName = conduitType === 'EMT' ? "1\" EMT Metal Conduit (per foot)" : "1\" Rigid PVC Sched. 40 Conduit (per foot)";
+        materialsList.push({ key: "conduit", name: conduitName, qty: runLength, cost: conduitPrice });
+        
+        if (gauge === 10) materialsList.push({ key: "wire", name: "RW90 Copper single conductor #10 AWG (3 pulls required)", qty: runLength * 3, cost: 0.75 });
+        else if (gauge === 8) materialsList.push({ key: "wire", name: "RW90 Copper single conductor #8 AWG (3 pulls required)", qty: runLength * 3, cost: 1.10 });
+        else materialsList.push({ key: "wire", name: "RW90 Copper single conductor #6 AWG (3 pulls required)", qty: runLength * 3, cost: 1.60 });
+      }
+
+      // C. Smart Load manager (DCC-9 EVEMS) Row
+      if (useEVEMS) {
+        materialsList.push({ key: "evems", name: MATERIALS_PRESETS.evemsUnit.name, qty: 1, cost: MATERIALS_PRESETS.evemsUnit.cost });
+      }
+
+      // D. Detached Trenching Conduit Enclosures Sizing Rows
+      if (isDetached) {
+        materialsList.push({ key: "trenchConduit", name: MATERIALS_PRESETS.pvc1.name, qty: trenchLength, cost: MATERIALS_PRESETS.pvc1.cost });
+        materialsList.push({ key: "trenchSweeps", name: MATERIALS_PRESETS.pvcSweeps.name, qty: 2, cost: MATERIALS_PRESETS.pvcSweeps.cost });
+        materialsList.push({ key: "trenchLB", name: MATERIALS_PRESETS.lbCondulet.name, qty: 2, cost: MATERIALS_PRESETS.lbCondulet.cost });
+        materialsList.push({ key: "trenchTape", name: MATERIALS_PRESETS.warningTape.name, qty: 1, cost: MATERIALS_PRESETS.warningTape.cost });
+      }
+
+      // E. Sundry Parts Sizing Row
+      materialsList.push({ key: "sundries", name: MATERIALS_PRESETS.sundries.name, qty: 1, cost: MATERIALS_PRESETS.sundries.cost });
+
+      // F. Inject Custom items added on the fly
+      customItems.forEach((cItem, index) => {
+        materialsList.push({
+          name: cItem.name,
+          qty: cItem.qty,
+          cost: cItem.cost,
+          index: index, // reference to array index for removal
+          isCustom: true
+        });
+      });
+
+      // Clear previous lists
+      const tbody = document.querySelector("#materialsTable tbody");
+      const printTbody = document.querySelector("#printMaterialsTable tbody");
+      tbody.innerHTML = "";
+      printTbody.innerHTML = "";
+
+      let rawMaterialsTotal = 0;
+      let markedUpMaterialsTotal = 0;
+
+      materialsList.forEach(item => {
+        // Merge manual overrides if they exist
+        let overridden = false;
+        if (item.key && manualOverrides[item.key]) {
+          overridden = true;
+          if (manualOverrides[item.key].qty !== undefined) {
+            item.qty = manualOverrides[item.key].qty;
+          }
+          if (manualOverrides[item.key].cost !== undefined) {
+            item.cost = manualOverrides[item.key].cost;
+          }
+          item.isOverridden = true;
+        }
+
+        let itemRawSum = item.qty * item.cost;
+        let itemMarkedUpSum = itemRawSum * markupFactor;
+        
+        rawMaterialsTotal += itemRawSum;
+        markedUpMaterialsTotal += itemMarkedUpSum;
+
+        // Render UI Table Row
+        let tr = document.createElement("tr");
+        let actionCell = "";
+        if (item.isCustom) {
+          actionCell = `<td class="table-actions no-print" onclick="removeCustomItem(${item.index})" title="Remove Custom Item">✕</td>`;
+        } else if (item.isOverridden) {
+          actionCell = `<td class="no-print" style="text-align: center;"><button class="btn-reset-item" onclick="resetItemOverride('${item.key}')" title="Reset to calculated default">↩️</button></td>`;
+        } else {
+          actionCell = `<td class="no-print"></td>`;
+        }
+        
+        // Render inputs for Qty and Cost inside the active dashboard
+        let qtyCellContent = "";
+        let costCellContent = "";
+        
+        if (item.isCustom) {
+          qtyCellContent = `<input type="number" class="takeoff-input" value="${item.qty}" min="0" step="any" onchange="updateCustomItemQty(${item.index}, this.value)">`;
+          costCellContent = `<input type="number" class="takeoff-input" value="${item.cost.toFixed(2)}" min="0" step="0.01" onchange="updateCustomItemCost(${item.index}, this.value)">`;
+        } else {
+          let inputClass = overridden ? "takeoff-input overridden" : "takeoff-input";
+          qtyCellContent = `<input type="number" class="${inputClass}" value="${item.qty}" min="0" step="any" onchange="updateOverrideQty('${item.key}', this.value)">`;
+          costCellContent = `<input type="number" class="${inputClass}" value="${item.cost.toFixed(2)}" min="0" step="0.01" onchange="updateOverrideCost('${item.key}', this.value)">`;
+        }
+        
+        tr.innerHTML = `
+          <td>${item.name}</td>
+          <td class="text-right">${qtyCellContent}</td>
+          <td class="text-right">$${costCellContent}</td>
+          <td class="text-right">$${itemMarkedUpSum.toFixed(2)}</td>
+          ${actionCell}
+        `;
+        tbody.appendChild(tr);
+
+        // Render PDF Proposal Print Table Row (Plain text values, no input boxes — shows client-facing marked up price)
+        let ptr = document.createElement("tr");
+        ptr.innerHTML = `
+          <td style="padding: 8px; border-bottom: 1px solid #eee; font-size: 11px;">${item.name}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">${item.qty}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">$${(item.cost).toFixed(2)}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">$${itemMarkedUpSum.toFixed(2)}</td>
+        `;
+        printTbody.appendChild(ptr);
+      });
+
+      // 6. Labour hours calculations (Time & Materials)
+      let hourlyLabourRate = parseFloat(document.getElementById('labourRate').value) || 0;
+      
+      let finalLabourHours = labourHours;
+      if (requiresJunctionBox) {
+        finalLabourHours += 1.5;
+      }
+      
+      // Service Upgrade labor penalty
+      const activeServiceUpgrade = document.getElementById('serviceUpgradeSelect').value;
+      if (activeServiceUpgrade === 'upgrade200a') {
+        finalLabourHours += 14;
+      } else if (activeServiceUpgrade === 'subpanel') {
+        finalLabourHours += 5;
+      } else if (activeServiceUpgrade === 'rejuvenation') {
+        finalLabourHours += 6;
+      }
+
+      // Subpanel configuration labour penalty
+      const subScenario = document.getElementById('subpanelScenarioSelect')?.value || 'none';
+      if (subScenario === 'existing') {
+        finalLabourHours += 1.5; // breaker install, load check, label
+      } else if (subScenario === 'new') {
+        finalLabourHours += 4.0; // mount enclosure, feed wire pull, terminations, label
+      }
+
+      // Professional Surcharge Labor Penalties
+      if (panelBrand === 'fpe' || panelBrand === 'sylvania') {
+        finalLabourHours += 1.0; // stab-lok vintage safety inspection
+      } else if (panelBrand === 'ite-gould') {
+        finalLabourHours += 0.5; // legacy vintage safety check
+      }
+      if (gfciActive) {
+        finalLabourHours += 0.5; // GFCI trip safety testing & calibration
+      }
+      if (connectionType === 'plugin-nema') {
+        finalLabourHours += 1.0; // mount industrial outlet box & route wiring
+      }
+      if (drywallVal === 'simple') {
+        finalLabourHours += 3.0; // basic route and single spot patching
+      } else if (drywallVal === 'complex') {
+        finalLabourHours += 8.0; // finished ceiling, multiple cutouts & sand/paint prep
+      }
+      if (concreteBoringActive) {
+        finalLabourHours += 2.0; // setup core drilling rig & drill basement/foundation
+      }
+      
+      let totalLabourCost = finalLabourHours * hourlyLabourRate;
+      
+      // Calculate digging digging surcharge for trenching
+      if (isDetached) {
+        const digMethod = document.getElementById('digMethod').value;
+        let excavationHours = digMethod === "hand" ? (trenchLength * 0.4) : (trenchLength * 0.15);
+        totalLabourCost += (excavationHours * hourlyLabourRate);
+      }
+
+      // Dynamic Permitting Fee tiering — based on marked-up (quoted) project value per Edmonton Electrical Permit schedule
+      let tradeWorkValue = markedUpMaterialsTotal + totalLabourCost;
+      let permitCostFee = 166.40; // Tier 1: $0 - $3000
+      if (tradeWorkValue > 10000) {
+        permitCostFee = 410.80; // Tier 3: $10000+
+      } else if (tradeWorkValue > 3000) {
+        permitCostFee = 234.00; // Tier 2: $3001 - $10000
+      }
+
+      document.getElementById('permitCostBox').value = "$" + permitCostFee.toFixed(2);
+      
+      let utilitySurcharge = parseFloat(document.getElementById('utilitySurcharge').value) || 0;
+
+      // Service upgrade permit — applied whenever a utility operator is selected
+      const utilityOp = document.getElementById('utilityOperatorSelect')?.value || 'none';
+      const upgradePermitFee = (utilityOp !== 'none') ? 175.00 : 0;
+      const upgradePermitRow = document.getElementById('upgradePermitRow');
+      if (upgradePermitRow) upgradePermitRow.style.display = (utilityOp !== 'none') ? 'flex' : 'none';
+
+      // Scoreboard metrics calculation (Assumes journeyman internal baseline trade rate is $45/hr)
+      // Permits are a passthrough — never marked up
+      let subtotalBeforeTax = markedUpMaterialsTotal + totalLabourCost;
+      let allPermitsFee = permitCostFee + upgradePermitFee;
+      let renvoltQuotedPrice = subtotalBeforeTax + allPermitsFee + utilitySurcharge;
+      let gstAmount = renvoltQuotedPrice * 0.05;
+      let grandTotal = renvoltQuotedPrice + gstAmount;
+
+      let actualTotalCost = rawMaterialsTotal + (finalLabourHours * 45) + allPermitsFee + utilitySurcharge;
+      let grossProfitValue = subtotalBeforeTax - (rawMaterialsTotal + (finalLabourHours * 45));
+      let grossMarginPercentage = subtotalBeforeTax > 0 ? (grossProfitValue / subtotalBeforeTax) * 100 : 0;
+
+      document.getElementById('actualProjectCost').innerText = "$" + actualTotalCost.toFixed(2);
+      document.getElementById('quotedPriceVal').innerText = "$" + renvoltQuotedPrice.toFixed(2);
+      document.getElementById('gstVal').innerText = "$" + gstAmount.toFixed(2);
+      document.getElementById('grandTotalVal').innerText = "$" + grandTotal.toFixed(2);
+      document.getElementById('profitVal').innerText = "$" + grossProfitValue.toFixed(2);
+      document.getElementById('marginVal').innerText = grossMarginPercentage.toFixed(0) + "%";
+
+      // Render client-safe PDF print fields
+      document.getElementById('printSubtotal').innerText = "$" + subtotalBeforeTax.toFixed(2);
+      document.getElementById('printPermitLine').innerText = "$" + permitCostFee.toFixed(2);
+      // Service upgrade permit row
+      const printUpgRow = document.getElementById('printUpgradePermitLine');
+      if (printUpgRow) printUpgRow.style.display = upgradePermitFee > 0 ? 'table-row' : 'none';
+      // Utility fee row
+      const printUtilRow = document.getElementById('printUtilityLine');
+      const utilLabel = document.getElementById('printUtilityLabel');
+      const utilFeeEl = document.getElementById('printUtilityFee');
+      if (printUtilRow && utilLabel && utilFeeEl) {
+        if (utilitySurcharge > 0) {
+          const op = document.getElementById('utilityOperatorSelect')?.value || 'none';
+          const opName = op === 'epcor' ? 'EPCOR' : op === 'fortis' ? 'FortisAlberta' : 'Utility';
+          utilLabel.innerText = opName + ' Disconnect/Reconnect Fee';
+          utilFeeEl.innerText = '$' + utilitySurcharge.toFixed(2);
+          printUtilRow.style.display = 'table-row';
+        } else {
+          printUtilRow.style.display = 'none';
+        }
+      }
+      document.getElementById('printGST').innerText = "$" + gstAmount.toFixed(2);
+      document.getElementById('printTotalEstimate').innerText = "$" + grandTotal.toFixed(2);
+
+      document.getElementById('printInstallationType').innerHTML = `<strong>Installation Archetype:</strong> ${isDetached ? 'Detached Garage Laneway (PVC Conductor Burial)' : 'Standard Attached Garage Install'}`;
+      document.getElementById('printBreaker').innerHTML = `<strong>Breaker Sizing:</strong> ${breaker}A 2-Pole (Continuous Sizing Rule 86-306)`;
+      document.getElementById('printWire').innerHTML = `<strong>Conductor Sizing:</strong> #${gauge} AWG ${runType} Conductor`;
+      document.getElementById('printVD').innerHTML = `<strong>Voltage Drop Calculation:</strong> ${vDropPercent.toFixed(2)}% drop over ${runLength}ft (Rule 8-102 Compliant)`;
+
+      let demandText = useEVEMS ? "EVEMS Smart Shedding active (Bypassed under Rule 8-106)" : document.getElementById('totalCalcLoad').value;
+      document.getElementById('printCalculatedLoad').innerHTML = `<strong>Main Service Calculations:</strong> ${demandText} Demand check`;
+
+      // 7. Render dynamic customer SMS copy & digital permit specs
+      generateExporters(grandTotal, finalGaugeNum, breaker, vDropPercent);
+    }
+
+    function updateQuoteStatusBadge() {
+      const sel = document.getElementById('quoteStatusSelect');
+      const colors = { pending: '#f97316', sent: '#00e1ff', accepted: '#10b981', declined: '#ef4444', invoiced: '#a78bfa' };
+      sel.style.color = colors[sel.value] || 'white';
+    }
+
+    function updateOverrideQty(key, value) {
+      let val = parseFloat(value);
+      if (isNaN(val) || val < 0) return;
+      if (!manualOverrides[key]) manualOverrides[key] = {};
+      manualOverrides[key].qty = val;
+      runElectricalMath();
+    }
+
+    function updateOverrideCost(key, value) {
+      let val = parseFloat(value);
+      if (isNaN(val) || val < 0) return;
+      if (!manualOverrides[key]) manualOverrides[key] = {};
+      manualOverrides[key].cost = val;
+      runElectricalMath();
+    }
+
+    function resetItemOverride(key) {
+      if (manualOverrides[key]) {
+        delete manualOverrides[key];
+        runElectricalMath();
+      }
+    }
+
+    function resetAllOverrides() {
+      manualOverrides = {};
+      runElectricalMath();
+    }
+
+    function updateCustomItemQty(index, value) {
+      let val = parseInt(value);
+      if (isNaN(val) || val < 0) return;
+      customItems[index].qty = val;
+      runElectricalMath();
+    }
+
+    function updateCustomItemCost(index, value) {
+      let val = parseFloat(value);
+      if (isNaN(val) || val < 0) return;
+      customItems[index].cost = val;
+      runElectricalMath();
+    }
+
+    function generateExporters(totalQuote, gauge, breaker, vd) {
+      // A. Standard SMS Quoting format
+      const isDet = document.getElementById('isDetached').checked;
+      const isEms = document.getElementById('useEVEMS').checked;
+      const selectedHardware = document.getElementById('chargerHardwareSelect').value;
+      const spec = EVSE_SPECS[selectedHardware];
+      
+      let scopeText = `Standard attached garage installation of ${spec.name}.`;
+      if (isDet) scopeText = `Detached garage installation of ${spec.name} including a ${trenchLength}ft underground conduit run.`;
+      if (isEms) scopeText += " Integrated DCC-9 smart energy load manager.";
+      if (requiresJunctionBox) scopeText += " Weatherproof adjacent splicing junction box included.";
+
+      let smsText = `RENVOLT EV CHARGING PROPOSAL\n`;
+      smsText += `============================\n`;
+      smsText += `EVSE Hardware: ${spec.name}\n`;
+      smsText += `Scope: ${scopeText}\n`;
+      smsText += `Breaker: ${breaker}A 2-Pole (continuous compliance)\n`;
+      smsText += `Conductor: #${gauge} AWG\n`;
+      smsText += `Labour & municipal permits included.\n\n`;
+      smsText += `Est. Total: $${totalQuote.toFixed(2)}\n`;
+      smsText += `============================\n`;
+      smsText += `Ready to proceed? We operate Friday-Sunday in Edmonton. Let us know what date works best!`;
+
+      document.getElementById('smsQuoteBox').value = smsText;
+
+      // B. City of Edmonton Digital Permit Sizing report text compiler
+      let panelCalculatedLoad = document.getElementById('totalCalcLoad').value;
+      let serviceCeilingAmps = document.getElementById('serviceAmps').value;
+      let permitText = `CEC 2024 DESIGN PERMIT SUBMISSION SHEET\n`;
+      permitText += `========================================\n`;
+      permitText += `Contractor: Renvolt Electrical\n`;
+      permitText += `EVSE Hardware: ${spec.name} ($${spec.msrp} MSRP)\n`;
+      permitText += `Continuous Load Limit: ${chargerAmps}A (continuous Load Rule 86-306)\n`;
+      permitText += `Overcurrent Protection: ${breaker}A 2-Pole breaker\n`;
+      permitText += `Branch Circuit Conductors: #${gauge} AWG Cu (75C compliant)\n`;
+      permitText += `Voltage Drop: ${vd.toFixed(2)}% calculated over ${runLength}ft (Rule 8-102)\n`;
+      if (requiresJunctionBox) {
+        permitText += `Termination Splicing: Weatherproof splicing junction box adjacent to EVSE, transitioned down to #${spec.maxAWG} AWG (Rule 12-112)\n`;
+      }
+      if (isDet) {
+        permitText += `Trench Specs: PVC conduit buried ${trenchLength}ft at 450mm depth (Rule 12-012)\n`;
+      }
+      if (isEms) {
+        permitText += `Load Management: DCC-9-40A EVEMS installed (Rule 8-106 bypass)\n`;
+      } else {
+        permitText += `Panel Load: Calculated residential demand is ${panelCalculatedLoad} on a ${serviceCeilingAmps}A main service.\n`;
+      }
+      permitText += `Inspection: Safety Codes inspection to be booked upon completion.`;
+
+      document.getElementById('permitSummaryBox').value = permitText;
+    }
+
+    // Copy to Clipboard UI Toast alert
+    function copyText(elemId) {
+      const copyTextarea = document.getElementById(elemId);
+      copyTextarea.select();
+      copyTextarea.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyTextarea.value);
+
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // ON-SITE BROWSER DATABASE (LOCALSTORAGE) PERSISTENCE
+    function getSavedQuotesFromStorage() {
+      let data = localStorage.getItem('renvolt_saved_quotes');
+      if (!data) return {};
+      try {
+        return JSON.parse(data);
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function refreshSavedQuotesDropdown() {
+      const dropdown = document.getElementById('savedQuotesDropdown');
+      dropdown.innerHTML = '<option value="">-- Load Saved Quote --</option>';
+      
+      const db = getSavedQuotesFromStorage();
+      for (let name in db) {
+        let option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        dropdown.appendChild(option);
+      }
+    }
+
+    function saveQuoteToDB() {
+      const name = document.getElementById('quoteNameInput').value.trim();
+      if (!name) {
+        alert("Please enter a customer name to save the quote.");
+        return;
+      }
+
+      const quoteConfig = {
+        chargerHardware: document.getElementById('chargerHardwareSelect').value,
+        chargerAmps: chargerAmps,
+        runLength: runLength,
+        trenchLength: trenchLength,
+        isDetached: isDetached,
+        useEVEMS: useEVEMS,
+        serviceUpgrade: document.getElementById('serviceUpgradeSelect').value,
+        conduitType: document.getElementById('conduitType').value,
+        materialMarkup: materialMarkup,
+        labourHours: labourHours,
+        wireMaterial: document.getElementById('wireMaterial').value,
+        runType: document.getElementById('runType').value,
+        serviceAmps: document.getElementById('serviceAmps').value,
+        floorArea: document.getElementById('floorArea').value,
+        loadStove: document.getElementById('loadStove').checked,
+        loadDryer: document.getElementById('loadDryer').checked,
+        loadWater: document.getElementById('loadWater').checked,
+        loadAC: document.getElementById('loadAC').checked,
+        loadHeating: document.getElementById('loadHeating').value,
+        labourRate: document.getElementById('labourRate').value,
+        utilitySurcharge: document.getElementById('utilitySurcharge').value,
+        chargerConnectionType: document.getElementById('chargerConnectionType').value,
+        gfciRequired: document.getElementById('gfciRequired').checked,
+        drywallSurcharge: document.getElementById('drywallSurcharge').value,
+        concreteBoring: document.getElementById('concreteBoring').checked,
+        panelBrandSelect: document.getElementById('panelBrandSelect').value,
+        breakerSize: document.getElementById('calculatedBreaker').value,
+        manualOverrides: manualOverrides,
+        customItems: customItems,
+        quoteStatus: document.getElementById('quoteStatusSelect').value
+      };
+
+      const db = getSavedQuotesFromStorage();
+      db[name] = quoteConfig;
+      localStorage.setItem('renvolt_saved_quotes', JSON.stringify(db));
+
+      document.getElementById('quoteNameInput').value = "";
+      refreshSavedQuotesDropdown();
+      
+      // Notify Copied/Saved
+      const toast = document.getElementById('toast');
+      toast.textContent = "Quote saved successfully!";
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.textContent = "Successfully copied to clipboard!";
+      }, 3000);
+    }
+
+    function loadQuoteFromDB(name) {
+      if (!name) return;
+      
+      const db = getSavedQuotesFromStorage();
+      const quote = db[name];
+      if (!quote) return;
+
+      // Restore State
+      chargerAmps = quote.chargerAmps;
+      runLength = quote.runLength;
+      trenchLength = quote.trenchLength;
+      isDetached = quote.isDetached;
+      useEVEMS = quote.useEVEMS;
+      materialMarkup = quote.materialMarkup;
+      labourHours = quote.labourHours;
+      customItems = quote.customItems || [];
+      manualOverrides = quote.manualOverrides || {};
+
+      // Restore Form Controls
+      document.getElementById('isDetached').checked = isDetached;
+      document.getElementById('useEVEMS').checked = useEVEMS;
+      document.getElementById('wireMaterial').value = quote.wireMaterial;
+      document.getElementById('runType').value = quote.runType;
+      document.getElementById('serviceAmps').value = quote.serviceAmps;
+      document.getElementById('floorArea').value = quote.floorArea;
+      document.getElementById('loadStove').checked = quote.loadStove;
+      document.getElementById('loadDryer').checked = quote.loadDryer;
+      document.getElementById('loadWater').checked = quote.loadWater;
+      document.getElementById('loadAC').checked = quote.loadAC;
+      document.getElementById('loadHeating').value = quote.loadHeating;
+      document.getElementById('labourRate').value = quote.labourRate;
+      document.getElementById('utilitySurcharge').value = quote.utilitySurcharge;
+
+      // Restore quote status badge
+      const statusSel = document.getElementById('quoteStatusSelect');
+      if (statusSel && quote.quoteStatus) {
+        statusSel.value = quote.quoteStatus;
+        updateQuoteStatusBadge();
+      }
+
+      if (quote.chargerHardware) {
+        document.getElementById('chargerHardwareSelect').value = quote.chargerHardware;
+      } else {
+        document.getElementById('chargerHardwareSelect').value = 'tesla';
+      }
+      selectEVSEHardware(document.getElementById('chargerHardwareSelect').value, false);
+
+      if (quote.serviceUpgrade) {
+        document.getElementById('serviceUpgradeSelect').value = quote.serviceUpgrade;
+      } else {
+        document.getElementById('serviceUpgradeSelect').value = 'none';
+      }
+
+      if (quote.conduitType) {
+        document.getElementById('conduitType').value = quote.conduitType;
+      } else {
+        document.getElementById('conduitType').value = 'PVC';
+      }
+
+      if (quote.chargerConnectionType) {
+        document.getElementById('chargerConnectionType').value = quote.chargerConnectionType;
+      } else {
+        document.getElementById('chargerConnectionType').value = 'hardwired';
+      }
+
+      if (quote.gfciRequired !== undefined) {
+        document.getElementById('gfciRequired').checked = quote.gfciRequired;
+      } else {
+        document.getElementById('gfciRequired').checked = false;
+      }
+
+      if (quote.drywallSurcharge) {
+        document.getElementById('drywallSurcharge').value = quote.drywallSurcharge;
+      } else {
+        document.getElementById('drywallSurcharge').value = 'none';
+      }
+
+      if (quote.concreteBoring !== undefined) {
+        document.getElementById('concreteBoring').checked = quote.concreteBoring;
+      } else {
+        document.getElementById('concreteBoring').checked = false;
+      }
+
+      if (quote.panelBrandSelect) {
+        document.getElementById('panelBrandSelect').value = quote.panelBrandSelect;
+      } else {
+        document.getElementById('panelBrandSelect').value = 'standard';
+      }
+
+      if (quote.breakerSize) {
+        document.getElementById('calculatedBreaker').value = quote.breakerSize;
+      } else {
+        document.getElementById('calculatedBreaker').value = getRecommendedBreaker(chargerAmps);
+      }
+
+      document.getElementById('runLength').value = runLength;
+      document.getElementById('runLengthVal').innerText = runLength + " ft";
+      
+      document.getElementById('trenchLength').value = trenchLength;
+      document.getElementById('trenchLengthVal').innerText = trenchLength + " ft";
+      
+      document.getElementById('labourHours').value = labourHours;
+      document.getElementById('labourHoursVal').innerText = labourHours + " hrs";
+      
+      document.getElementById('materialMarkup').value = materialMarkup;
+      document.getElementById('markupVal').innerText = materialMarkup + "%";
+      
+      // Update displays
+      document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
+      document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
+      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
+
+      runElectricalMath();
+    }
+
+    function deleteQuoteFromDB() {
+      const dropdown = document.getElementById('savedQuotesDropdown');
+      const name = dropdown.value;
+      if (!name) {
+        alert("Please select a saved quote to delete.");
+        return;
+      }
+
+      if (confirm(`Are you sure you want to delete quote "${name}"?`)) {
+        const db = getSavedQuotesFromStorage();
+        delete db[name];
+        localStorage.setItem('renvolt_saved_quotes', JSON.stringify(db));
+        
+        refreshSavedQuotesDropdown();
+        loadPresetProfile('attached'); // Reset to default attached garage
+
+        // Notify
+        const toast = document.getElementById('toast');
+        toast.textContent = "Quote deleted successfully!";
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = "Successfully copied to clipboard!";
+        }, 3000);
+      }
+    }
+
+    // ==========================================================================
+    // CRM WORKSPACE PERSISTENCE, PIPELINES, AND INTERACTIVE DEEP LINKAGE
+    // ==========================================================================
+
+    // CRM Database Leads Initialization
+    function initializeCRMLeads() {
+      let leads = localStorage.getItem('renvolt_crm_leads');
+      if (!leads) {
+        // Prepopulate with 3 realistic local Edmonton leads
+        const starterLeads = [
+          {
+            name: "Sarah Jenkins",
+            status: "Scheduled",
+            phone: "780-555-0122",
+            email: "sarah.j@outlook.com",
+            address: "14210 102 Ave NW, Glenora, Edmonton, AB",
+            hardware: "tesla",
+            amps: "32",
+            runLength: "45",
+            trenchLength: "40",
+            isDetached: true,
+            useEVEMS: false,
+            serviceUpgrade: "none",
+            panelCapacity: "200",
+            notes: "Detached garage laneway install. Customer already has a modern 200A service panel in basement. Trenching requires hand shovel due to expensive mature landscaping ferns. Running #8/3 Teck90 buried in Schedule 40 PVC conduit. Locate completed with AB811 (Locate #202604213).",
+            quoteTotal: 3450.00
+          },
+          {
+            name: "David Miller",
+            status: "Quoted",
+            phone: "780-555-0199",
+            email: "david.miller@strathcona.ca",
+            address: "8912 104 St NW, Strathcona, Edmonton, AB",
+            hardware: "grizzle",
+            amps: "32",
+            runLength: "30",
+            trenchLength: "0",
+            isDetached: false,
+            useEVEMS: false,
+            serviceUpgrade: "upgrade200a",
+            panelCapacity: "100",
+            notes: "Federal Pioneer 100A panel is completely full and has zero headroom for EV charging. Upgrading to a 200A service panel to establish adequate headroom. Installing Grizzl-E Classic metal enclosure on stud wall in attached garage. Permit coordination with Epcor required for line disconnect.",
+            quoteTotal: 5850.00
+          },
+          {
+            name: "Michael Vance",
+            status: "Lead",
+            phone: "780-555-0245",
+            email: "mvance@windermere-living.net",
+            address: "312 Windermere Rd NW, Windermere, Edmonton, AB",
+            hardware: "wallbox",
+            amps: "48",
+            runLength: "20",
+            trenchLength: "0",
+            isDetached: false,
+            useEVEMS: true,
+            serviceUpgrade: "none",
+            panelCapacity: "100",
+            notes: "Client has multi-vehicle garage with tight panel bounds. Bypassing service upgrades using a DCC-9 smart energy load manager. Sizing Wallbox Pulsar Plus to run at 48A continuous (requires #6 AWG copper circuit breaker size 60A). Install scheduled for weekend delivery.",
+            quoteTotal: 3220.00
+          }
+        ];
+        localStorage.setItem('renvolt_crm_leads', JSON.stringify(starterLeads));
+      }
+      
+      renderCRMLeads();
+    }
+
+    function getCRMLeads() {
+      const data = localStorage.getItem('renvolt_crm_leads');
+      if (!data) return [];
+      try {
+        return JSON.parse(data);
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveCRMLeads(leads) {
+      localStorage.setItem('renvolt_crm_leads', JSON.stringify(leads));
+    }
+
+    // Dynamic Leads list rendering based on search filters
+    function renderCRMLeads() {
+      const container = document.getElementById('crmLeadsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const query = document.getElementById('crmSearchInput').value.toLowerCase().trim();
+      const leads = getCRMLeads();
+
+      const filteredLeads = leads.filter(lead => {
+        return lead.name.toLowerCase().includes(query) ||
+               lead.phone.toLowerCase().includes(query) ||
+               lead.email.toLowerCase().includes(query) ||
+               lead.address.toLowerCase().includes(query) ||
+               lead.status.toLowerCase().includes(query);
+      });
+
+      if (filteredLeads.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">No leads found matching your search. Click "Add Lead" to insert a new client.</div>';
+        return;
+      }
+
+      filteredLeads.forEach((lead, origIndex) => {
+        // Find original index in master list for load/edit mapping
+        const index = leads.indexOf(lead);
+
+        // Dynamic badges styles matching pipelines
+        let badgeColor = "var(--color-warning)";
+        let badgeBg = "var(--color-warning-bg)";
+        if (lead.status === 'Completed') {
+          badgeColor = "var(--color-success)";
+          badgeBg = "var(--color-success-bg)";
+        } else if (lead.status === 'Scheduled') {
+          badgeColor = "var(--color-primary)";
+          badgeBg = "var(--color-primary-glow)";
+        } else if (lead.status === 'Quoted') {
+          badgeColor = "var(--color-primary)";
+          badgeBg = "var(--color-primary-glow)";
+        } else if (lead.status === 'Assessed') {
+          badgeColor = "var(--color-accent)";
+          badgeBg = "rgba(204, 88, 51, 0.08)";
+        }
+
+        // EVSE Brand names beautification
+        let evseText = lead.hardware ? EVSE_SPECS[lead.hardware].name : "Tesla Wall Connector";
+        let upgradeText = "No upgrade required";
+        if (lead.serviceUpgrade === 'upgrade200a') upgradeText = "100A to 200A Full Service Upgrade";
+        else if (lead.serviceUpgrade === 'subpanel') upgradeText = "100A Garage Subpanel Installation";
+        else if (lead.serviceUpgrade === 'rejuvenation') upgradeText = "Panel Rejuvenation & Swaps";
+
+        let leadCard = document.createElement("div");
+        leadCard.className = "card";
+        leadCard.style.cssText = "margin-bottom: 12px; border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.01);";
+        leadCard.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+            <div style="flex: 1; min-width: 280px;">
+              <h3 style="font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--color-text); display: flex; align-items: center; gap: 8px;">
+                ${lead.name}
+                <span class="badge" style="background-color: ${badgeBg}; border-color: ${badgeColor}; color: ${badgeColor}; font-size: 10px; padding: 2px 8px; border-radius: 50px;">
+                  ${lead.status}
+                </span>
+              </h3>
+              <p style="font-size: 12px; color: var(--color-muted); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px;">
+                <span>📍 ${lead.address}</span>
+                <span>• 📞 ${lead.phone}</span>
+                <span>• ✉️ ${lead.email}</span>
+              </p>
+              
+              <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--color-primary); margin-top: 10px; background: rgba(46, 64, 54, 0.04); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); line-height: 1.4;">
+                • EVSE Hardware: ${evseText}<br>
+                • Sizing Parameter: ${lead.amps}A continuous load over ${lead.runLength}ft (${lead.isDetached ? 'Detached ' + lead.trenchLength + 'ft Trench' : 'Attached Garage'})<br>
+                • Service Upgrade: ${upgradeText} (${lead.panelCapacity}A Base panel)
+              </div>
+              
+              ${lead.notes ? `<p style="font-size: 12.5px; color: var(--color-muted); font-style: italic; margin-top: 8px; border-left: 2px solid var(--color-primary); padding-left: 8px;">"${lead.notes}"</p>` : ""}
+            </div>
+            
+            <div style="text-align: right; min-width: 150px; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+              <div>
+                <div style="font-size: 24px; font-weight: 800; color: var(--color-primary); font-family: var(--font-display);">$${lead.quoteTotal.toFixed(2)}</div>
+                <div style="font-size: 10px; color: var(--color-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Quoted Price</div>
+              </div>
+              <div style="display: flex; gap: 6px; margin-top: 20px; justify-content: flex-end; flex-wrap: wrap;">
+                <button class="btn-preset" onclick="loadLeadIntoSizer(${index})" style="padding: 6px 10px; font-size: 11px; background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success);">⚡ Load</button>
+                <button class="btn-preset" onclick="syncSizerBackToLead(${index})" style="padding: 6px 10px; font-size: 11px; background: var(--color-primary-glow); border-color: var(--color-primary); color: var(--color-primary);">💾 Sync</button>
+                <button class="btn-preset" onclick="openCRMLeadDrawer('edit', ${index})" style="padding: 6px 8px; font-size: 11px;">📝 Edit</button>
+                <button class="btn-preset" onclick="deleteCRMLead(${index})" style="padding: 6px 8px; font-size: 11px; background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger);">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(leadCard);
+      });
+    }
+
+    // CRM Lead Editing Drawer Overlay Control
+    function openCRMLeadDrawer(mode, index = null) {
+      const drawer = document.getElementById('crmLeadDrawer');
+      const title = document.getElementById('crmDrawerTitle');
+      if (!drawer) return;
+
+      drawer.style.display = 'block';
+
+      if (mode === 'add') {
+        title.textContent = "Add New CRM Lead";
+        document.getElementById('crmLeadIndex').value = "";
+        document.getElementById('crmLeadName').value = "";
+        document.getElementById('crmLeadStatus').value = "Lead";
+        document.getElementById('crmLeadPhone').value = "";
+        document.getElementById('crmLeadEmail').value = "";
+        document.getElementById('crmLeadAddress').value = "";
+        document.getElementById('crmLeadHardware').value = "tesla";
+        document.getElementById('crmLeadAmps').value = "32";
+        document.getElementById('crmLeadRunLength').value = "30";
+        document.getElementById('crmLeadTrenchLength').value = "0";
+        document.getElementById('crmLeadServiceUpgrade').value = "none";
+        document.getElementById('crmLeadPanelCapacity').value = "100";
+        document.getElementById('crmLeadEVEMS').checked = false;
+        document.getElementById('crmLeadNotes').value = "";
+      } else {
+        title.textContent = "Edit CRM Lead Details";
+        const leads = getCRMLeads();
+        const lead = leads[index];
+        if (!lead) return;
+
+        document.getElementById('crmLeadIndex').value = index;
+        document.getElementById('crmLeadName').value = lead.name || "";
+        document.getElementById('crmLeadStatus').value = lead.status || "Lead";
+        document.getElementById('crmLeadPhone').value = lead.phone || "";
+        document.getElementById('crmLeadEmail').value = lead.email || "";
+        document.getElementById('crmLeadAddress').value = lead.address || "";
+        document.getElementById('crmLeadHardware').value = lead.hardware || "tesla";
+        document.getElementById('crmLeadAmps').value = lead.amps || "32";
+        document.getElementById('crmLeadRunLength').value = lead.runLength || "30";
+        document.getElementById('crmLeadTrenchLength').value = lead.trenchLength || "0";
+        document.getElementById('crmLeadServiceUpgrade').value = lead.serviceUpgrade || "none";
+        document.getElementById('crmLeadPanelCapacity').value = lead.panelCapacity || "100";
+        document.getElementById('crmLeadEVEMS').checked = lead.useEVEMS || false;
+        document.getElementById('crmLeadNotes').value = lead.notes || "";
+      }
+
+      // Scroll drawer into visual scope smoothly
+      drawer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeCRMLeadDrawer() {
+      const drawer = document.getElementById('crmLeadDrawer');
+      if (drawer) drawer.style.display = 'none';
+    }
+
+    // Save/Insert CRM lead details
+    function saveCRMLead() {
+      const name = document.getElementById('crmLeadName').value.trim();
+      if (!name) {
+        alert("Please enter a client name.");
+        return;
+      }
+
+      const indexStr = document.getElementById('crmLeadIndex').value;
+      const leads = getCRMLeads();
+
+      const leadConfig = {
+        name: name,
+        status: document.getElementById('crmLeadStatus').value,
+        phone: document.getElementById('crmLeadPhone').value.trim(),
+        email: document.getElementById('crmLeadEmail').value.trim(),
+        address: document.getElementById('crmLeadAddress').value.trim(),
+        hardware: document.getElementById('crmLeadHardware').value,
+        amps: document.getElementById('crmLeadAmps').value,
+        runLength: document.getElementById('crmLeadRunLength').value,
+        trenchLength: document.getElementById('crmLeadTrenchLength').value,
+        isDetached: parseInt(document.getElementById('crmLeadTrenchLength').value) > 0,
+        useEVEMS: document.getElementById('crmLeadEVEMS').checked,
+        serviceUpgrade: document.getElementById('crmLeadServiceUpgrade').value,
+        panelCapacity: document.getElementById('crmLeadPanelCapacity').value,
+        notes: document.getElementById('crmLeadNotes').value.trim()
+      };
+
+      if (indexStr === "") {
+        // Insert new lead and simulate target quote price baseline
+        leadConfig.quoteTotal = 2500.00; // Baseline default, load and sync updates this!
+        leads.push(leadConfig);
+      } else {
+        // Edit existing lead details but retain previous quote total unless loaded & updated
+        const index = parseInt(indexStr);
+        leadConfig.quoteTotal = leads[index].quoteTotal || 2500.00;
+        leads[index] = leadConfig;
+      }
+
+      saveCRMLeads(leads);
+      closeCRMLeadDrawer();
+      renderCRMLeads();
+
+      const toast = document.getElementById('toast');
+      toast.textContent = "Lead saved successfully!";
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.textContent = "Successfully copied to clipboard!";
+      }, 3000);
+    }
+
+    function deleteCRMLead(index) {
+      if (confirm("Are you sure you want to delete this lead from the CRM?")) {
+        const leads = getCRMLeads();
+        leads.splice(index, 1);
+        saveCRMLeads(leads);
+        renderCRMLeads();
+
+        const toast = document.getElementById('toast');
+        toast.textContent = "Lead deleted from CRM!";
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = "Successfully copied to clipboard!";
+        }, 3000);
+      }
+    }
+
+    function loadLeadIntoSizer(index) {
+      const leads = getCRMLeads();
+      const lead = leads[index];
+      if (!lead) return;
+
+      // 1. Populate Sizer State & Form Controls
+      chargerAmps = parseInt(lead.amps);
+      runLength = parseInt(lead.runLength);
+      trenchLength = parseInt(lead.trenchLength || 0);
+      isDetached = lead.isDetached;
+      useEVEMS = lead.useEVEMS;
+      manualOverrides = lead.manualOverrides || {};
+
+      // Update checkboxes and fields
+      document.getElementById('isDetached').checked = isDetached;
+      document.getElementById('useEVEMS').checked = useEVEMS;
+      document.getElementById('runLength').value = runLength;
+      document.getElementById('runLengthVal').innerText = runLength + " ft";
+      document.getElementById('trenchLength').value = trenchLength;
+      document.getElementById('trenchLengthVal').innerText = trenchLength + " ft";
+      
+      document.getElementById('serviceAmps').value = lead.panelCapacity || "100";
+      document.getElementById('serviceUpgradeSelect').value = lead.serviceUpgrade || "none";
+      if (lead.conduitType) {
+        document.getElementById('conduitType').value = lead.conduitType;
+      }
+      document.getElementById('chargerHardwareSelect').value = lead.hardware || "tesla";
+      document.getElementById('quoteNameInput').value = lead.name;
+
+      // Restore professional surcharges
+      document.getElementById('chargerConnectionType').value = lead.chargerConnectionType || "hardwired";
+      document.getElementById('gfciRequired').checked = lead.gfciRequired || false;
+      document.getElementById('drywallSurcharge').value = lead.drywallSurcharge || "none";
+      document.getElementById('concreteBoring').checked = lead.concreteBoring || false;
+      document.getElementById('panelBrandSelect').value = lead.panelBrandSelect || "standard";
+      
+      if (lead.breakerSize) {
+        document.getElementById('calculatedBreaker').value = lead.breakerSize;
+      } else {
+        document.getElementById('calculatedBreaker').value = getRecommendedBreaker(chargerAmps);
+      }
+
+      // Update visual form displays
+      document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
+      document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
+      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
+
+      // Rebuild dynamic amp options button group for this charger
+      selectEVSEHardware(lead.hardware, false);
+
+      // Run math to recalculate takeoff sheet
+      runElectricalMath();
+
+      // Active sizer tab navigation click selector
+      const sizingBtn = document.querySelector(".tabs-nav button:first-child");
+      switchTab('sizingTab', sizingBtn);
+
+      const toast = document.getElementById('toast');
+      toast.textContent = `Loaded ${lead.name}'s data into Sizer!`;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.textContent = "Successfully copied to clipboard!";
+      }, 3000);
+    }
+
+    function syncSizerBackToLead(index) {
+      const leads = getCRMLeads();
+      const lead = leads[index];
+      if (!lead) return;
+
+      // Sync active sizer settings back to Lead profile
+      lead.hardware = document.getElementById('chargerHardwareSelect').value;
+      lead.amps = chargerAmps.toString();
+      lead.runLength = runLength.toString();
+      lead.trenchLength = trenchLength.toString();
+      lead.isDetached = isDetached;
+      lead.useEVEMS = useEVEMS;
+      lead.serviceUpgrade = document.getElementById('serviceUpgradeSelect').value;
+      lead.conduitType = document.getElementById('conduitType').value;
+      lead.panelCapacity = document.getElementById('serviceAmps').value;
+
+      // Sync new professional sizer settings and overrides
+      lead.chargerConnectionType = document.getElementById('chargerConnectionType').value;
+      lead.gfciRequired = document.getElementById('gfciRequired').checked;
+      lead.drywallSurcharge = document.getElementById('drywallSurcharge').value;
+      lead.concreteBoring = document.getElementById('concreteBoring').checked;
+      lead.panelBrandSelect = document.getElementById('panelBrandSelect').value;
+      lead.breakerSize = document.getElementById('calculatedBreaker').value;
+      lead.manualOverrides = manualOverrides;
+
+      // Fetch Quoted Price total sum from visual scoreboard
+      const quotedPriceText = document.getElementById('quotedPriceVal').innerText;
+      lead.quoteTotal = parseFloat(quotedPriceText.replace(/[^0-9.]/g, '')) || 0;
+
+      leads[index] = lead;
+      saveCRMLeads(leads);
+      renderCRMLeads();
+
+      const toast = document.getElementById('toast');
+      toast.textContent = `Synced sizer specs back to ${lead.name}!`;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.textContent = "Successfully copied to clipboard!";
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
