@@ -50,7 +50,7 @@ const Navbar = () => {
                 <div className="hidden md:flex items-center space-x-8 font-sans text-sm font-medium">
                     <button onClick={() => handleNavClick('features')} className="hover:-translate-y-[1px] transition-transform focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded">Infrastructure</button>
                     <button onClick={() => handleNavClick('site-hosts')} className="hover:-translate-y-[1px] transition-transform focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded">Site Hosts</button>
-                    <a href="/calculator-preview.html" target="_blank" rel="noopener noreferrer" className="hover:-translate-y-[1px] transition-transform focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded text-accent font-semibold">Calculator</a>
+                    <a href="/calculator-preview.html" className="hover:-translate-y-[1px] transition-transform focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-4 rounded text-accent font-semibold">Calculator</a>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -79,7 +79,7 @@ const Navbar = () => {
                 <div className="md:hidden mt-4 pt-4 border-t border-white/10 [.scrolled_&]:border-primary/10 flex flex-col gap-3 font-sans text-sm font-medium animate-[fadeIn_0.2s_ease-out]">
                     <button onClick={() => handleNavClick('features')} className="text-left py-2 px-2 rounded-xl hover:bg-white/10 [.scrolled_&]:hover:bg-dark/5 transition-colors focus-visible:outline-2 focus-visible:outline-accent">Infrastructure</button>
                     <button onClick={() => handleNavClick('site-hosts')} className="text-left py-2 px-2 rounded-xl hover:bg-white/10 [.scrolled_&]:hover:bg-dark/5 transition-colors focus-visible:outline-2 focus-visible:outline-accent">Site Hosts</button>
-                    <a href="/calculator-preview.html" target="_blank" rel="noopener noreferrer" className="block text-left py-2 px-2 rounded-xl hover:bg-white/10 [.scrolled_&]:hover:bg-dark/5 transition-colors focus-visible:outline-2 focus-visible:outline-accent text-accent font-semibold">Calculator</a>
+                    <a href="/calculator-preview.html" className="block text-left py-2 px-2 rounded-xl hover:bg-white/10 [.scrolled_&]:hover:bg-dark/5 transition-colors focus-visible:outline-2 focus-visible:outline-accent text-accent font-semibold">Calculator</a>
                     <button onClick={() => handleNavClick('site-host-form')} className="text-left py-2 px-2 rounded-xl hover:bg-white/10 [.scrolled_&]:hover:bg-dark/5 transition-colors focus-visible:outline-2 focus-visible:outline-accent">Contact</button>
                 </div>
             )}
