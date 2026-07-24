@@ -2074,7 +2074,9 @@
       8: 16510,
       6: 26240,
       4: 41740,
-      2: 66360
+      2: 66360,
+      1: 83690,
+      0: 105600 // #1/0 AWG
     };
 
     // Standard local storage initialization
@@ -2454,17 +2456,39 @@
         }
       }
 
-      // 2. Initial wire size gauge baseline check (CEC Table 2 - 75°C terminals)
+      // 2. Initial wire size gauge baseline check (Table 2 and Table 4 - 75°C / 60°C terminals)
       let initialGaugeNum = 8;
-      if (standardBreaker <= 30) initialGaugeNum = 10;
-      else if (standardBreaker <= 50) initialGaugeNum = 8;  // #8 AWG Cu rated 50A @ 75°C
-      else if (standardBreaker <= 70) initialGaugeNum = 6;  // #6 AWG Cu rated 65A @ 75°C
-      else initialGaugeNum = 2;                            // 100A uses #2 AWG Cu
+      const wireMaterial = document.getElementById('wireMaterial').value;
+      const runType = document.getElementById('runType').value;
 
-      document.getElementById('initialGauge').value = "#" + initialGaugeNum + " AWG";
+      if (wireMaterial === "Cu") {
+        if (runType === "NMD90") {
+          // Rule 4-006 / Table 2 60°C column for NMD90 non-metallic cable
+          if (standardBreaker <= 30) initialGaugeNum = 10;     // 30A @ 60°C
+          else if (standardBreaker <= 40) initialGaugeNum = 8; // 40A @ 60°C
+          else if (standardBreaker <= 55) initialGaugeNum = 6; // 55A @ 60°C
+          else if (standardBreaker <= 70) initialGaugeNum = 4; // 70A @ 60°C
+          else initialGaugeNum = 2;                            // 95A @ 60°C
+        } else {
+          // Teck90 / RW90 Conduit (75°C terminals Table 2)
+          if (standardBreaker <= 30) initialGaugeNum = 10;
+          else if (standardBreaker <= 50) initialGaugeNum = 8; // #8 Cu is 50A @ 75°C
+          else if (standardBreaker <= 65) initialGaugeNum = 6; // #6 Cu is 65A @ 75°C
+          else if (standardBreaker <= 85) initialGaugeNum = 4; // #4 Cu is 85A @ 75°C
+          else initialGaugeNum = 2;                            // #2 Cu is 115A @ 75°C
+        }
+      } else { // Aluminum (Table 4, 75°C)
+        if (standardBreaker <= 25) initialGaugeNum = 10;      // #10 Al is 25A
+        else if (standardBreaker <= 40) initialGaugeNum = 8;  // #8 Al is 40A
+        else if (standardBreaker <= 65) initialGaugeNum = 4;  // #4 Al is 65A
+        else if (standardBreaker <= 90) initialGaugeNum = 2;  // #2 Al is 90A
+        else if (standardBreaker <= 100) initialGaugeNum = 1; // #1 Al is 100A
+        else initialGaugeNum = 0;                            // #1/0 Al is 120A
+      }
+
+      document.getElementById('initialGauge').value = "#" + (initialGaugeNum === 0 ? "1/0" : initialGaugeNum) + " AWG";
 
       // 3. Exact Voltage Drop (Formula: Vd = 2 * K * I * L / CM)
-      const wireMaterial = document.getElementById('wireMaterial').value;
       const K = wireMaterial === "Cu" ? 12.9 : 21.2;
       
       let finalGaugeNum = initialGaugeNum;
@@ -2472,7 +2496,7 @@
       let iterationCount = 0;
       
       // Auto-upsizing iterative loop to meet Rule 8-102 (Max 3% branch drop)
-      while (iterationCount < 5) {
+      while (iterationCount < 6) {
         let cm = CIRCULAR_MILS[finalGaugeNum] || 16510;
         let vd = (2 * K * chargerAmps * runLength) / cm;
         vDropPercent = (vd / 240) * 100;
@@ -2486,6 +2510,8 @@
         else if (finalGaugeNum === 8) finalGaugeNum = 6;
         else if (finalGaugeNum === 6) finalGaugeNum = 4;
         else if (finalGaugeNum === 4) finalGaugeNum = 2;
+        else if (finalGaugeNum === 2) finalGaugeNum = 1;
+        else if (finalGaugeNum === 1) finalGaugeNum = 0;
         else break; // Max sizing index reached
         
         iterationCount++;
@@ -2499,26 +2525,29 @@
       let terminalAlertText = "";
       let terminalAlertClass = "pass";
       let terminalAlertIcon = "✓";
+      let calculatedGauge = finalGaugeNum;
       
       // Under min check
-      if (finalGaugeNum > spec.minAWG) {
-        finalGaugeNum = spec.minAWG;
+      if (calculatedGauge > spec.minAWG) {
         terminalAlertClass = "warning";
         terminalAlertIcon = "⚠️";
-        terminalAlertText = `<strong>Terminal Size Compliance Alert:</strong> Standard calculations suggest #${finalGaugeNum} AWG, but the <strong>${spec.name}</strong> terminals require a minimum conductor size of <strong>#${spec.minAWG} AWG</strong>. Wire size has been automatically upsized for hardware compatibility.`;
+        terminalAlertText = `<strong>Terminal Size Compliance Alert:</strong> Standard calculations suggest #${calculatedGauge === 0 ? '1/0' : calculatedGauge} AWG, but the <strong>${spec.name}</strong> terminals require a minimum conductor size of <strong>#${spec.minAWG} AWG</strong>. Wire size has been automatically upsized for hardware compatibility.`;
+        finalGaugeNum = spec.minAWG;
       }
       
       // Over max check
-      if (finalGaugeNum < spec.maxAWG) {
+      if (calculatedGauge < spec.maxAWG) {
         requiresJunctionBox = true;
         terminalAlertClass = "warning";
         terminalAlertIcon = "⚠️";
-        terminalAlertText = `<strong>Physical Terminal Limit Alert:</strong> Cable run requires <strong>#${finalGaugeNum} AWG</strong> for voltage drop, but the <strong>${spec.name}</strong> terminals strictly max out at <strong>#${spec.maxAWG} AWG</strong>. A weatherproof external splicing junction box is required adjacent to the charger to transition down to #${spec.maxAWG} AWG for termination.`;
+        terminalAlertText = `<strong>Physical Terminal Limit Alert:</strong> Cable run requires <strong>#${calculatedGauge === 0 ? '1/0' : calculatedGauge} AWG</strong> for voltage drop, but the <strong>${spec.name}</strong> terminals strictly max out at <strong>#${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG</strong>. A weatherproof external splicing junction box is required adjacent to the charger to transition down to #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG for termination.`;
       }
       
       if (!terminalAlertText) {
-        terminalAlertText = `<strong>Terminal Sizing Compliant:</strong> The final wire size <strong>#${finalGaugeNum} AWG</strong> fits perfectly within the <strong>${spec.name}</strong> terminals range (<strong>#${spec.minAWG} - #${spec.maxAWG} AWG</strong>). Terminals screw torque rating: <strong>${spec.torque}</strong>.`;
+        terminalAlertText = `<strong>Terminal Sizing Compliant:</strong> The final wire size <strong>#${finalGaugeNum === 0 ? '1/0' : finalGaugeNum} AWG</strong> fits perfectly within the <strong>${spec.name}</strong> terminals range (<strong>#${spec.minAWG} - #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG</strong>). Terminals screw torque rating: <strong>${spec.torque}</strong>.`;
       }
+
+      document.getElementById('finalGauge').value = "#" + (finalGaugeNum === 0 ? "1/0" : finalGaugeNum) + " AWG";
 
       document.getElementById('finalGauge').value = "#" + finalGaugeNum + " AWG";
 
@@ -2807,23 +2836,42 @@
       }
 
       // B. Circuit Wire Conductors Sizing Row
+      const wireMat = document.getElementById('wireMaterial').value;
+      const matLabel = wireMat === 'Al' ? 'Aluminum' : 'Copper';
+      const gLabel = gauge === 0 ? "1/0" : gauge;
+
       if (runType === "NMD90") {
-        if (gauge === 10) materialsList.push({ key: "wire", name: "NMD90 Copper wire #10/2 (per foot)", qty: runLength, cost: 2.20 });
-        else if (gauge === 8) materialsList.push({ key: "wire", name: MATERIALS_PRESETS.nmd8_2.name, qty: runLength, cost: MATERIALS_PRESETS.nmd8_2.cost });
-        else materialsList.push({ key: "wire", name: MATERIALS_PRESETS.nmd6_2.name, qty: runLength, cost: MATERIALS_PRESETS.nmd6_2.cost });
+        let costPerFt = 2.20;
+        if (gauge === 8) costPerFt = MATERIALS_PRESETS.nmd8_2.cost;
+        else if (gauge === 6) costPerFt = MATERIALS_PRESETS.nmd6_2.cost;
+        else if (gauge === 4) costPerFt = 6.50;
+        else if (gauge === 2) costPerFt = 9.80;
+        materialsList.push({ key: "wire", name: `NMD90 ${matLabel} wire #${gLabel}/2 (per foot)`, qty: runLength, cost: costPerFt });
       } else if (runType === "Teck90") {
-        if (gauge === 10) materialsList.push({ key: "wire", name: "Armored Teck90 #10/3 cable (per foot)", qty: runLength, cost: 3.50 });
-        else if (gauge === 8) materialsList.push({ key: "wire", name: MATERIALS_PRESETS.teck8_3.name, qty: runLength, cost: MATERIALS_PRESETS.teck8_3.cost });
-        else materialsList.push({ key: "wire", name: MATERIALS_PRESETS.teck6_3.name, qty: runLength, cost: MATERIALS_PRESETS.teck6_3.cost });
+        let costPerFt = 3.50;
+        if (gauge === 8) costPerFt = MATERIALS_PRESETS.teck8_3.cost;
+        else if (gauge === 6) costPerFt = MATERIALS_PRESETS.teck6_3.cost;
+        else if (gauge === 4) costPerFt = 11.50;
+        else if (gauge === 2) costPerFt = 16.00;
+        else if (gauge === 1) costPerFt = 19.50;
+        else if (gauge === 0) costPerFt = 23.00;
+        if (wireMat === 'Al') costPerFt = Math.round(costPerFt * 0.65 * 100) / 100;
+        materialsList.push({ key: "wire", name: `Armored Teck90 ${matLabel} #${gLabel}/3 cable (per foot)`, qty: runLength, cost: costPerFt });
       } else if (runType === "Conduit") {
         const conduitType = document.getElementById('conduitType').value;
         const conduitPrice = conduitType === 'EMT' ? 3.50 : 2.00;
         const conduitName = conduitType === 'EMT' ? "1\" EMT Metal Conduit (per foot)" : "1\" Rigid PVC Sched. 40 Conduit (per foot)";
         materialsList.push({ key: "conduit", name: conduitName, qty: runLength, cost: conduitPrice });
         
-        if (gauge === 10) materialsList.push({ key: "wire", name: "RW90 Copper single conductor #10 AWG (3 pulls required)", qty: runLength * 3, cost: 0.75 });
-        else if (gauge === 8) materialsList.push({ key: "wire", name: "RW90 Copper single conductor #8 AWG (3 pulls required)", qty: runLength * 3, cost: 1.10 });
-        else materialsList.push({ key: "wire", name: "RW90 Copper single conductor #6 AWG (3 pulls required)", qty: runLength * 3, cost: 1.60 });
+        let singleCost = 0.75;
+        if (gauge === 8) singleCost = 1.10;
+        else if (gauge === 6) singleCost = 1.60;
+        else if (gauge === 4) singleCost = 2.40;
+        else if (gauge === 2) singleCost = 3.60;
+        else if (gauge === 1) singleCost = 4.50;
+        else if (gauge === 0) singleCost = 5.50;
+        if (wireMat === 'Al') singleCost = Math.round(singleCost * 0.60 * 100) / 100;
+        materialsList.push({ key: "wire", name: `RW90 ${matLabel} single conductor #${gLabel} AWG (3 pulls required)`, qty: runLength * 3, cost: singleCost });
       }
 
       // C. Smart Load manager (DCC-9 EVEMS) Row
