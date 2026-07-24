@@ -1268,7 +1268,7 @@
           <div class="switch-container">
             <div>
               <span style="font-weight: 700; font-size: 15px;">Detached Garage Install?</span>
-              <div class="switch-label-desc">Requires underground excavation and Schedule 40 PVC encasement</div>
+              <div class="switch-label-desc">Requires underground excavation, burial depth check & Teck90 / PVC conduit</div>
             </div>
             <label class="switch">
               <input type="checkbox" id="isDetached" onchange="toggleDetached(this.checked)">
@@ -1278,30 +1278,50 @@
 
           <div id="detachedFields" style="display: none;">
             <div class="form-group">
-              <label>Trench Run Length (ft)</label>
+              <label>Trench Underground Run Length (ft)</label>
               <div class="slider-container">
-                <input type="range" id="trenchLength" min="5" max="120" step="5" value="30" oninput="updateTrenchLength(this.value)">
+                <input type="range" id="trenchLength" min="5" max="150" step="5" value="30" oninput="updateTrenchLength(this.value)">
                 <span class="slider-val" id="trenchLengthVal">30 ft</span>
               </div>
             </div>
             
             <div class="input-row">
               <div class="form-group">
-                <label>Burial Digging Method</label>
-                <select id="digMethod" onchange="runElectricalMath()">
-                  <option value="hand" selected>Hand Shovel (High Labour / Sensitive Landscaping)</option>
-                  <option value="trench">Mini-Excavator Trenching (Fast / Large Open Yards)</option>
+                <label>Trench Surface & Location Type</label>
+                <select id="trenchSurface" onchange="updateTrenchSurface(this.value)">
+                  <option value="lawn" selected>Lawn / Garden Area (Soft Earth - Non-vehicular)</option>
+                  <option value="driveway">Driveway / Concrete Pad / Laneway (Vehicular Area)</option>
+                  <option value="asphalt">Asphalt / Pavement Cut Crossing (+ Surcharge)</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>Minimum CEC Depth</label>
-                <input type="text" value="18 inches (450mm)" readonly style="font-weight: 700; color: var(--color-warning);">
+                <label>Burial Digging Method</label>
+                <select id="digMethod" onchange="runElectricalMath()">
+                  <option value="hand" selected>Hand Shovel (0.4 hrs/ft - Sensitive Landscaping)</option>
+                  <option value="trench">Mini-Excavator Trenching (0.15 hrs/ft - Open Yard)</option>
+                </select>
               </div>
             </div>
 
-            <div class="status-panel warning" style="margin-top: 16px;">
+            <div class="input-row" style="margin-top: 10px;">
+              <div class="form-group">
+                <label>CEC Rule 12-012 Minimum Burial Depth</label>
+                <input type="text" id="cecTrenchDepth" value="18 inches (450mm)" readonly style="font-weight: 700; color: var(--color-warning);">
+              </div>
+              <div class="form-group">
+                <label>AB811 Utility Locate Ticket #</label>
+                <input type="text" id="ab811LocateTicket" placeholder="e.g. AB811-2026-9841" onchange="runElectricalMath()">
+              </div>
+            </div>
+
+            <!-- Trenching Code & Safety Explanatory Card -->
+            <div style="margin-top: 12px; padding: 10px 12px; background: rgba(46, 64, 54, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 11px; color: var(--color-text); line-height: 1.4;">
+              💡 <strong>Rule 12-012 Burial & Warning Tape Rules:</strong> Direct burial Teck90 cable in lawn areas requires 450mm (18 in) depth. Under vehicular driveways, 600mm (24 in) depth is mandatory (or 450mm if enclosed in Schedule 40 PVC). Mandatory electrical warning tape must be placed 150mm (6 in) above cable/conduit before backfilling.
+            </div>
+
+            <div class="status-panel warning" style="margin-top: 14px;">
               <div class="status-icon">⚠️</div>
-              <div><strong>Permit Notice:</strong> Soil digging in Alberta legally requires utility checks. Prior to break-ground, clear locates with Alberta One-Call (AB811).</div>
+              <div><strong>Alberta Permit Mandatory Notice:</strong> Excavation in Alberta legally requires underground utility locates. Prior to breaking ground, clear gas, power, water, and telecom lines via <strong>Alberta One-Call (AB811)</strong>.</div>
             </div>
           </div>
           <div id="detachedDisabledNotice" style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">
@@ -2281,6 +2301,20 @@
       runElectricalMath();
     }
 
+    function updateTrenchSurface(val) {
+      const depthInput = document.getElementById('cecTrenchDepth');
+      if (depthInput) {
+        if (val === 'driveway' || val === 'asphalt') {
+          depthInput.value = "24 inches (600mm) - Vehicular";
+          depthInput.style.color = "var(--color-danger)";
+        } else {
+          depthInput.value = "18 inches (450mm) - Soft Earth";
+          depthInput.style.color = "var(--color-warning)";
+        }
+      }
+      runElectricalMath();
+    }
+
     function updateLabourHours(val) {
       labourHours = parseInt(val);
       document.getElementById('labourHoursVal').innerText = val + " hrs";
@@ -2791,6 +2825,10 @@
 
       // D. Detached Trenching Conduit Enclosures Sizing Rows
       if (isDetached) {
+        const trenchSurface = document.getElementById('trenchSurface')?.value || 'lawn';
+        if (trenchSurface === 'asphalt') {
+          materialsList.push({ key: "asphaltCut", name: "Asphalt / Concrete Saw Cut & Pavement Patch Kit Surcharge", qty: 1, cost: 350.00 });
+        }
         materialsList.push({ key: "trenchConduit", name: MATERIALS_PRESETS.pvc1.name, qty: trenchLength, cost: MATERIALS_PRESETS.pvc1.cost });
         materialsList.push({ key: "trenchSweeps", name: MATERIALS_PRESETS.pvcSweeps.name, qty: 2, cost: MATERIALS_PRESETS.pvcSweeps.cost });
         materialsList.push({ key: "trenchLB", name: MATERIALS_PRESETS.lbCondulet.name, qty: 2, cost: MATERIALS_PRESETS.lbCondulet.cost });
