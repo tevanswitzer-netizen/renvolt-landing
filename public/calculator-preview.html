@@ -1817,11 +1817,19 @@
           </div>
         </div>
 
-        <div class="btn-row no-print" style="margin-top: 20px;">
-          <button class="btn btn-success" onclick="window.print()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <div class="btn-row no-print" style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <button class="btn btn-success" onclick="window.print()" style="width: 100%;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
             Print Executive Proposal PDF
           </button>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="copyQuoteSummary()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
+              📋 Copy Summary Text
+            </button>
+            <button class="btn btn-secondary" onclick="exportQuoteToCSV()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
+              📊 Export CSV Takeoff
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -3164,6 +3172,65 @@
       setTimeout(() => {
         toast.classList.remove('show');
       }, 3000);
+    }
+
+    function copyQuoteSummary() {
+      const totalQuoted = document.getElementById('quotedPriceVal').innerText;
+      const grandTotal = document.getElementById('grandTotalVal').innerText;
+      const selectedHardware = document.getElementById('chargerHardwareSelect').value;
+      const spec = EVSE_SPECS[selectedHardware] || EVSE_SPECS.grizzle;
+      const breaker = document.getElementById('calculatedBreaker').value;
+      const wire = document.getElementById('finalGauge').value;
+      const runType = document.getElementById('runType').value;
+      const runLen = document.getElementById('runLength').value;
+      const isDet = document.getElementById('isDetached').checked;
+      
+      const text = `RENVOLT ELECTRICAL EVSE ESTIMATE\n` +
+        `====================================\n` +
+        `• Hardware: ${spec.name}\n` +
+        `• Electrical Sizing: ${chargerAmps}A continuous (${breaker}A breaker, ${wire} ${runType})\n` +
+        `• Run Length: ${runLen}ft ${isDet ? '(Detached Garage)' : '(Attached Garage)'}\n` +
+        `• Subtotal: ${totalQuoted}\n` +
+        `• Total with GST: ${grandTotal} CAD\n` +
+        `====================================\n` +
+        `Includes Edmonton electrical permit, materials, and Certified Master Electrician installation.`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast');
+        if (toast) {
+          toast.textContent = "Quote summary copied to clipboard!";
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+      });
+    }
+
+    function exportQuoteToCSV() {
+      const tbody = document.querySelector("#materialsTable tbody");
+      if (!tbody) return;
+      const rows = tbody.querySelectorAll("tr");
+      let csvContent = "data:text/csv;charset=utf-8,Item Description,Quantity,Unit Cost (CAD),Total Price (CAD)\n";
+      
+      rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+        if (cols.length >= 4) {
+          const name = `"${cols[0].innerText.replace(/"/g, '""')}"`;
+          const qtyInput = cols[1].querySelector("input");
+          const qty = qtyInput ? qtyInput.value : cols[1].innerText.trim();
+          const costInput = cols[2].querySelector("input");
+          const cost = costInput ? costInput.value.replace('$', '') : cols[2].innerText.replace('$', '').trim();
+          const total = cols[3].innerText.replace('$', '').trim();
+          csvContent += `${name},${qty},${cost},${total}\n`;
+        }
+      });
+      
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Renvolt_Takeoff_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // ON-SITE BROWSER DATABASE (LOCALSTORAGE) PERSISTENCE
