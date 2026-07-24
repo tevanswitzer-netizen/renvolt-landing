@@ -1095,14 +1095,83 @@
             Step 1: Continuous Charging Sizing
             <span class="badge">Rule 86-306</span>
           </div>
+          
+          <!-- Recommended Home Chargers in Canada Grid -->
+          <div style="margin-bottom: 20px; background: rgba(46, 64, 54, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--color-primary); margin-bottom: 2px; display: flex; align-items: center; gap: 6px;">
+              <span>🇨🇦</span> Recommended Level 2 Home Chargers in Canada
+            </div>
+            <div style="font-size: 11px; color: var(--color-muted); margin-bottom: 12px;">
+              Vetted picks for Canadian winter climate & strict CEC 2024 compliance. Click to quick-load specs:
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px;">
+              
+              <!-- Grizzl-E Classic -->
+              <div onclick="selectRecommendedChargerCard('grizzle')" id="card-grizzle" style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: var(--transition);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                  <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(34, 197, 94, 0.12); color: #15803d; border: 1px solid rgba(34, 197, 94, 0.3); text-transform: uppercase;">MADE IN CANADA</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 13px;">~$499</span>
+                </div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--color-text); margin-bottom: 2px;">Grizzl-E Classic</div>
+                <div style="font-size: 10.5px; color: var(--color-muted); line-height: 1.3; margin-bottom: 8px;">Rugged 40A, UL-certified — best value.</div>
+                <div style="font-size: 10.5px; font-weight: 700; color: var(--color-accent); display: flex; align-items: center; gap: 4px;">
+                  Select charger &rarr;
+                </div>
+              </div>
+
+              <!-- Lectron V-Box -->
+              <div onclick="selectRecommendedChargerCard('lectron')" id="card-lectron" style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: var(--transition);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                  <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(59, 130, 246, 0.12); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.3); text-transform: uppercase;">BUDGET PICK</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 13px;">~$450</span>
+                </div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--color-text); margin-bottom: 2px;">Lectron V-Box</div>
+                <div style="font-size: 10.5px; color: var(--color-muted); line-height: 1.3; margin-bottom: 8px;">40A / 48A with Wi-Fi — cheapest pick.</div>
+                <div style="font-size: 10.5px; font-weight: 700; color: var(--color-accent); display: flex; align-items: center; gap: 4px;">
+                  Select charger &rarr;
+                </div>
+              </div>
+
+              <!-- ChargePoint Home Flex -->
+              <div onclick="selectRecommendedChargerCard('chargepoint')" id="card-chargepoint" style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: var(--transition);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                  <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(168, 85, 247, 0.12); color: #7e22ce; border: 1px solid rgba(168, 85, 247, 0.3); text-transform: uppercase;">APP + WI-FI</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 13px;">~$749</span>
+                </div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--color-text); margin-bottom: 2px;">ChargePoint Home Flex</div>
+                <div style="font-size: 10.5px; color: var(--color-muted); line-height: 1.3; margin-bottom: 8px;">App + off-peak scheduling (50A max).</div>
+                <div style="font-size: 10.5px; font-weight: 700; color: var(--color-accent); display: flex; align-items: center; gap: 4px;">
+                  Select charger &rarr;
+                </div>
+              </div>
+
+              <!-- Emporia EV Charger -->
+              <div onclick="selectRecommendedChargerCard('emporia')" id="card-emporia" style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: var(--transition);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                  <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(234, 179, 8, 0.12); color: #a16207; border: 1px solid rgba(234, 179, 8, 0.3); text-transform: uppercase;">ENERGY TRACKING</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 13px;">~$649</span>
+                </div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--color-text); margin-bottom: 2px;">Emporia EV Charger</div>
+                <div style="font-size: 10.5px; color: var(--color-muted); line-height: 1.3; margin-bottom: 8px;">48A with built-in energy tracking.</div>
+                <div style="font-size: 10.5px; font-weight: 700; color: var(--color-accent); display: flex; align-items: center; gap: 4px;">
+                  Select charger &rarr;
+                </div>
+              </div>
+
+            </div>
+          </div>
+
           <div class="form-group">
-            <label>EVSE Charger Hardware</label>
+            <label>EVSE Charger Hardware Selection</label>
             <select id="chargerHardwareSelect" onchange="selectEVSEHardware(this.value)">
-              <option value="tesla" selected>Tesla Universal Wall Connector ($850 - Max 48A)</option>
-              <option value="chargepoint">ChargePoint Home Flex ($950 - Max 50A)</option>
-              <option value="grizzle">Grizzl-E Classic ($550 - Max 40A)</option>
-              <option value="flo">Flo Home G5 & X5 ($995 - Fixed 30A)</option>
-              <option value="wallbox">Wallbox Pulsar Plus ($825 - Max 48A)</option>
+              <option value="grizzle" selected>Grizzl-E Classic ($499 - 40A Made in Canada)</option>
+              <option value="lectron">Lectron V-Box ($450 - 40A/48A Budget Pick)</option>
+              <option value="chargepoint">ChargePoint Home Flex ($749 - 50A App + Wi-Fi)</option>
+              <option value="emporia">Emporia Level 2 Charger ($649 - 48A Energy Tracking)</option>
+              <option value="tesla">Tesla Universal Wall Connector ($850 - 48A Dual Dock)</option>
+              <option value="flo">Flo Home G5 & X5 ($995 - 30A Commercial Grade)</option>
+              <option value="wallbox">Wallbox Pulsar Plus ($825 - 48A Power Sharing)</option>
             </select>
           </div>
           <div class="form-group">
@@ -1231,6 +1300,18 @@
           <div id="terminalStatus" class="status-panel pass" style="margin-top: 12px;">
             <div class="status-icon">✓</div>
             <div id="terminalStatusText">Charger terminal limits verified.</div>
+          </div>
+
+          <!-- Manufacturer Manual Installation & Supplier Pricing Card -->
+          <div id="mfgGuideCard" class="card" style="margin-top: 16px; background: rgba(46, 64, 54, 0.02); border: 1px solid var(--border-color);">
+            <div class="card-title" style="margin-bottom: 10px;">
+              📘 Manufacturer Manual Guide & Supplier Pricing
+              <span class="badge" style="background: rgba(46, 64, 54, 0.1); color: var(--color-primary); border-color: var(--color-primary);">Official Specs</span>
+            </div>
+            
+            <div id="mfgGuideContent" style="font-size: 12px; color: var(--color-text); line-height: 1.5;">
+              <!-- Dynamically populated in JS -->
+            </div>
           </div>
         </div>
 
@@ -1590,10 +1671,12 @@
               <div class="form-group">
                 <label>EVSE Hardware Preset</label>
                 <select id="crmLeadHardware">
+                  <option value="grizzle" selected>Grizzl-E Classic ($499)</option>
+                  <option value="lectron">Lectron V-Box ($450)</option>
+                  <option value="chargepoint">ChargePoint Home Flex ($749)</option>
+                  <option value="emporia">Emporia Level 2 Charger ($649)</option>
                   <option value="tesla">Tesla Wall Connector ($850)</option>
-                  <option value="chargepoint">ChargePoint Home Flex ($950)</option>
-                  <option value="grizzle">Grizzl-E Classic ($550)</option>
-                  <option value="flo">Flo Home G5/X5 ($995)</option>
+                  <option value="flo">Flo Home G5 & X5 ($995)</option>
                   <option value="wallbox">Wallbox Pulsar Plus ($825)</option>
                 </select>
               </div>
@@ -1899,13 +1982,106 @@
     let manualOverrides = {}; // Map to store manual price/qty overrides
     let requiresJunctionBox = false;
 
-    // EVSE Charger Engineering Specification Matrix
+    // EVSE Charger Engineering Specification Matrix (Canadian Market Vetted Picks + Technical Manual Specs)
     const EVSE_SPECS = {
-      tesla: { name: "Tesla Universal Wall Connector", msrp: 850.00, minAWG: 12, maxAWG: 4, maxAmps: 48, defaultAmps: 48, torque: "50 in-lbs (5.6 Nm)" },
-      chargepoint: { name: "ChargePoint Home Flex", msrp: 699.00, minAWG: 14, maxAWG: 6, maxAmps: 50, defaultAmps: 40, torque: "Push-Pin Terminals (no screw torque)" },
-      grizzle: { name: "Grizzl-E Classic", msrp: 550.00, minAWG: 8, maxAWG: 6, maxAmps: 40, defaultAmps: 40, torque: "16 in-lbs (1.8 Nm)" },
-      flo: { name: "Flo Home G5 & X5", msrp: 995.00, minAWG: 8, maxAWG: 6, maxAmps: 30, defaultAmps: 30, torque: "Power: 16 in-lbs, GND: 40-45 in-lbs" },
-      wallbox: { name: "Wallbox Pulsar Plus", msrp: 825.00, minAWG: 10, maxAWG: 6, maxAmps: 48, defaultAmps: 40, torque: "11.5 in-lbs (1.3 Nm)" }
+      grizzle: {
+        name: "Grizzl-E Classic",
+        msrp: 499.00,
+        minAWG: 8,
+        maxAWG: 6,
+        maxAmps: 40,
+        defaultAmps: 40,
+        torque: "16 in-lbs (1.8 Nm)",
+        badge: "MADE IN CANADA",
+        subtitle: "Rugged 40A, UL-certified — best value.",
+        ampOptions: [16, 24, 32, 40],
+        supplierPrices: "United Chargers Direct: $499 CAD | Amazon.ca: $499 CAD | Home Depot Canada: $549 CAD",
+        configGuide: "DIP Switch configurable inside housing (16A, 24A, 32A, 40A continuous). NEMA 4 aluminum chassis rated to -40°C."
+      },
+      lectron: {
+        name: "Lectron V-Box",
+        msrp: 450.00,
+        minAWG: 8,
+        maxAWG: 6,
+        maxAmps: 48,
+        defaultAmps: 40,
+        torque: "22 in-lbs (2.5 Nm)",
+        badge: "BUDGET PICK",
+        subtitle: "40A / 48A with Wi-Fi — cheapest pick.",
+        ampOptions: [16, 24, 32, 40, 48],
+        supplierPrices: "Amazon.ca: $390–$450 CAD | Lectron Direct: $450 CAD | Home Depot: $450 CAD",
+        configGuide: "NEMA 14-50 plug-in (max 40A continuous) or Hardwired (max 48A). Real-time screen display & Wi-Fi app monitoring."
+      },
+      chargepoint: {
+        name: "ChargePoint Home Flex",
+        msrp: 749.00,
+        minAWG: 14,
+        maxAWG: 6,
+        maxAmps: 50,
+        defaultAmps: 40,
+        torque: "Spring Levers (Push-Pin / No Torque Screw)",
+        badge: "APP + WI-FI",
+        subtitle: "App + off-peak scheduling.",
+        ampOptions: [16, 24, 32, 40, 48, 50],
+        supplierPrices: "Best Buy Canada: $749 CAD | Amazon.ca: $749 CAD | ChargePoint Direct: $749 CAD",
+        configGuide: "Hardwired (48A/50A on 60A/70A breaker) or NEMA 14-50 (40A on 50A breaker). Smart App off-peak charging scheduling."
+      },
+      emporia: {
+        name: "Emporia Level 2 EV Charger",
+        msrp: 649.00,
+        minAWG: 10,
+        maxAWG: 6,
+        maxAmps: 48,
+        defaultAmps: 48,
+        torque: "10.6 in-lbs (1.2 Nm)",
+        badge: "ENERGY TRACKING",
+        subtitle: "48A with built-in energy tracking.",
+        ampOptions: [16, 24, 32, 40, 48],
+        supplierPrices: "Amazon.ca: $649 CAD | Home Depot Canada: $649 CAD | Emporia Direct: $649 CAD",
+        configGuide: "Hardwired 48A (60A breaker) or NEMA 14-50 40A (50A breaker). Integrated Home Energy & Solar Tracking App."
+      },
+      tesla: {
+        name: "Tesla Universal Wall Connector",
+        msrp: 850.00,
+        minAWG: 12,
+        maxAWG: 4,
+        maxAmps: 48,
+        defaultAmps: 48,
+        torque: "50 in-lbs (5.6 Nm)",
+        badge: "UNIVERSAL DOCK",
+        subtitle: "Integrated J1772 & NACS adapter.",
+        ampOptions: [24, 32, 40, 48],
+        supplierPrices: "Tesla Canada Direct: $850 CAD",
+        configGuide: "Hardwired only. Integrated Magic Dock supports both Tesla NACS and J1772 EVs seamlessly."
+      },
+      flo: {
+        name: "Flo Home G5 & X5",
+        msrp: 995.00,
+        minAWG: 8,
+        maxAWG: 6,
+        maxAmps: 30,
+        defaultAmps: 30,
+        torque: "Power: 16 in-lbs, GND: 40-45 in-lbs",
+        badge: "CANADIAN PREMIUM",
+        subtitle: "Ultra-durable 30A commercial grade.",
+        ampOptions: [30],
+        supplierPrices: "Flo Direct / Retailers: $995 CAD",
+        configGuide: "Hardwired 30A continuous (40A breaker). 100% heavy industrial Canadian aluminum casing."
+      },
+      wallbox: {
+        name: "Wallbox Pulsar Plus",
+        msrp: 825.00,
+        minAWG: 10,
+        maxAWG: 6,
+        maxAmps: 48,
+        defaultAmps: 40,
+        torque: "11.5 in-lbs (1.3 Nm)",
+        badge: "COMPACT SMART",
+        subtitle: "Power sharing & Bluetooth/Wi-Fi.",
+        ampOptions: [16, 24, 32, 40, 48],
+        supplierPrices: "Amazon.ca: $825 CAD | Wallbox Direct: $825 CAD",
+        configGuide: "Hardwired (48A) or NEMA 14-50 (40A). Internal power sharing balance for up to 7 units."
+      }
     };
     
     // Core Edmonton Pricing Presets (Tradesperson Wholesaler cost indexes)
@@ -1950,11 +2126,35 @@
       const spec = EVSE_SPECS[brand];
       if (!spec) return;
       
+      // Highlight card if brand is in recommended list
+      ['grizzle', 'lectron', 'chargepoint', 'emporia'].forEach(b => {
+        const card = document.getElementById(`card-${b}`);
+        if (card) {
+          if (b === brand) {
+            card.style.borderColor = 'var(--color-accent)';
+            card.style.boxShadow = '0 0 14px rgba(204, 88, 51, 0.25)';
+            card.style.background = '#FFFFFF';
+          } else {
+            card.style.borderColor = 'var(--border-color)';
+            card.style.boxShadow = 'none';
+            card.style.background = 'var(--bg-card)';
+          }
+        }
+      });
+      
       renderAmpButtons();
       
       if (triggerMath) {
         runElectricalMath();
       }
+    }
+
+    // 1-Click Recommended Charger Selection Card Helper
+    function selectRecommendedChargerCard(brand) {
+      const selectElem = document.getElementById('chargerHardwareSelect');
+      if (!selectElem) return;
+      selectElem.value = brand;
+      selectEVSEHardware(brand, true);
     }
 
     // Dynamic amp options button group renderer
@@ -1964,24 +2164,13 @@
       container.innerHTML = '';
       
       const selectedHardware = document.getElementById('chargerHardwareSelect').value;
-      const spec = EVSE_SPECS[selectedHardware];
+      const spec = EVSE_SPECS[selectedHardware] || EVSE_SPECS.grizzle;
       
-      let ampOptions = [24, 32, 40, 48];
-      if (selectedHardware === 'flo') {
-        ampOptions = [30];
-      } else if (selectedHardware === 'grizzle') {
-        ampOptions = [24, 32, 40];
-      }
+      let ampOptions = spec.ampOptions || [16, 24, 32, 40];
       
       // Keep chargerAmps compliant with options
       if (!ampOptions.includes(chargerAmps)) {
-        if (selectedHardware === 'flo') {
-          chargerAmps = 30;
-        } else if (chargerAmps > spec.maxAmps) {
-          chargerAmps = spec.maxAmps;
-        } else {
-          chargerAmps = 32;
-        }
+        chargerAmps = spec.defaultAmps || ampOptions[0];
       }
       
       document.getElementById('continuousAmps').value = chargerAmps;
@@ -2045,8 +2234,8 @@
       manualOverrides = {}; // Reset overrides on preset load
       
       // Update UI Toggles & Sliders
-      document.getElementById('chargerHardwareSelect').value = 'tesla';
-      selectEVSEHardware('tesla', false);
+      document.getElementById('chargerHardwareSelect').value = 'grizzle';
+      selectEVSEHardware('grizzle', false);
 
       document.getElementById('runLength').value = runLength;
       document.getElementById('runLengthVal').innerText = runLength + " ft";
@@ -2368,6 +2557,56 @@
         terminalStatus.querySelector('.status-icon').innerText = terminalAlertIcon;
         terminalStatusText.innerHTML = terminalAlertText;
       }
+
+      // Render Manufacturer Manual & Canadian Supplier Pricing Card
+      renderMfgGuideCard(spec, finalGaugeNum);
+    }
+
+    // Render Manufacturer Manual & Canadian Supplier Pricing Card Breakdown
+    function renderMfgGuideCard(spec, finalGaugeNum) {
+      const container = document.getElementById('mfgGuideContent');
+      if (!container || !spec) return;
+      
+      let html = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 12px;">
+          <div style="background: var(--bg-card); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px;">Terminal Screw Torque</div>
+            <div style="font-weight: 700; font-size: 13px; color: var(--color-accent); font-family: var(--font-mono); margin-top: 2px;">
+              ${spec.torque}
+            </div>
+          </div>
+          <div style="background: var(--bg-card); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px;">Wire Gauge Limits</div>
+            <div style="font-weight: 700; font-size: 13px; color: var(--color-primary); font-family: var(--font-mono); margin-top: 2px;">
+              #${spec.minAWG} min to #${spec.maxAWG} AWG max
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: var(--bg-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 10px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+            ⚙️ Manufacturer Installation & Config Guide
+          </div>
+          <div style="font-size: 12px; color: var(--color-text); font-weight: 500;">
+            ${spec.configGuide || 'Follow manufacturer manual for terminal landing and torque specifications.'}
+          </div>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--color-muted);">
+            <strong>CEC 2024 Compliance Note:</strong> Continuous load calculated at 125% per Rule 86-306 / 8-200. NEMA 14-50 plug-in installations require a dedicated Class A GFCI breaker in Canada.
+          </div>
+        </div>
+
+        <div style="background: var(--bg-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <div style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+            🇨🇦 Up-to-Date Canadian Supplier Pricing
+          </div>
+          <div style="font-size: 12px; font-family: var(--font-mono); color: var(--color-text); font-weight: 600;">
+            ${spec.supplierPrices || `MSRP: $${spec.msrp.toFixed(2)} CAD`}
+          </div>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+    }
 
       // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200)
       let panelDemandAmps = 0;
