@@ -1,0 +1,185 @@
+[
+    {
+        "id": "cust_glenora_sarah",
+        "name": "Sarah Jenkins",
+        "phone": "780-555-0144",
+        "email": "sarah.jenkins@glenora-life.ca",
+        "address": "10314 135 St, Edmonton, AB T5N 2C4",
+        "status": "Load Checked",
+        "createdAt": "2026-05-18T10:00:00Z",
+        "loadCalculator": {
+            "panelSize": 100,
+            "livingArea": 160,
+            "hasRange": true,
+            "rangePower": 12000,
+            "hasDryer": true,
+            "hasWaterHeater": true,
+            "hasHotTub": false,
+            "heatingType": "larger",
+            "heatingPower": 12000,
+            "acPower": 4000,
+            "otherLoads": 0,
+            "evseAmps": 32,
+            "useEVEMS": true
+        },
+        "voltageDrop": {
+            "vdAmps": 32,
+            "vdLength": 20,
+            "vdGauge": "8"
+        },
+        "quote": {
+            "garageType": "attached",
+            "runLength": 20,
+            "trenchLength": 0,
+            "selectedEVSE": "Tesla Universal Wall Connector",
+            "includePanelUpgrade": false,
+            "includeEVEMS": true
+        },
+        "checklist": {
+            "panelBrand": "Square D",
+            "panelCapacity": "100A",
+            "panelSpaces": "Available",
+            "garageSetup": "Attached",
+            "distanceToPanel": "20ft",
+            "meterLocation": "Outside Garage",
+            "groundingConfirmed": true,
+            "ab811Required": false,
+            "photoPanel": true,
+            "photoMeter": true,
+            "photoChargerLoc": false,
+            "photoPathway": false,
+            "photoPanelName": "sarah_panel_label.jpg",
+            "photoMeterName": "sarah_meter_mast.jpg",
+            "photoChargerLocName": "",
+            "photoPathwayName": ""
+        },
+        "uploadedPhotos": {
+            "photoPanel": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoMeter": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoChargerLoc": null,
+            "photoPathway": null
+        }
+    },
+    {
+        "id": "cust_windermere_michael",
+        "name": "Michael Chen",
+        "phone": "780-555-0188",
+        "email": "m.chen@windermere-estates.ca",
+        "address": "422 Windermere Rd NW, Edmonton, AB T6W 0S8",
+        "status": "Quote Issued",
+        "createdAt": "2026-05-18T14:30:00Z",
+        "loadCalculator": {
+            "panelSize": 200,
+            "livingArea": 320,
+            "hasRange": true,
+            "rangePower": 12000,
+            "hasDryer": true,
+            "hasWaterHeater": true,
+            "hasHotTub": true,
+            "heatingType": "larger",
+            "heatingPower": 18000,
+            "acPower": 5000,
+            "otherLoads": 1500,
+            "evseAmps": 48,
+            "useEVEMS": false
+        },
+        "voltageDrop": {
+            "vdAmps": 48,
+            "vdLength": 45,
+            "vdGauge": "6"
+        },
+        "quote": {
+            "garageType": "attached",
+            "runLength": 45,
+            "trenchLength": 0,
+            "selectedEVSE": "High-Power Home EVSE",
+            "includePanelUpgrade": false,
+            "includeEVEMS": false
+        },
+        "checklist": {
+            "panelBrand": "Siemens",
+            "panelCapacity": "200A",
+            "panelSpaces": "Available",
+            "garageSetup": "Attached",
+            "distanceToPanel": "45ft",
+            "meterLocation": "Outside Garage",
+            "groundingConfirmed": true,
+            "ab811Required": false,
+            "photoPanel": true,
+            "photoMeter": true,
+            "photoChargerLoc": true,
+            "photoPathway": true,
+            "photoPanelName": "michael_siemens_panel.jpg",
+            "photoMeterName": "michael_meter_mast.jpg",
+            "photoChargerLocName": "michael_mounting_studs.jpg",
+            "photoPathwayName": "michael_conduit_joists.jpg"
+        },
+        "uploadedPhotos": {
+            "photoPanel": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoMeter": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoChargerLoc": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoPathway": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC"
+        }
+    },
+    {
+        "id": "cust_strathcona_david",
+        "name": "David O'Connor",
+        "phone": "780-555-0199",
+        "email": "david.oc@strathcona-heritage.org",
+        "address": "10135 84 Ave NW, Edmonton, AB T6E 2G5",
+        "status": "Draft",
+        "createdAt": "2026-05-19T02:15:00Z",
+        "loadCalculator": {
+            "panelSize": 125,
+            "livingArea": 140,
+            "hasRange": true,
+            "rangePower": 9000,
+            "hasDryer": false,
+            "hasWaterHeater": true,
+            "hasHotTub": false,
+            "heatingType": "larger",
+            "heatingPower": 8000,
+            "acPower": 0,
+            "otherLoads": 0,
+            "evseAmps": 32,
+            "useEVEMS": false
+        },
+        "voltageDrop": {
+            "vdAmps": 32,
+            "vdLength": 60,
+            "vdGauge": "6"
+        },
+        "quote": {
+            "garageType": "detached",
+            "runLength": 60,
+            "trenchLength": 20,
+            "selectedEVSE": "Grizzl-E Classic (Canadian Made)",
+            "includePanelUpgrade": false,
+            "includeEVEMS": false
+        },
+        "checklist": {
+            "panelBrand": "Federal Pioneer (FPE)",
+            "panelCapacity": "125A",
+            "panelSpaces": "Full",
+            "garageSetup": "Detached",
+            "distanceToPanel": "60ft",
+            "meterLocation": "Back Alley side of fence",
+            "groundingConfirmed": true,
+            "ab811Required": true,
+            "photoPanel": true,
+            "photoMeter": false,
+            "photoChargerLoc": false,
+            "photoPathway": false,
+            "photoPanelName": "david_fpe_panel.jpg",
+            "photoMeterName": "",
+            "photoChargerLocName": "",
+            "photoPathwayName": ""
+        },
+        "uploadedPhotos": {
+            "photoPanel": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAMklEQVR42u3PMQEAAAzCMMrPv68P4CcNhUChUCgUCoVCoVAoFAqFQqFQKJQ3DAoFAuUCwyN1HwH1VpYpAAAAAElFTkSuQmCC",
+            "photoMeter": null,
+            "photoChargerLoc": null,
+            "photoPathway": null
+        }
+    }
+]

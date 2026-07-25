@@ -28,6 +28,7 @@
 ### Research & Development
 | Document | Version | Status | Notes |
 |---|---|---|---|
+| Edmonton-Outskirts-Vetting.md | v1.0 | ✅ Complete | South Airport Mall vs West Yellowhead |
 | Alberta-5-Node-Corridor-Loop-Analysis.md | v1.0 | ✅ Complete | All 5 nodes confirmed GO |
 | Corridor-Analysis-10-Sites.md | v1 | ✅ Complete | Extended pipeline analysis |
 | 90-Day-Launch-Playbook.md | v2 | ✅ Complete | Use v2 — most current |

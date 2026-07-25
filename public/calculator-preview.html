@@ -491,7 +491,6 @@
       font-weight: 700;
       color: var(--color-accent);
       font-family: var(--font-mono);
-    }
       min-width: 60px;
       text-align: right;
     }
@@ -1093,7 +1092,7 @@
         <div class="card">
           <div class="card-title">
             Step 1: Continuous Charging Sizing
-            <span class="badge">Rule 86-306</span>
+            <span class="badge">Rule 86-302</span>
           </div>
           
           <div class="form-group">
@@ -1106,6 +1105,7 @@
               <option value="tesla">Tesla Universal Wall Connector ($850 - 48A Dual Dock)</option>
               <option value="flo">Flo Home G5 & X5 ($995 - 30A Commercial Grade)</option>
               <option value="wallbox">Wallbox Pulsar Plus ($825 - 48A Power Sharing)</option>
+              <option value="porsche">Porsche Wall Charger Connect ($1,650 - 80A High-Power)</option>
             </select>
           </div>
           <div class="form-group">
@@ -1386,10 +1386,14 @@
                 <input type="checkbox" id="loadDryer" checked onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
                 Clothes Dryer (Rule 8-200: 2.5kW)
               </label>
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
-                <input type="checkbox" id="loadWater" checked onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
-                Hot Water Tank (3kW)
-              </label>
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label>Hot Water Heater Type</label>
+                <select id="loadWater" onchange="runElectricalMath()" style="font-size: 13px;">
+                  <option value="0">Gas / Tankless (No Electric Load)</option>
+                  <option value="3000" selected>Standard Electric Tank (3,000W)</option>
+                  <option value="4500">High-Recovery Electric Tank (4,500W)</option>
+                </select>
+              </div>
               <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--color-text); font-size: 13.5px; font-weight: 500;">
                 <input type="checkbox" id="loadAC" onchange="runElectricalMath()" style="width: 18px; height: 18px; cursor: pointer;">
                 Central A/C (100% Demand)
@@ -1638,6 +1642,7 @@
                   <option value="tesla">Tesla Wall Connector ($850)</option>
                   <option value="flo">Flo Home G5 & X5 ($995)</option>
                   <option value="wallbox">Wallbox Pulsar Plus ($825)</option>
+                  <option value="porsche">Porsche Wall Charger Connect ($1,650)</option>
                 </select>
               </div>
               <div class="form-group">
@@ -1708,6 +1713,26 @@
           <div id="crmLeadsContainer" style="display: flex; flex-direction: column; gap: 16px;">
             <!-- Rendered dynamically in JS -->
           </div>
+        </div>
+      </div>
+
+      <!-- DATA MANAGEMENT: EXPORT / IMPORT -->
+      <div class="card" style="margin-top: 16px;">
+        <div class="card-title">
+          Data Backup & Transfer
+          <span class="badge" style="background-color: rgba(46,64,54,0.08); border-color: var(--color-primary); color: var(--color-primary);">Portable</span>
+        </div>
+        <p style="font-size: 12px; color: var(--color-muted); margin-bottom: 14px;">
+          Export all your saved quotes and CRM leads as a JSON file. Use this to back up your data, move between browsers, or transfer between your laptop and phone.
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-success" onclick="exportAllDataAsJSON()" style="padding: 10px 18px; font-size: 13px;">
+            📥 Export All Data (JSON)
+          </button>
+          <button class="btn btn-secondary" onclick="document.getElementById('jsonImportInput').click()" style="padding: 10px 18px; font-size: 13px;">
+            📤 Import Data (JSON)
+          </button>
+          <input type="file" id="jsonImportInput" accept=".json" onchange="importAllDataFromJSON(this)" style="display: none;">
         </div>
       </div>
 
@@ -2049,6 +2074,20 @@
         ampOptions: [16, 24, 32, 40, 48],
         supplierPrices: "Amazon.ca: $825 CAD | Wallbox Direct: $825 CAD",
         configGuide: "Hardwired (48A) or NEMA 14-50 (40A). Internal power sharing balance for up to 7 units."
+      },
+      porsche: {
+        name: "Porsche Wall Charger Connect",
+        msrp: 1650.00,
+        minAWG: 6,
+        maxAWG: 4,
+        maxAmps: 80,
+        defaultAmps: 48,
+        torque: "35 in-lbs (4.0 Nm)",
+        badge: "HIGH-POWER",
+        subtitle: "80A / 19.2kW maximum output.",
+        ampOptions: [32, 40, 48, 80],
+        supplierPrices: "Porsche Canada Direct: $1,650 CAD | Porsche Centre Edmonton: $1,650 CAD",
+        configGuide: "Hardwired only. App-configurable from 32A to 80A continuous. Requires #4 AWG minimum for 80A (100A breaker). Integrated Porsche Home Energy Manager compatible."
       }
     };
     
@@ -2124,7 +2163,7 @@
       }
     }
 
-    // 1-Click Recommended Charger Selection Card Helper
+    // 1-Click Recommended Charger Selection Card Helper (Legacy — kept for save/load compatibility)
     function selectRecommendedChargerCard(brand) {
       const selectElem = document.getElementById('chargerHardwareSelect');
       if (!selectElem) return;
@@ -2227,7 +2266,6 @@
       // Show/Hide detached specific fields
       document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
       document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
-      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
       
       runElectricalMath();
     }
@@ -2354,7 +2392,9 @@
 
     function toggleEVEMS(checked) {
       useEVEMS = checked;
-      document.getElementById('panelCalcFields').style.display = checked ? 'none' : 'block';
+      // Don't hide panelCalcFields — always show the demand calculation inputs
+      // so the user can see/adjust appliance loads. EVEMS only changes how EVSE
+      // load is entered (0W instead of full nameplate).
       
       // Auto-adjust labor hours to EVEMS minimum (8 hours) when checked
       if (checked) {
@@ -2480,6 +2520,7 @@
       } else { // Aluminum (Table 4, 75°C)
         if (standardBreaker <= 25) initialGaugeNum = 10;      // #10 Al is 25A
         else if (standardBreaker <= 40) initialGaugeNum = 8;  // #8 Al is 40A
+        else if (standardBreaker <= 50) initialGaugeNum = 6;  // #6 Al is 50A
         else if (standardBreaker <= 65) initialGaugeNum = 4;  // #4 Al is 65A
         else if (standardBreaker <= 90) initialGaugeNum = 2;  // #2 Al is 90A
         else if (standardBreaker <= 100) initialGaugeNum = 1; // #1 Al is 100A
@@ -2549,19 +2590,17 @@
 
       document.getElementById('finalGauge').value = "#" + (finalGaugeNum === 0 ? "1/0" : finalGaugeNum) + " AWG";
 
-      document.getElementById('finalGauge').value = "#" + finalGaugeNum + " AWG";
-
       // Visual Voltage Drop Feedback Card
       const vdropStatus = document.getElementById('vdropStatus');
       const vdropStatusText = document.getElementById('vdropStatusText');
       if (vDropPercent <= 3.0) {
         vdropStatus.className = "status-panel pass";
         vdropStatus.querySelector('.status-icon').innerText = "✓";
-        vdropStatusText.innerHTML = `Voltage drop is **${vDropPercent.toFixed(2)}%** (CEC standard &le; 3%). Wire size #${finalGaugeNum} AWG is fully compliant.`;
+        vdropStatusText.innerHTML = `Voltage drop is <strong>${vDropPercent.toFixed(2)}%</strong> (CEC standard &le; 3%). Wire size <strong>#${finalGaugeNum === 0 ? '1/0' : finalGaugeNum} AWG</strong> is fully compliant.`;
       } else {
         vdropStatus.className = "status-panel warning";
         vdropStatus.querySelector('.status-icon').innerText = "⚠️";
-        vdropStatusText.innerHTML = `Voltage drop is **${vDropPercent.toFixed(2)}%**. Conductor max limit reached. Sizing up is recommended or shift placement closer.`;
+        vdropStatusText.innerHTML = `Voltage drop is <strong>${vDropPercent.toFixed(2)}%</strong>. Conductor max limit reached. Sizing up is recommended or shift placement closer.`;
       }
 
       // Visual Terminal Sizing Feedback Card
@@ -2575,6 +2614,129 @@
 
       // Render Manufacturer Manual & Canadian Supplier Pricing Card
       renderMfgGuideCard(spec, finalGaugeNum);
+
+      // 3.7. NMD90 + Aluminum Safety Guard
+      // NMD90 cable is only manufactured with Copper conductors in Canada.
+      // If user selects NMD90 + Aluminum, auto-switch to Teck90 with a warning.
+      if (runType === 'NMD90' && wireMaterial === 'Al') {
+        document.getElementById('runType').value = 'Teck90';
+        const vdropStatusEl = document.getElementById('vdropStatus');
+        if (vdropStatusEl) {
+          vdropStatusEl.className = "status-panel warning";
+          vdropStatusEl.querySelector('.status-icon').innerText = "⚠️";
+          document.getElementById('vdropStatusText').innerHTML = '<strong>NMD90 Cable Notice:</strong> NMD90 non-metallic sheathed cable is only manufactured with Copper conductors in Canada. Wiring method has been automatically switched to <strong>Teck90 Armored Cable</strong> for Aluminum conductor compatibility.';
+        }
+        // Re-run with corrected wiring method
+        return runElectricalMath();
+      }
+
+      // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200)
+      let panelDemandAmps = 0;
+      let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
+      
+      const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
+      const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
+
+      // Utility operator dropdown is always visible — no toggle logic needed
+
+      // Run the FULL Rule 8-200 dwelling demand calculation.
+      // When EVEMS is active, the only difference is EVSE load = 0W per Rule 8-106.
+      let calculatedWatts = 0;
+      
+      // A. Basic Floor Area Demand (Rule 8-200(1)(a)(i))
+      let floorAreaValue = parseInt(document.getElementById('floorArea').value);
+      calculatedWatts += 5000; // First 90 sq meters demand load is 5000W
+      if (floorAreaValue > 90) {
+        calculatedWatts += Math.ceil((floorAreaValue - 90) / 90) * 1000;
+      }
+
+      // B. Electric Range/Stove Load (Rule 8-200(1)(a)(ii) & Table 14)
+      if (document.getElementById('loadStove').checked) {
+        calculatedWatts += 6000; // First 12kW demand is 6000W
+      }
+
+      // C. Domestic Dryer (Rule 8-200(1)(a)(vi) / Table 28)
+      // When an electric range is present, additional appliances >1500W are added at 25% of nameplate
+      const hasRange = document.getElementById('loadStove').checked;
+      if (document.getElementById('loadDryer').checked) {
+        const dryerNameplate = 2500;
+        calculatedWatts += hasRange ? (dryerNameplate * 0.25) : dryerNameplate;
+      }
+
+      // D. Hot Water tank (Rule 8-200(1)(a)(vi))
+      // Storage-type electric: 25% of nameplate when range is present
+      // Gas/Tankless: 0W
+      const hotWaterNameplate = parseInt(document.getElementById('loadWater').value) || 0;
+      if (hotWaterNameplate > 0) {
+        calculatedWatts += hasRange ? (hotWaterNameplate * 0.25) : hotWaterNameplate;
+      }
+
+      // E. Thermal loads space cooling vs space heating (Larger of AC vs Heat - Rule 8-200(1)(a)(iv))
+      let acWatts = document.getElementById('loadAC').checked ? 4000 : 0;
+      
+      let rawHeatingInput = parseInt(document.getElementById('loadHeating').value);
+      let heatingWatts = 0;
+      if (rawHeatingInput > 0) {
+        // First 10kW heating load calculated at 100%, balance at 75%
+        if (rawHeatingInput <= 10000) {
+          heatingWatts = rawHeatingInput;
+        } else {
+          heatingWatts = 10000 + (rawHeatingInput - 10000) * 0.75;
+        }
+      }
+      
+      // Select larger of thermal loads
+      calculatedWatts += Math.max(acWatts, heatingWatts);
+
+      // F. Electric Vehicle Charging Station Continuous Load (Rule 86-302 / 8-200(1)(a)(vi))
+      if (useEVEMS) {
+        // Rule 8-106: EVEMS managed load — EVSE entered as 0W in demand calculation
+        calculatedWatts += 0;
+      } else {
+        calculatedWatts += (chargerAmps * 240); // Continuous load evaluated at 100%
+      }
+
+      // Convert total calculated Watts to panel demand Amperage at 240V
+      panelDemandAmps = calculatedWatts / 240;
+      let availableAmps = effectiveServiceCeiling - panelDemandAmps;
+
+      document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
+      document.getElementById('availableCapacity').value = availableAmps.toFixed(1) + " A";
+
+      // Panel Compliance Visual Feed
+      const panelBox = document.getElementById('panelCalcResult');
+      const panelIcon = document.getElementById('panelCalcIcon');
+      const panelText = document.getElementById('panelCalcText');
+
+      if (useEVEMS) {
+        panelBox.className = "status-panel pass";
+        panelIcon.innerText = "⚡";
+        panelText.innerHTML = `<strong>Smart EVEMS Controller Active (Rule 8-106):</strong> EVSE continuous load entered as <strong>0W</strong> in dwelling demand. Base dwelling demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> on a ${effectiveServiceCeiling}A service — <strong>${availableAmps.toFixed(1)}A headroom available.</strong>`;
+      } else if (availableAmps >= 0) {
+        if (serviceUpgradeType === 'upgrade200a') {
+          panelBox.className = "status-panel pass";
+          panelIcon.innerText = "⚡";
+          panelText.innerHTML = `<strong>200A Service Upgrade Configured:</strong> Adequate headroom established. Calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> under new 200A ceiling limit.`;
+        } else if (availableAmps <= 10) {
+          panelBox.className = "status-panel warning";
+          panelIcon.innerText = "⚠️";
+          panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel headroom is tight. Smart EVEMS recommended to avoid utility connection upgrades.`;
+        } else {
+          panelBox.className = "status-panel pass";
+          panelIcon.innerText = "✓";
+          panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel has compliant headroom under <strong>Rule 8-200</strong>.`;
+        }
+      } else {
+        panelBox.className = "status-panel fail";
+        panelIcon.innerText = "✕";
+        panelText.innerHTML = `Calculated load is <strong>${panelDemandAmps.toFixed(1)}A</strong>, which exceeds your ${effectiveServiceCeiling}A main service capacity! <strong>Service upgrade or EVEMS required.</strong>`;
+      }
+
+      // Update gauges
+      updateSVGVisualGauges(vDropPercent, panelDemandAmps, effectiveServiceCeiling);
+
+      // 5. Generate Takeoff & Quoting Sheet
+      populateTakeoffPricingSheet(finalGaugeNum, standardBreaker, vDropPercent);
     }
 
     // Render Manufacturer Manual & Canadian Supplier Pricing Card Breakdown
@@ -2593,7 +2755,7 @@
           <div style="background: var(--bg-card); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
             <div style="font-size: 10px; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px;">Wire Gauge Limits</div>
             <div style="font-weight: 700; font-size: 13px; color: var(--color-primary); font-family: var(--font-mono); margin-top: 2px;">
-              #${spec.minAWG} min to #${spec.maxAWG} AWG max
+              #${spec.minAWG} min to #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG max
             </div>
           </div>
         </div>
@@ -2606,7 +2768,7 @@
             ${spec.configGuide || 'Follow manufacturer manual for terminal landing and torque specifications.'}
           </div>
           <div style="margin-top: 8px; font-size: 11px; color: var(--color-muted);">
-            <strong>CEC 2024 Compliance Note:</strong> Continuous load calculated at 125% per Rule 86-306 / 8-200. NEMA 14-50 plug-in installations require a dedicated Class A GFCI breaker in Canada.
+            <strong>CEC 2024 Compliance Note:</strong> Continuous load calculated at 125% per Rule 86-302 / 8-200. NEMA 14-50 plug-in installations require a dedicated Class A GFCI breaker in Canada.
           </div>
         </div>
 
@@ -2623,112 +2785,7 @@
       container.innerHTML = html;
     }
 
-      // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200)
-      let panelDemandAmps = 0;
-      let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
-      
-      const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
-      const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
-
-      // Utility operator dropdown is always visible — no toggle logic needed
-      
-      if (useEVEMS) {
-        // Smart Energy Management System (Rule 8-106 bypass)
-        panelDemandAmps = 45; // Nominal base load simulation
-        document.getElementById('totalCalcLoad').value = "45.0 A";
-        document.getElementById('availableCapacity').value = (effectiveServiceCeiling - 45).toFixed(1) + " A";
-        
-        const panelBox = document.getElementById('panelCalcResult');
-        panelBox.className = "status-panel pass";
-        document.getElementById('panelCalcIcon').innerText = "⚡";
-        document.getElementById('panelCalcText').innerHTML = "<strong>Smart EVEMS Controller Active:</strong> Dynamically loads continuous demand. Sizing calculations safely bypassed under <strong>CEC Rule 8-106</strong>.";
-      } else {
-        // Exact 2024 Canadian Electrical Code Panel Math
-        let calculatedWatts = 0;
-        
-        // A. Basic Floor Area Demand (Rule 8-200(1)(a)(i))
-        let floorAreaValue = parseInt(document.getElementById('floorArea').value);
-        calculatedWatts += 5000; // First 90 sq meters demand load is 5000W
-        if (floorAreaValue > 90) {
-          calculatedWatts += Math.ceil((floorAreaValue - 90) / 90) * 1000;
-        }
-
-        // B. Electric Range/Stove Load (Rule 8-200(1)(a)(ii) & Table 14)
-        if (document.getElementById('loadStove').checked) {
-          calculatedWatts += 6000; // First 12kW demand is 6000W
-        }
-
-        // C. Domestic Dryer (Rule 8-200(1)(a)(vi) / Table 28)
-        if (document.getElementById('loadDryer').checked) {
-          calculatedWatts += 2500; // Standard nominal dryer load
-        }
-
-        // D. Hot Water tank (Rule 8-200(1)(a)(vi))
-        if (document.getElementById('loadWater').checked) {
-          calculatedWatts += 3000; // Standard nameplate
-        }
-
-        // E. Thermal loads space cooling vs space heating (Larger of AC vs Heat - Rule 8-200(1)(a)(iv))
-        let acWatts = document.getElementById('loadAC').checked ? 4000 : 0;
-        
-        let rawHeatingInput = parseInt(document.getElementById('loadHeating').value);
-        let heatingWatts = 0;
-        if (rawHeatingInput > 0) {
-          // First 10kW heating load calculated at 100%, balance at 75%
-          if (rawHeatingInput <= 10000) {
-            heatingWatts = rawHeatingInput;
-          } else {
-            heatingWatts = 10000 + (rawHeatingInput - 10000) * 0.75;
-          }
-        }
-        
-        // Select larger of thermal loads
-        calculatedWatts += Math.max(acWatts, heatingWatts);
-
-        // F. Electric Vehicle Charging StationContinuous Load (Rule 86-306 / 8-200(1)(a)(vi))
-        calculatedWatts += (chargerAmps * 240); // Continuous load evaluated at 100%
-
-        // Convert total calculated Watts to panel demand Amperage at 240V
-        panelDemandAmps = calculatedWatts / 240;
-        let availableAmps = effectiveServiceCeiling - panelDemandAmps;
-
-        document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
-        document.getElementById('availableCapacity').value = availableAmps.toFixed(1) + " A";
-
-        // Panel Compliance Visual Feed
-        const panelBox = document.getElementById('panelCalcResult');
-        const panelIcon = document.getElementById('panelCalcIcon');
-        const panelText = document.getElementById('panelCalcText');
-
-        if (availableAmps >= 0) {
-          if (serviceUpgradeType === 'upgrade200a') {
-            panelBox.className = "status-panel pass";
-            panelIcon.innerText = "⚡";
-            panelText.innerHTML = `<strong>200A Service Upgrade Configured:</strong> Adequate headroom established. Calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> under new 200A ceiling limit.`;
-          } else if (availableAmps <= 10) {
-            panelBox.className = "status-panel warning";
-            panelIcon.innerText = "⚠️";
-            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel headroom is tight. Smart EVEMS recommended to avoid utility connection upgrades.`;
-          } else {
-            panelBox.className = "status-panel pass";
-            panelIcon.innerText = "✓";
-            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel has compliant headroom under <strong>Rule 8-200</strong>.`;
-          }
-        } else {
-          panelBox.className = "status-panel fail";
-          panelIcon.innerText = "✕";
-          panelText.innerHTML = `Calculated load is <strong>${panelDemandAmps.toFixed(1)}A</strong>, which exceeds your ${effectiveServiceCeiling}A main service capacity! <strong>Service upgrade or EVEMS required.</strong>`;
-        }
-      }
-
-      // Update gauges
-      updateSVGVisualGauges(vDropPercent, panelDemandAmps, effectiveServiceCeiling);
-
-      // 5. Generate Takeoff & Quoting Sheet
-      populateTakeoffPricingSheet(finalGaugeNum, standardBreaker);
-    }
-
-    function populateTakeoffPricingSheet(gauge, breaker) {
+    function populateTakeoffPricingSheet(gauge, breaker, vDropPercent) {
       let materialsList = [];
       const runType = document.getElementById('runType').value;
       const markupFactor = 1 + (materialMarkup / 100);
@@ -3329,7 +3386,7 @@
         floorArea: document.getElementById('floorArea').value,
         loadStove: document.getElementById('loadStove').checked,
         loadDryer: document.getElementById('loadDryer').checked,
-        loadWater: document.getElementById('loadWater').checked,
+        loadWater: document.getElementById('loadWater').value,
         loadAC: document.getElementById('loadAC').checked,
         loadHeating: document.getElementById('loadHeating').value,
         labourRate: document.getElementById('labourRate').value,
@@ -3389,7 +3446,7 @@
       document.getElementById('floorArea').value = quote.floorArea;
       document.getElementById('loadStove').checked = quote.loadStove;
       document.getElementById('loadDryer').checked = quote.loadDryer;
-      document.getElementById('loadWater').checked = quote.loadWater;
+      document.getElementById('loadWater').value = quote.loadWater || '3000';
       document.getElementById('loadAC').checked = quote.loadAC;
       document.getElementById('loadHeating').value = quote.loadHeating;
       document.getElementById('labourRate').value = quote.labourRate;
@@ -3472,7 +3529,6 @@
       // Update displays
       document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
       document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
-      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
 
       runElectricalMath();
     }
@@ -3850,7 +3906,6 @@
       // Update visual form displays
       document.getElementById('detachedFields').style.display = isDetached ? 'block' : 'none';
       document.getElementById('detachedDisabledNotice').style.display = isDetached ? 'none' : 'block';
-      document.getElementById('panelCalcFields').style.display = useEVEMS ? 'none' : 'block';
 
       // Rebuild dynamic amp options button group for this charger
       selectEVSEHardware(lead.hardware, false);
@@ -3912,6 +3967,105 @@
         toast.textContent = "Successfully copied to clipboard!";
       }, 3000);
     }
+
+    // ==========================================================================
+    // JSON DATA EXPORT / IMPORT (Portable Backup for Field Use)
+    // ==========================================================================
+
+    function exportAllDataAsJSON() {
+      const exportData = {
+        exportVersion: '2.0.0',
+        exportDate: new Date().toISOString(),
+        exportSource: 'Renvolt EV Calculator',
+        savedQuotes: getSavedQuotesFromStorage(),
+        crmLeads: getCRMLeads()
+      };
+
+      const jsonString = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Renvolt_Backup_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      const toast = document.getElementById('toast');
+      toast.textContent = 'Data exported successfully!';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function importAllDataFromJSON(inputElement) {
+      const file = inputElement.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importData = JSON.parse(e.target.result);
+
+          // Validate structure
+          if (!importData.exportSource || importData.exportSource !== 'Renvolt EV Calculator') {
+            alert('Invalid file: This does not appear to be a Renvolt data export.');
+            return;
+          }
+
+          const confirmMsg = `This will import data from ${importData.exportDate ? new Date(importData.exportDate).toLocaleDateString() : 'unknown date'}.\n\n` +
+            `• ${Object.keys(importData.savedQuotes || {}).length} saved quotes\n` +
+            `• ${(importData.crmLeads || []).length} CRM leads\n\n` +
+            `Choose how to import:\n` +
+            `OK = MERGE with existing data\n` +
+            `Cancel = Abort import`;
+
+          if (!confirm(confirmMsg)) return;
+
+          // Merge saved quotes
+          if (importData.savedQuotes) {
+            const existingQuotes = getSavedQuotesFromStorage();
+            const mergedQuotes = { ...existingQuotes, ...importData.savedQuotes };
+            localStorage.setItem('renvolt_saved_quotes', JSON.stringify(mergedQuotes));
+            refreshSavedQuotesDropdown();
+          }
+
+          // Merge CRM leads (deduplicate by name + phone)
+          if (importData.crmLeads && Array.isArray(importData.crmLeads)) {
+            const existingLeads = getCRMLeads();
+            const existingKeys = new Set(existingLeads.map(l => l.name + '|' + l.phone));
+            
+            importData.crmLeads.forEach(lead => {
+              const key = lead.name + '|' + lead.phone;
+              if (!existingKeys.has(key)) {
+                existingLeads.push(lead);
+                existingKeys.add(key);
+              }
+            });
+            
+            saveCRMLeads(existingLeads);
+            renderCRMLeads();
+          }
+
+          const toast = document.getElementById('toast');
+          toast.textContent = 'Data imported successfully!';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3000);
+
+        } catch (err) {
+          alert('Error reading file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+
+      // Reset the input so the same file can be re-imported if needed
+      inputElement.value = '';
+    }
   </script>
+
+  <!-- VERSION STAMP -->
+  <footer class="no-print" style="text-align: center; padding: 16px 20px; font-size: 11px; color: var(--color-muted); border-top: 1px solid var(--border-color); margin-top: 30px; font-family: var(--font-mono);">
+    Renvolt EV Installation Calculator v2.0.0 &bull; CEC 2024 (CSA C22.1-24) &bull; Built July 2026 &bull; Edmonton, AB
+  </footer>
 </body>
 </html>
