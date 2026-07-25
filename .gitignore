@@ -1,0 +1,34 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+.env
+.env.local
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Internal docs & dev artifacts
+cinematic_builder.md
+Renvolt_AI_Context_Master_Prompt.md
+generate_ad_screenshot.cjs
+NotebookLM_Sources/
+notebooklm/
+GEMINI.md/
