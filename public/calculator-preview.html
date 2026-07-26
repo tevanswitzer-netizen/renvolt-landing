@@ -2042,137 +2042,154 @@
     let manualOverrides = {}; // Map to store manual price/qty overrides
     let requiresJunctionBox = false;
 
-    // EVSE Charger Engineering Specification Matrix (Canadian Market Vetted Picks + Technical Manual Specs)
-    const EVSE_SPECS = {
-      grizzle: {
-        name: "Grizzl-E Classic",
-        msrp: 499.00,
-        minAWG: 8,
-        maxAWG: 6,
-        maxAmps: 40,
-        defaultAmps: 40,
-        torque: "16 in-lbs (1.8 Nm)",
-        badge: "MADE IN CANADA",
-        subtitle: "Rugged 40A, UL-certified — best value.",
-        ampOptions: [16, 24, 32, 40],
-        supplierPrices: "United Chargers Direct: $499 CAD | Amazon.ca: $499 CAD | Home Depot Canada: $549 CAD",
-        configGuide: "DIP Switch configurable inside housing (16A, 24A, 32A, 40A continuous). NEMA 4 aluminum chassis rated to -40°C."
+    // Global Configuration Object (Hardware specs, materials costs, labor constants)
+    const CONFIG = {
+      hardware: {
+        grizzle: {
+          name: "Grizzl-E Classic",
+          msrp: 499.00,
+          baseCost: 499.00,
+          minAWG: 8,
+          maxAWG: 6,
+          maxAmps: 40,
+          defaultAmps: 40,
+          torque: "16 in-lbs (1.8 Nm)",
+          badge: "MADE IN CANADA",
+          subtitle: "Rugged 40A, UL-certified — best value.",
+          ampOptions: [16, 24, 32, 40],
+          supplierPrices: "United Chargers Direct: $499 CAD | Amazon.ca: $499 CAD | Home Depot Canada: $549 CAD",
+          configGuide: "DIP Switch configurable inside housing (16A, 24A, 32A, 40A continuous). NEMA 4 aluminum chassis rated to -40°C."
+        },
+        lectron: {
+          name: "Lectron V-Box",
+          msrp: 450.00,
+          baseCost: 450.00,
+          minAWG: 8,
+          maxAWG: 6,
+          maxAmps: 48,
+          defaultAmps: 40,
+          torque: "22 in-lbs (2.5 Nm)",
+          badge: "BUDGET PICK",
+          subtitle: "40A / 48A with Wi-Fi — cheapest pick.",
+          ampOptions: [16, 24, 32, 40, 48],
+          supplierPrices: "Amazon.ca: $390–$450 CAD | Lectron Direct: $450 CAD | Home Depot: $450 CAD",
+          configGuide: "NEMA 14-50 plug-in (max 40A continuous) or Hardwired (max 48A). Real-time screen display & Wi-Fi app monitoring."
+        },
+        chargepoint: {
+          name: "ChargePoint Home Flex",
+          msrp: 749.00,
+          baseCost: 749.00,
+          minAWG: 14,
+          maxAWG: 6,
+          maxAmps: 50,
+          defaultAmps: 40,
+          torque: "Spring Levers (Push-Pin / No Torque Screw)",
+          badge: "APP + WI-FI",
+          subtitle: "App + off-peak scheduling.",
+          ampOptions: [16, 24, 32, 40, 48, 50],
+          supplierPrices: "Best Buy Canada: $749 CAD | Amazon.ca: $749 CAD | ChargePoint Direct: $749 CAD",
+          configGuide: "Hardwired (48A/50A on 60A/70A breaker) or NEMA 14-50 (40A on 50A breaker). Smart App off-peak charging scheduling."
+        },
+        emporia: {
+          name: "Emporia Level 2 EV Charger",
+          msrp: 649.00,
+          baseCost: 649.00,
+          minAWG: 10,
+          maxAWG: 6,
+          maxAmps: 48,
+          defaultAmps: 48,
+          torque: "10.6 in-lbs (1.2 Nm)",
+          badge: "ENERGY TRACKING",
+          subtitle: "48A with built-in energy tracking.",
+          ampOptions: [16, 24, 32, 40, 48],
+          supplierPrices: "Amazon.ca: $649 CAD | Home Depot Canada: $649 CAD | Emporia Direct: $649 CAD",
+          configGuide: "Hardwired 48A (60A breaker) or NEMA 14-50 40A (50A breaker). Integrated Home Energy & Solar Tracking App."
+        },
+        tesla: {
+          name: "Tesla Universal Wall Connector",
+          msrp: 850.00,
+          baseCost: 850.00,
+          minAWG: 12,
+          maxAWG: 4,
+          maxAmps: 48,
+          defaultAmps: 48,
+          torque: "50 in-lbs (5.6 Nm)",
+          badge: "UNIVERSAL DOCK",
+          subtitle: "Integrated J1772 & NACS adapter.",
+          ampOptions: [24, 32, 40, 48],
+          supplierPrices: "Tesla Canada Direct: $850 CAD",
+          configGuide: "Hardwired only. Integrated Magic Dock supports both Tesla NACS and J1772 EVs seamlessly."
+        },
+        flo: {
+          name: "Flo Home G5 & X5",
+          msrp: 995.00,
+          baseCost: 995.00,
+          minAWG: 8,
+          maxAWG: 6,
+          maxAmps: 30,
+          defaultAmps: 30,
+          torque: "Power: 16 in-lbs, GND: 40-45 in-lbs",
+          badge: "CANADIAN PREMIUM",
+          subtitle: "Ultra-durable 30A commercial grade.",
+          ampOptions: [30],
+          supplierPrices: "Flo Direct / Retailers: $995 CAD",
+          configGuide: "Hardwired 30A continuous (40A breaker). 100% heavy industrial Canadian aluminum casing."
+        },
+        wallbox: {
+          name: "Wallbox Pulsar Plus",
+          msrp: 825.00,
+          baseCost: 825.00,
+          minAWG: 10,
+          maxAWG: 6,
+          maxAmps: 48,
+          defaultAmps: 40,
+          torque: "11.5 in-lbs (1.3 Nm)",
+          badge: "COMPACT SMART",
+          subtitle: "Power sharing & Bluetooth/Wi-Fi.",
+          ampOptions: [16, 24, 32, 40, 48],
+          supplierPrices: "Amazon.ca: $825 CAD | Wallbox Direct: $825 CAD",
+          configGuide: "Hardwired (48A) or NEMA 14-50 (40A). Internal power sharing balance for up to 7 units."
+        },
+        porsche: {
+          name: "Porsche Wall Charger Connect",
+          msrp: 1650.00,
+          baseCost: 1650.00,
+          minAWG: 6,
+          maxAWG: 4,
+          maxAmps: 80,
+          defaultAmps: 48,
+          torque: "35 in-lbs (4.0 Nm)",
+          badge: "HIGH-POWER",
+          subtitle: "80A / 19.2kW maximum output.",
+          ampOptions: [32, 40, 48, 80],
+          supplierPrices: "Porsche Canada Direct: $1,650 CAD | Porsche Centre Edmonton: $1,650 CAD",
+          configGuide: "Hardwired only. App-configurable from 32A to 80A continuous. Requires #4 AWG minimum for 80A (100A breaker). Integrated Porsche Home Energy Manager compatible."
+        }
       },
-      lectron: {
-        name: "Lectron V-Box",
-        msrp: 450.00,
-        minAWG: 8,
-        maxAWG: 6,
-        maxAmps: 48,
-        defaultAmps: 40,
-        torque: "22 in-lbs (2.5 Nm)",
-        badge: "BUDGET PICK",
-        subtitle: "40A / 48A with Wi-Fi — cheapest pick.",
-        ampOptions: [16, 24, 32, 40, 48],
-        supplierPrices: "Amazon.ca: $390–$450 CAD | Lectron Direct: $450 CAD | Home Depot: $450 CAD",
-        configGuide: "NEMA 14-50 plug-in (max 40A continuous) or Hardwired (max 48A). Real-time screen display & Wi-Fi app monitoring."
+      materials: {
+        breaker40: { name: "2-Pole Breaker 40A (Siemens/Schneider)", cost: 45.00, unitCost: 45.00, description: "2-Pole Breaker 40A (Siemens/Schneider)" },
+        breaker60: { name: "2-Pole Breaker 60A (High-Amp L2 Charger)", cost: 65.00, unitCost: 65.00, description: "2-Pole Breaker 60A (High-Amp L2 Charger)" },
+        nmd8_2: { name: "NMD90 Copper wire #8/2 (per foot)", cost: 3.00, unitCost: 3.00, description: "NMD90 Copper wire #8/2 (per foot)" },
+        nmd6_2: { name: "NMD90 Copper wire #6/2 (per foot)", cost: 4.50, unitCost: 4.50, description: "NMD90 Copper wire #6/2 (per foot)" },
+        teck8_3: { name: "Armored Teck90 #8/3 cable (per foot)", cost: 4.75, unitCost: 4.75, description: "Armored Teck90 #8/3 cable (per foot)" },
+        teck6_3: { name: "Armored Teck90 #6/3 cable (per foot)", cost: 8.00, unitCost: 8.00, description: "Armored Teck90 #6/3 cable (per foot)" },
+        pvc1: { name: "1\" Rigid PVC Sched. 40 Conduit (per foot)", cost: 2.00, unitCost: 2.00, description: "1\" Rigid PVC Sched. 40 Conduit (per foot)" },
+        pvcSweeps: { name: "1\" PVC 90° Sweeps", cost: 8.50, unitCost: 8.50, description: "1\" PVC 90° Sweeps" },
+        lbCondulet: { name: "1\" Weatherproof LB Condulet box", cost: 22.00, unitCost: 22.00, description: "1\" Weatherproof LB Condulet box" },
+        warningTape: { name: "Underground electrical warning tape (100ft roll)", cost: 18.00, unitCost: 18.00, description: "Underground electrical warning tape (100ft roll)" },
+        evemsUnit: { name: "RVE DCC-9-40A Smart Energy Manager", cost: 1725.00, unitCost: 1725.00, description: "RVE DCC-9-40A Smart Energy Manager" },
+        sundries: { name: "Mounting hardware, code labels, junction fittings", cost: 30.00, unitCost: 30.00, description: "Mounting hardware, code labels, junction fittings" }
       },
-      chargepoint: {
-        name: "ChargePoint Home Flex",
-        msrp: 749.00,
-        minAWG: 14,
-        maxAWG: 6,
-        maxAmps: 50,
-        defaultAmps: 40,
-        torque: "Spring Levers (Push-Pin / No Torque Screw)",
-        badge: "APP + WI-FI",
-        subtitle: "App + off-peak scheduling.",
-        ampOptions: [16, 24, 32, 40, 48, 50],
-        supplierPrices: "Best Buy Canada: $749 CAD | Amazon.ca: $749 CAD | ChargePoint Direct: $749 CAD",
-        configGuide: "Hardwired (48A/50A on 60A/70A breaker) or NEMA 14-50 (40A on 50A breaker). Smart App off-peak charging scheduling."
-      },
-      emporia: {
-        name: "Emporia Level 2 EV Charger",
-        msrp: 649.00,
-        minAWG: 10,
-        maxAWG: 6,
-        maxAmps: 48,
-        defaultAmps: 48,
-        torque: "10.6 in-lbs (1.2 Nm)",
-        badge: "ENERGY TRACKING",
-        subtitle: "48A with built-in energy tracking.",
-        ampOptions: [16, 24, 32, 40, 48],
-        supplierPrices: "Amazon.ca: $649 CAD | Home Depot Canada: $649 CAD | Emporia Direct: $649 CAD",
-        configGuide: "Hardwired 48A (60A breaker) or NEMA 14-50 40A (50A breaker). Integrated Home Energy & Solar Tracking App."
-      },
-      tesla: {
-        name: "Tesla Universal Wall Connector",
-        msrp: 850.00,
-        minAWG: 12,
-        maxAWG: 4,
-        maxAmps: 48,
-        defaultAmps: 48,
-        torque: "50 in-lbs (5.6 Nm)",
-        badge: "UNIVERSAL DOCK",
-        subtitle: "Integrated J1772 & NACS adapter.",
-        ampOptions: [24, 32, 40, 48],
-        supplierPrices: "Tesla Canada Direct: $850 CAD",
-        configGuide: "Hardwired only. Integrated Magic Dock supports both Tesla NACS and J1772 EVs seamlessly."
-      },
-      flo: {
-        name: "Flo Home G5 & X5",
-        msrp: 995.00,
-        minAWG: 8,
-        maxAWG: 6,
-        maxAmps: 30,
-        defaultAmps: 30,
-        torque: "Power: 16 in-lbs, GND: 40-45 in-lbs",
-        badge: "CANADIAN PREMIUM",
-        subtitle: "Ultra-durable 30A commercial grade.",
-        ampOptions: [30],
-        supplierPrices: "Flo Direct / Retailers: $995 CAD",
-        configGuide: "Hardwired 30A continuous (40A breaker). 100% heavy industrial Canadian aluminum casing."
-      },
-      wallbox: {
-        name: "Wallbox Pulsar Plus",
-        msrp: 825.00,
-        minAWG: 10,
-        maxAWG: 6,
-        maxAmps: 48,
-        defaultAmps: 40,
-        torque: "11.5 in-lbs (1.3 Nm)",
-        badge: "COMPACT SMART",
-        subtitle: "Power sharing & Bluetooth/Wi-Fi.",
-        ampOptions: [16, 24, 32, 40, 48],
-        supplierPrices: "Amazon.ca: $825 CAD | Wallbox Direct: $825 CAD",
-        configGuide: "Hardwired (48A) or NEMA 14-50 (40A). Internal power sharing balance for up to 7 units."
-      },
-      porsche: {
-        name: "Porsche Wall Charger Connect",
-        msrp: 1650.00,
-        minAWG: 6,
-        maxAWG: 4,
-        maxAmps: 80,
-        defaultAmps: 48,
-        torque: "35 in-lbs (4.0 Nm)",
-        badge: "HIGH-POWER",
-        subtitle: "80A / 19.2kW maximum output.",
-        ampOptions: [32, 40, 48, 80],
-        supplierPrices: "Porsche Canada Direct: $1,650 CAD | Porsche Centre Edmonton: $1,650 CAD",
-        configGuide: "Hardwired only. App-configurable from 32A to 80A continuous. Requires #4 AWG minimum for 80A (100A breaker). Integrated Porsche Home Energy Manager compatible."
+      labor: {
+        defaultLabourRate: 100,
+        internalCostRate: 45,
+        baseInstallHours: 6
       }
     };
-    
-    // Core Edmonton Pricing Presets (Tradesperson Wholesaler cost indexes)
-    const MATERIALS_PRESETS = {
-      breaker40: { name: "2-Pole Breaker 40A (Siemens/Schneider)", cost: 45.00 },
-      breaker60: { name: "2-Pole Breaker 60A (High-Amp L2 Charger)", cost: 65.00 },
-      nmd8_2: { name: "NMD90 Copper wire #8/2 (per foot)", cost: 3.00 },
-      nmd6_2: { name: "NMD90 Copper wire #6/2 (per foot)", cost: 4.50 },
-      teck8_3: { name: "Armored Teck90 #8/3 cable (per foot)", cost: 4.75 },
-      teck6_3: { name: "Armored Teck90 #6/3 cable (per foot)", cost: 8.00 },
-      pvc1: { name: "1\" Rigid PVC Sched. 40 Conduit (per foot)", cost: 2.00 },
-      pvcSweeps: { name: "1\" PVC 90° Sweeps", cost: 8.50 },
-      lbCondulet: { name: "1\" Weatherproof LB Condulet box", cost: 22.00 },
-      warningTape: { name: "Underground electrical warning tape (100ft roll)", cost: 18.00 },
-      evemsUnit: { name: "RVE DCC-9-40A Smart Energy Manager", cost: 1725.00 },
-      sundries: { name: "Mounting hardware, code labels, junction fittings", cost: 30.00 }
-    };
+
+    // Backwards-compatible aliases referencing top-level CONFIG
+    const EVSE_SPECS = CONFIG.hardware;
+    const MATERIALS_PRESETS = CONFIG.materials;
 
     // Circular Mils Table for Exact Voltage Drop (Rule 8-102 / Table 5A)
     const CIRCULAR_MILS = {
@@ -3242,7 +3259,7 @@
       const upgradePermitRow = document.getElementById('upgradePermitRow');
       if (upgradePermitRow) upgradePermitRow.style.display = (utilityOp !== 'none') ? 'flex' : 'none';
 
-      // Scoreboard metrics calculation (Assumes journeyman internal baseline trade rate is $45/hr)
+      // Scoreboard metrics calculation (Uses CONFIG.labor.internalCostRate)
       // Permits are a passthrough — never marked up
       let subtotalBeforeTax = markedUpMaterialsTotal + totalLabourCost;
       let allPermitsFee = permitCostFee + upgradePermitFee;
@@ -3250,8 +3267,8 @@
       let gstAmount = renvoltQuotedPrice * 0.05;
       let grandTotal = renvoltQuotedPrice + gstAmount;
 
-      let actualTotalCost = rawMaterialsTotal + (finalLabourHours * 45) + allPermitsFee + utilitySurcharge;
-      let grossProfitValue = subtotalBeforeTax - (rawMaterialsTotal + (finalLabourHours * 45));
+      let actualTotalCost = rawMaterialsTotal + (finalLabourHours * CONFIG.labor.internalCostRate) + allPermitsFee + utilitySurcharge;
+      let grossProfitValue = subtotalBeforeTax - (rawMaterialsTotal + (finalLabourHours * CONFIG.labor.internalCostRate));
       let grossMarginPercentage = subtotalBeforeTax > 0 ? (grossProfitValue / subtotalBeforeTax) * 100 : 0;
 
       document.getElementById('actualProjectCost').innerText = "$" + actualTotalCost.toFixed(2);
