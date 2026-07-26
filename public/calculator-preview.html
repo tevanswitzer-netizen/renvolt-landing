@@ -1064,6 +1064,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           CRM Workspace
         </button>
+        <button class="tab-btn" onclick="switchTab('quoteTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Quoting / Takeoff
+        </button>
       </div>
 
       <!-- TAB 1: CEC SIZING -->
@@ -1797,128 +1801,128 @@
         </details>
       </div>
 
-    </div>
-
-    <!-- RIGHT COLUMN: FINANCIALS & active TAKEOFF SHEET -->
-    <div class="right-col">
-      <div class="card">
-        <div class="card-title">
-          T&M Quoting Engine & Takeoff Sheet
-          <span class="badge" style="background-color: var(--color-success); border-color: var(--color-success); color: var(--bg-main);">Interactive</span>
-        </div>
-
-        <div class="input-row">
-          <div class="form-group">
-            <label>Hourly Labour Rate</label>
-            <input type="number" id="labourRate" value="100" onchange="runElectricalMath()">
+      <!-- TAB 6: QUOTING & TAKEOFF -->
+      <div id="quoteTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            T&amp;M Quoting Engine &amp; Takeoff Sheet
+            <span class="badge" style="background-color: var(--color-success); border-color: var(--color-success); color: var(--bg-main);">Interactive</span>
           </div>
+
+          <div class="input-row">
+            <div class="form-group">
+              <label>Hourly Labour Rate</label>
+              <input type="number" id="labourRate" value="100" onchange="runElectricalMath()">
+            </div>
+            <div class="form-group">
+              <label>Base Install Hours</label>
+              <div class="slider-container" style="margin-top: 8px;">
+                <input type="range" id="labourHours" min="2" max="20" step="1" value="6" oninput="updateLabourHours(this.value)">
+                <span class="slider-val" id="labourHoursVal">6 hrs</span>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
-            <label>Base Install Hours</label>
-            <div class="slider-container" style="margin-top: 8px;">
-              <input type="range" id="labourHours" min="2" max="20" step="1" value="6" oninput="updateLabourHours(this.value)">
-              <span class="slider-val" id="labourHoursVal">6 hrs</span>
+            <label>Materials Trade Markup</label>
+            <div class="slider-container">
+              <input type="range" id="materialMarkup" min="0" max="50" step="5" value="20" oninput="updateMarkup(this.value)">
+              <span class="slider-val" id="markupVal">20%</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="margin-bottom: 0;">Material Takeoff List</label>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-preset" onclick="resetAllOverrides()" style="padding: 4px 8px; font-size: 11px; background: rgba(255, 0, 100, 0.05); border-color: rgba(255, 0, 100, 0.2); color: #ff0055;">
+                🔄 Reset Takeoff
+              </button>
+              <button class="btn-preset" onclick="addNewCustomMaterialRow()" style="padding: 4px 8px; font-size: 11px; background: rgba(46, 64, 54, 0.04); border-color: rgba(46, 64, 54, 0.2); color: var(--color-primary);">
+                ➕ Add Custom Item
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table id="materialsTable">
+              <thead>
+                <tr>
+                  <th>Item Specs</th>
+                  <th class="text-right">Qty</th>
+                  <th class="text-right">Cost</th>
+                  <th class="text-right">Total</th>
+                  <th class="no-print" style="width: 30px; text-align: center;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="input-row" style="margin-top: 10px;">
+            <div class="form-group">
+              <label>Edmonton Electrical Permit</label>
+              <input type="text" id="permitCostBox" value="$166.40" readonly style="color: var(--color-muted);">
+            </div>
+            <div class="form-group">
+              <label>Utility Connection Fees</label>
+              <input type="number" id="utilitySurcharge" value="0" onchange="runElectricalMath()">
+            </div>
+          </div>
+          <div class="input-row" id="upgradePermitRow" style="display: none; margin-top: 4px;">
+            <div class="form-group" style="max-width: 340px;">
+              <label style="color: var(--color-warning);">⚡ Service Upgrade Permit (City of Edmonton)</label>
+              <input type="text" id="upgradePermitCostBox" value="$175.00" readonly style="color: var(--color-warning); font-weight: 600;">
+            </div>
+          </div>
+
+          <!-- Profit Summary Metrics -->
+          <div class="metric-grid">
+            <div class="metric-box">
+              <div class="metric-label">Internal Cost (@ $45/hr)</div>
+              <div class="metric-val" id="actualProjectCost">$0.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Subtotal (Before Tax)</div>
+              <div class="metric-val total" id="quotedPriceVal">$0.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">GST (5% Alberta)</div>
+              <div class="metric-val" id="gstVal" style="color: var(--color-warning);">$0.00</div>
+            </div>
+            <div class="metric-box" style="border-color: var(--color-primary); box-shadow: 0 0 12px rgba(0,225,255,0.1);">
+              <div class="metric-label" style="color: var(--color-primary);">Total With GST</div>
+              <div class="metric-val total" id="grandTotalVal" style="color: var(--color-primary);">$0.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Estimated Gross Profit</div>
+              <div class="metric-val profit" id="profitVal">$0.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Gross Margin %</div>
+              <div class="metric-val profit" id="marginVal">0%</div>
+            </div>
+          </div>
+
+          <div class="btn-row no-print" style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-success" onclick="window.print()" style="width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              Print Executive Proposal PDF
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" onclick="copyQuoteSummary()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
+                📋 Copy Summary Text
+              </button>
+              <button class="btn btn-secondary" onclick="exportQuoteToCSV()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
+                📊 Export CSV Takeoff
+              </button>
             </div>
           </div>
         </div>
-
-        <div class="form-group">
-          <label>Materials Trade Markup</label>
-          <div class="slider-container">
-            <input type="range" id="materialMarkup" min="0" max="50" step="5" value="20" oninput="updateMarkup(this.value)">
-            <span class="slider-val" id="markupVal">20%</span>
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <label style="margin-bottom: 0;">Material Takeoff List</label>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-preset" onclick="resetAllOverrides()" style="padding: 4px 8px; font-size: 11px; background: rgba(255, 0, 100, 0.05); border-color: rgba(255, 0, 100, 0.2); color: #ff0055;">
-              🔄 Reset Takeoff
-            </button>
-            <button class="btn-preset" onclick="addNewCustomMaterialRow()" style="padding: 4px 8px; font-size: 11px; background: rgba(46, 64, 54, 0.04); border-color: rgba(46, 64, 54, 0.2); color: var(--color-primary);">
-              ➕ Add Custom Item
-            </button>
-          </div>
-        </div>
-
-        <div class="table-container">
-          <table id="materialsTable">
-            <thead>
-              <tr>
-                <th>Item Specs</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Cost</th>
-                <th class="text-right">Total</th>
-                <th class="no-print" style="width: 30px; text-align: center;"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Populated dynamically via JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <div class="input-row" style="margin-top: 10px;">
-          <div class="form-group">
-            <label>Edmonton Electrical Permit</label>
-            <input type="text" id="permitCostBox" value="$166.40" readonly style="color: var(--color-muted);">
-          </div>
-          <div class="form-group">
-            <label>Utility Connection Fees</label>
-            <input type="number" id="utilitySurcharge" value="0" onchange="runElectricalMath()">
-          </div>
-        </div>
-        <div class="input-row" id="upgradePermitRow" style="display: none; margin-top: 4px;">
-          <div class="form-group" style="max-width: 340px;">
-            <label style="color: var(--color-warning);">⚡ Service Upgrade Permit (City of Edmonton)</label>
-            <input type="text" id="upgradePermitCostBox" value="$175.00" readonly style="color: var(--color-warning); font-weight: 600;">
-          </div>
-        </div>
-
-        <!-- Profit Summary Metrics -->
-        <div class="metric-grid">
-          <div class="metric-box">
-            <div class="metric-label">Internal Cost (@ $45/hr)</div>
-            <div class="metric-val" id="actualProjectCost">$0.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Subtotal (Before Tax)</div>
-            <div class="metric-val total" id="quotedPriceVal">$0.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">GST (5% Alberta)</div>
-            <div class="metric-val" id="gstVal" style="color: var(--color-warning);">$0.00</div>
-          </div>
-          <div class="metric-box" style="border-color: var(--color-primary); box-shadow: 0 0 12px rgba(0,225,255,0.1);">
-            <div class="metric-label" style="color: var(--color-primary);">Total With GST</div>
-            <div class="metric-val total" id="grandTotalVal" style="color: var(--color-primary);">$0.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Estimated Gross Profit</div>
-            <div class="metric-val profit" id="profitVal">$0.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Gross Margin %</div>
-            <div class="metric-val profit" id="marginVal">0%</div>
-          </div>
-        </div>
-
-        <div class="btn-row no-print" style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px;">
-          <button class="btn btn-success" onclick="window.print()" style="width: 100%;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-            Print Executive Proposal PDF
-          </button>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary" onclick="copyQuoteSummary()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
-              📋 Copy Summary Text
-            </button>
-            <button class="btn btn-secondary" onclick="exportQuoteToCSV()" style="flex: 1; font-size: 12px; padding: 8px 10px;">
-              📊 Export CSV Takeoff
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
+
+    </div><!-- end left-col -->
     </div><!-- end columns-wrapper -->
 
     <!-- ==========================================================================
