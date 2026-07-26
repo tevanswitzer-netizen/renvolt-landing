@@ -1170,12 +1170,19 @@
               </select>
             </div>
           </div>
+          <div id="commNMDWarning" class="status-panel warning" style="display: none; margin-top: 8px; font-size: 11px;">
+            <div class="status-icon" style="font-size: 14px;">⚠️</div>
+            <div>NMD is typically for residential / concealed runs; confirm wiring method for this commercial environment.</div>
+          </div>
           
           <div class="form-group" style="margin-top: 15px;">
             <label>One-Way Cable Branch Length</label>
             <div class="slider-container">
               <input type="range" id="runLength" min="5" max="150" step="5" value="30" oninput="updateRunLength(this.value)">
               <span class="slider-val" id="runLengthVal">30 ft</span>
+            </div>
+            <div id="runLengthWarning" style="display: none; margin-top: 6px; font-size: 11px; color: var(--color-warning);">
+              ⚠️ <strong>Long run (&gt;60m / 200ft):</strong> Extra review recommended for VD, conduit fill, and install complexity.
             </div>
           </div>
 
@@ -1290,6 +1297,9 @@
               <div class="slider-container">
                 <input type="range" id="trenchLength" min="5" max="150" step="5" value="30" oninput="updateTrenchLength(this.value)">
                 <span class="slider-val" id="trenchLengthVal">30 ft</span>
+              </div>
+              <div id="trenchLengthWarning" style="display: none; margin-top: 6px; font-size: 11px; color: var(--color-warning);">
+                ⚠️ <strong>Long trench (&gt;60m / 200ft):</strong> Extra review recommended for VD, conduit fill, and install complexity.
               </div>
             </div>
             
@@ -1549,6 +1559,10 @@
                 <div style="font-size: 10px; color: var(--color-muted); margin-top: 2px;">From load calc / engineer / utility – do not guess.</div>
               </div>
             </div>
+            <div id="commZeroWarning" class="status-panel warning" style="display: none; margin-top: 8px; font-size: 11px;">
+              <div class="status-icon" style="font-size: 14px;">⚠️</div>
+              <div>Main service rating and existing demand are required for a meaningful commercial headroom result.</div>
+            </div>
             <div class="status-panel warning" style="margin-top: 10px; font-size: 11px;">
               <div class="status-icon" style="font-size: 14px;">⚠️</div>
               <div><strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.</div>
@@ -1762,6 +1776,25 @@
           </button>
           <input type="file" id="jsonImportInput" accept=".json" onchange="importAllDataFromJSON(this)" style="display: none;">
         </div>
+      </div>
+
+      <!-- TECH NOTES & ENGINEERING ASSUMPTIONS -->
+      <div class="card" style="margin-top: 16px; background: rgba(46, 64, 54, 0.02); border: 1px solid var(--border-color);">
+        <details style="cursor: pointer;">
+          <summary style="font-weight: 700; font-size: 13px; color: var(--color-primary); display: flex; align-items: center; justify-content: space-between; outline: none; list-style: none;">
+            <span>📌 Tech Notes &amp; Assumptions</span>
+            <span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(46, 64, 54, 0.08); color: var(--color-muted);">CEC-2024</span>
+          </summary>
+          <div style="margin-top: 12px; font-size: 11.5px; color: var(--color-muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
+            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+              <li><strong>Branch voltage drop target:</strong> 3% (Rule 8‑102) – tool warns when above this.</li>
+              <li><strong>Residential demand logic:</strong> Dwelling demand per CEC 8‑200 (floor area, range, dryer, fixed loads).</li>
+              <li><strong>Commercial mode:</strong> Uses engineer/utility-provided service rating and existing demand/headroom; does NOT perform full CEC 8‑4xx demand calculation.</li>
+              <li><strong>EV loads:</strong> One EV branch circuit per calculation. Multiple EVSEs or depots require separate engineered load design.</li>
+              <li><strong>Pricing:</strong> Material and labour costs based on mid‑2026 Edmonton wholesaler and trade rates; adjust periodically as needed.</li>
+            </ul>
+          </div>
+        </details>
       </div>
 
     </div>
@@ -2628,15 +2661,15 @@
         finalGaugeNum = spec.minAWG;
       }
       
-      // Over max check
-      if (calculatedGauge < spec.maxAWG) {
-        requiresJunctionBox = true;
-        terminalAlertClass = "warning";
-        terminalAlertIcon = "⚠️";
-        terminalAlertText = `<strong>Physical Terminal Limit Alert:</strong> Cable run requires <strong>#${calculatedGauge === 0 ? '1/0' : calculatedGauge} AWG</strong> for voltage drop, but the <strong>${spec.name}</strong> terminals strictly max out at <strong>#${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG</strong>. A weatherproof external splicing junction box is required adjacent to the charger to transition down to #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG for termination.`;
-      }
-      
-      if (!terminalAlertText) {
+      let terminalAlertText = "";
+
+      if (!isAWGFitting(finalGaugeNum, spec.minAWG, spec.maxAWG)) {
+        terminalAlertClass = "fail";
+        terminalAlertIcon = "✕";
+        terminalAlertText = `<strong>Terminal Capacity Warning:</strong> Wire size <strong>#${finalGaugeNum === 0 ? '1/0' : finalGaugeNum} AWG</strong> required for voltage drop exceed the max lug capacity of <strong>${spec.name}</strong> (max #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG). Requires terminal adapter lug or junction box transition.`;
+      } else {
+        terminalAlertClass = "pass";
+        terminalAlertIcon = "✓";
         terminalAlertText = `<strong>Terminal Sizing Compliant:</strong> The final wire size <strong>#${finalGaugeNum === 0 ? '1/0' : finalGaugeNum} AWG</strong> fits perfectly within the <strong>${spec.name}</strong> terminals range (<strong>#${spec.minAWG} - #${spec.maxAWG === 0 ? '1/0' : spec.maxAWG} AWG</strong>). Terminals screw torque rating: <strong>${spec.torque}</strong>.`;
       }
 
@@ -2668,8 +2701,6 @@
       renderMfgGuideCard(spec, finalGaugeNum);
 
       // 3.7. NMD90 + Aluminum Safety Guard
-      // NMD90 cable is only manufactured with Copper conductors in Canada.
-      // If user selects NMD90 + Aluminum, auto-switch to Teck90 with a warning.
       if (runType === 'NMD90' && wireMaterial === 'Al') {
         document.getElementById('runType').value = 'Teck90';
         const vdropStatusEl = document.getElementById('vdropStatus');
@@ -2678,7 +2709,6 @@
           vdropStatusEl.querySelector('.status-icon').innerText = "⚠️";
           document.getElementById('vdropStatusText').innerHTML = '<strong>NMD90 Cable Notice:</strong> NMD90 non-metallic sheathed cable is only manufactured with Copper conductors in Canada. Wiring method has been automatically switched to <strong>Teck90 Armored Cable</strong> for Aluminum conductor compatibility.';
         }
-        // Re-run with corrected wiring method
         return runElectricalMath();
       }
 
@@ -2693,9 +2723,29 @@
       if (systemMode === 'commercial') {
         if (panelBadge) panelBadge.innerText = "3Ø 120/208V Headroom";
 
-        let mainServiceRating = Math.max(0, parseFloat(document.getElementById('commServiceAmps')?.value) || 0);
-        let existingDemand = Math.max(0, parseFloat(document.getElementById('commExistingDemand')?.value) || 0);
+        let commServiceInput = document.getElementById('commServiceAmps');
+        let commDemandInput = document.getElementById('commExistingDemand');
+
+        let rawCommService = parseFloat(commServiceInput?.value);
+        let rawCommDemand = parseFloat(commDemandInput?.value);
+
+        if (isNaN(rawCommService) || rawCommService < 0) {
+          rawCommService = 0;
+          if (commServiceInput && commServiceInput.value !== '') commServiceInput.value = 0;
+        }
+        if (isNaN(rawCommDemand) || rawCommDemand < 0) {
+          rawCommDemand = 0;
+          if (commDemandInput && commDemandInput.value !== '') commDemandInput.value = 0;
+        }
+
+        let mainServiceRating = rawCommService;
+        let existingDemand = rawCommDemand;
         let evDemandAmps = useEVEMS ? 0 : chargerAmps;
+
+        const commZeroWarning = document.getElementById('commZeroWarning');
+        if (commZeroWarning) {
+          commZeroWarning.style.display = (mainServiceRating === 0 || existingDemand === 0) ? 'flex' : 'none';
+        }
 
         let availableHeadroom = mainServiceRating - existingDemand - evDemandAmps;
 
