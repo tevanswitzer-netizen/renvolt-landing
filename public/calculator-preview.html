@@ -1343,7 +1343,7 @@
         <div class="card">
           <div class="card-title">
             Panel Capacity Sizing Check
-            <span class="badge">Rule 8-200</span>
+            <span class="badge" id="panelCardBadge">Rule 8-200</span>
           </div>
 
           <div class="switch-container">
@@ -1533,7 +1533,26 @@
               <textarea id="subpanelNotes" placeholder="e.g. Existing 100A sub in detached garage, 2 slots free, Square D QO panel, breaker accessible from south wall..." style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: var(--radius-sm); padding: 10px; height: 68px; font-size: 12px; outline: none; resize: none;"></textarea>
             </div>
           </div>
-          <!-- end panelCalcFields -->
+          </div><!-- end panelCalcFields -->
+
+          <!-- COMMERCIAL PANEL HEADROOM INPUTS -->
+          <div id="commercialCalcFields" style="display: none;">
+            <div class="input-row">
+              <div class="form-group">
+                <label>Main Service Rating (A, 3Ø)</label>
+                <input type="number" id="commServiceAmps" value="200" min="1" step="any" onchange="runElectricalMath()" oninput="runElectricalMath()">
+                <div style="font-size: 10px; color: var(--color-muted); margin-top: 2px;">From load calc / engineer / utility – do not guess.</div>
+              </div>
+              <div class="form-group">
+                <label>Existing Demand or Allowed EV Headroom (A)</label>
+                <input type="number" id="commExistingDemand" value="100" min="0" step="any" onchange="runElectricalMath()" oninput="runElectricalMath()">
+                <div style="font-size: 10px; color: var(--color-muted); margin-top: 2px;">From load calc / engineer / utility – do not guess.</div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; padding: 10px 12px; background: rgba(249, 115, 22, 0.08); border: 1px solid var(--color-warning); border-radius: var(--radius-sm); font-size: 11px; color: var(--color-warning); line-height: 1.4;">
+              ⚠️ <strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.
+            </div>
+          </div>
 
           <div class="input-row">
             <div class="form-group">
@@ -2221,6 +2240,19 @@
     function updateSystemType(val) {
       systemMode = val === 'commercial' ? 'commercial' : 'residential';
       systemVoltage = systemMode === 'commercial' ? 208 : 240;
+
+      const resFields = document.getElementById('panelCalcFields');
+      const commFields = document.getElementById('commercialCalcFields');
+      if (resFields && commFields) {
+        if (systemMode === 'commercial') {
+          resFields.style.display = 'none';
+          commFields.style.display = 'block';
+        } else {
+          resFields.style.display = 'block';
+          commFields.style.display = 'none';
+        }
+      }
+
       const currentHardware = document.getElementById('chargerHardwareSelect')?.value || 'grizzle';
       renderAmpButtons(currentHardware);
       runElectricalMath();
@@ -2649,106 +2681,132 @@
         return runElectricalMath();
       }
 
-      // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200)
+      // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200 vs Commercial Headroom Check)
       let panelDemandAmps = 0;
-      let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
-      
-      const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
-      const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
-
-      // Utility operator dropdown is always visible — no toggle logic needed
-
-      // Run the FULL Rule 8-200 dwelling demand calculation.
-      // When EVEMS is active, the only difference is EVSE load = 0W per Rule 8-106.
-      let calculatedWatts = 0;
-      
-      // A. Basic Floor Area Demand (Rule 8-200(1)(a)(i))
-      let floorAreaValue = parseInt(document.getElementById('floorArea').value);
-      calculatedWatts += 5000; // First 90 sq meters demand load is 5000W
-      if (floorAreaValue > 90) {
-        calculatedWatts += Math.ceil((floorAreaValue - 90) / 90) * 1000;
-      }
-
-      // B. Electric Range/Stove Load (Rule 8-200(1)(a)(ii) & Table 14)
-      if (document.getElementById('loadStove').checked) {
-        calculatedWatts += 6000; // First 12kW demand is 6000W
-      }
-
-      // C. Domestic Dryer (Rule 8-200(1)(a)(vi) / Table 28)
-      // When an electric range is present, additional appliances >1500W are added at 25% of nameplate
-      const hasRange = document.getElementById('loadStove').checked;
-      if (document.getElementById('loadDryer').checked) {
-        const dryerNameplate = 2500;
-        calculatedWatts += hasRange ? (dryerNameplate * 0.25) : dryerNameplate;
-      }
-
-      // D. Hot Water tank (Rule 8-200(1)(a)(vi))
-      // Storage-type electric: 25% of nameplate when range is present
-      // Gas/Tankless: 0W
-      const hotWaterNameplate = parseInt(document.getElementById('loadWater').value) || 0;
-      if (hotWaterNameplate > 0) {
-        calculatedWatts += hasRange ? (hotWaterNameplate * 0.25) : hotWaterNameplate;
-      }
-
-      // E. Thermal loads space cooling vs space heating (Larger of AC vs Heat - Rule 8-200(1)(a)(iv))
-      let acWatts = document.getElementById('loadAC').checked ? 4000 : 0;
-      
-      let rawHeatingInput = parseInt(document.getElementById('loadHeating').value);
-      let heatingWatts = 0;
-      if (rawHeatingInput > 0) {
-        // First 10kW heating load calculated at 100%, balance at 75%
-        if (rawHeatingInput <= 10000) {
-          heatingWatts = rawHeatingInput;
-        } else {
-          heatingWatts = 10000 + (rawHeatingInput - 10000) * 0.75;
-        }
-      }
-      
-      // Select larger of thermal loads
-      calculatedWatts += Math.max(acWatts, heatingWatts);
-
-      // F. Electric Vehicle Charging Station Continuous Load (Rule 86-302 / 8-200(1)(a)(vi))
-      if (useEVEMS) {
-        // Rule 8-106: EVEMS managed load — EVSE entered as 0W in demand calculation
-        calculatedWatts += 0;
-      } else {
-        calculatedWatts += (chargerAmps * systemVoltage); // Continuous load evaluated at 100%
-      }
-
-      // Convert total calculated Watts to panel demand Amperage at systemVoltage
-      panelDemandAmps = calculatedWatts / systemVoltage;
-      let availableAmps = effectiveServiceCeiling - panelDemandAmps;
-
-      document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
-      document.getElementById('availableCapacity').value = availableAmps.toFixed(1) + " A";
-
-      // Panel Compliance Visual Feed
+      let availableAmps = 0;
       const panelBox = document.getElementById('panelCalcResult');
       const panelIcon = document.getElementById('panelCalcIcon');
       const panelText = document.getElementById('panelCalcText');
+      const panelBadge = document.getElementById('panelCardBadge');
 
-      if (useEVEMS) {
-        panelBox.className = "status-panel pass";
-        panelIcon.innerText = "⚡";
-        panelText.innerHTML = `<strong>Smart EVEMS Controller Active (Rule 8-106):</strong> EVSE continuous load entered as <strong>0W</strong> in dwelling demand. Base dwelling demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> on a ${effectiveServiceCeiling}A service — <strong>${availableAmps.toFixed(1)}A headroom available.</strong>`;
-      } else if (availableAmps >= 0) {
-        if (serviceUpgradeType === 'upgrade200a') {
-          panelBox.className = "status-panel pass";
-          panelIcon.innerText = "⚡";
-          panelText.innerHTML = `<strong>200A Service Upgrade Configured:</strong> Adequate headroom established. Calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> under new 200A ceiling limit.`;
-        } else if (availableAmps <= 10) {
-          panelBox.className = "status-panel warning";
-          panelIcon.innerText = "⚠️";
-          panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel headroom is tight. Smart EVEMS recommended to avoid utility connection upgrades.`;
-        } else {
+      if (systemMode === 'commercial') {
+        if (panelBadge) panelBadge.innerText = "3Ø 120/208V Headroom";
+
+        let mainServiceRating = Math.max(0, parseFloat(document.getElementById('commServiceAmps')?.value) || 0);
+        let existingDemand = Math.max(0, parseFloat(document.getElementById('commExistingDemand')?.value) || 0);
+        let evDemandAmps = useEVEMS ? 0 : chargerAmps;
+
+        let availableHeadroom = mainServiceRating - existingDemand - evDemandAmps;
+
+        panelDemandAmps = existingDemand + evDemandAmps;
+        availableAmps = availableHeadroom;
+
+        document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
+        document.getElementById('availableCapacity').value = availableHeadroom.toFixed(1) + " A";
+
+        if (availableHeadroom >= 0) {
           panelBox.className = "status-panel pass";
           panelIcon.innerText = "✓";
-          panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel has compliant headroom under <strong>Rule 8-200</strong>.`;
+          panelText.innerHTML = "EV load fits within provided headroom. Confirm against formal load calc before final sign-off.";
+        } else {
+          panelBox.className = "status-panel fail";
+          panelIcon.innerText = "✕";
+          panelText.innerHTML = "EV load exceeds provided headroom. Service/feeder review or mitigation (EVEMS, upgrade) required.";
         }
       } else {
-        panelBox.className = "status-panel fail";
-        panelIcon.innerText = "✕";
-        panelText.innerHTML = `Calculated load is <strong>${panelDemandAmps.toFixed(1)}A</strong>, which exceeds your ${effectiveServiceCeiling}A main service capacity! <strong>Service upgrade or EVEMS required.</strong>`;
+        if (panelBadge) panelBadge.innerText = "Rule 8-200";
+
+        let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
+        const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
+        const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
+
+        // Run the FULL Rule 8-200 dwelling demand calculation.
+        // When EVEMS is active, the only difference is EVSE load = 0W per Rule 8-106.
+        let calculatedWatts = 0;
+        
+        // A. Basic Floor Area Demand (Rule 8-200(1)(a)(i))
+        let floorAreaValue = parseInt(document.getElementById('floorArea').value);
+        calculatedWatts += 5000; // First 90 sq meters demand load is 5000W
+        if (floorAreaValue > 90) {
+          calculatedWatts += Math.ceil((floorAreaValue - 90) / 90) * 1000;
+        }
+
+        // B. Electric Range/Stove Load (Rule 8-200(1)(a)(ii) & Table 14)
+        if (document.getElementById('loadStove').checked) {
+          calculatedWatts += 6000; // First 12kW demand is 6000W
+        }
+
+        // C. Domestic Dryer (Rule 8-200(1)(a)(vi) / Table 28)
+        // When an electric range is present, additional appliances >1500W are added at 25% of nameplate
+        const hasRange = document.getElementById('loadStove').checked;
+        if (document.getElementById('loadDryer').checked) {
+          const dryerNameplate = 2500;
+          calculatedWatts += hasRange ? (dryerNameplate * 0.25) : dryerNameplate;
+        }
+
+        // D. Hot Water tank (Rule 8-200(1)(a)(vi))
+        // Storage-type electric: 25% of nameplate when range is present
+        // Gas/Tankless: 0W
+        const hotWaterNameplate = parseInt(document.getElementById('loadWater').value) || 0;
+        if (hotWaterNameplate > 0) {
+          calculatedWatts += hasRange ? (hotWaterNameplate * 0.25) : hotWaterNameplate;
+        }
+
+        // E. Thermal loads space cooling vs space heating (Larger of AC vs Heat - Rule 8-200(1)(a)(iv))
+        let acWatts = document.getElementById('loadAC').checked ? 4000 : 0;
+        
+        let rawHeatingInput = parseInt(document.getElementById('loadHeating').value);
+        let heatingWatts = 0;
+        if (rawHeatingInput > 0) {
+          // First 10kW heating load calculated at 100%, balance at 75%
+          if (rawHeatingInput <= 10000) {
+            heatingWatts = rawHeatingInput;
+          } else {
+            heatingWatts = 10000 + (rawHeatingInput - 10000) * 0.75;
+          }
+        }
+        
+        // Select larger of thermal loads
+        calculatedWatts += Math.max(acWatts, heatingWatts);
+
+        // F. Electric Vehicle Charging Station Continuous Load (Rule 86-302 / 8-200(1)(a)(vi))
+        if (useEVEMS) {
+          // Rule 8-106: EVEMS managed load — EVSE entered as 0W in demand calculation
+          calculatedWatts += 0;
+        } else {
+          calculatedWatts += (chargerAmps * systemVoltage); // Continuous load evaluated at 100%
+        }
+
+        // Convert total calculated Watts to panel demand Amperage at systemVoltage
+        panelDemandAmps = calculatedWatts / systemVoltage;
+        availableAmps = effectiveServiceCeiling - panelDemandAmps;
+
+        document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
+        document.getElementById('availableCapacity').value = availableAmps.toFixed(1) + " A";
+
+        if (useEVEMS) {
+          panelBox.className = "status-panel pass";
+          panelIcon.innerText = "⚡";
+          panelText.innerHTML = `<strong>Smart EVEMS Controller Active (Rule 8-106):</strong> EVSE continuous load entered as <strong>0W</strong> in dwelling demand. Base dwelling demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> on a ${effectiveServiceCeiling}A service — <strong>${availableAmps.toFixed(1)}A headroom available.</strong>`;
+        } else if (availableAmps >= 0) {
+          if (serviceUpgradeType === 'upgrade200a') {
+            panelBox.className = "status-panel pass";
+            panelIcon.innerText = "⚡";
+            panelText.innerHTML = `<strong>200A Service Upgrade Configured:</strong> Adequate headroom established. Calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong> under new 200A ceiling limit.`;
+          } else if (availableAmps <= 10) {
+            panelBox.className = "status-panel warning";
+            panelIcon.innerText = "⚠️";
+            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel headroom is tight. Smart EVEMS recommended to avoid utility connection upgrades.`;
+          } else {
+            panelBox.className = "status-panel pass";
+            panelIcon.innerText = "✓";
+            panelText.innerHTML = `Panel calculated demand is <strong>${panelDemandAmps.toFixed(1)}A</strong>. Panel has compliant headroom under <strong>Rule 8-200</strong>.`;
+          }
+        } else {
+          panelBox.className = "status-panel fail";
+          panelIcon.innerText = "✕";
+          panelText.innerHTML = `Calculated load is <strong>${panelDemandAmps.toFixed(1)}A</strong>, which exceeds your ${effectiveServiceCeiling}A main service capacity! <strong>Service upgrade or EVEMS required.</strong>`;
+        }
       }
 
       // Update gauges
