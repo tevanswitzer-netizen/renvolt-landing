@@ -1096,6 +1096,14 @@
           </div>
           
           <div class="form-group">
+            <label>System Type</label>
+            <select id="systemTypeSelect" onchange="updateSystemType(this.value)">
+              <option value="residential" selected>Residential – 1Ø 120/240 V (Dwelling)</option>
+              <option value="commercial">Commercial – 3Ø 120/208 V (L-L for EVSE)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
             <label>EVSE Charger Hardware Selection</label>
             <select id="chargerHardwareSelect" onchange="selectEVSEHardware(this.value)">
               <option value="grizzle" selected>Grizzl-E Classic ($499 - 40A Made in Canada)</option>
@@ -1964,6 +1972,8 @@
        ========================================================================== -->
   <script>
     // State Variables
+    let systemMode = 'residential';
+    let systemVoltage = 240;
     let chargerAmps = 32;
     let runLength = 30;
     let trenchLength = 30;
@@ -2196,7 +2206,7 @@
       ampOptions.forEach(amps => {
         const btn = document.createElement('button');
         btn.className = `btn-toggle ${chargerAmps === amps ? 'active' : ''}`;
-        const kw = ((amps * 240) / 1000).toFixed(1);
+        const kw = ((amps * systemVoltage) / 1000).toFixed(1);
         btn.innerText = `${amps}A (${kw}kW)`;
         btn.onclick = function() {
           setChargerAmps(amps, btn);
@@ -2205,6 +2215,15 @@
       });
       
       container.style.gridTemplateColumns = `repeat(${ampOptions.length}, 1fr)`;
+    }
+
+    // System Type Control Handler
+    function updateSystemType(val) {
+      systemMode = val === 'commercial' ? 'commercial' : 'residential';
+      systemVoltage = systemMode === 'commercial' ? 208 : 240;
+      const currentHardware = document.getElementById('chargerHardwareSelect')?.value || 'grizzle';
+      renderAmpButtons(currentHardware);
+      runElectricalMath();
     }
 
     // Profile Presets Loader
@@ -2540,7 +2559,7 @@
       while (iterationCount < 6) {
         let cm = CIRCULAR_MILS[finalGaugeNum] || 16510;
         let vd = (2 * K * chargerAmps * runLength) / cm;
-        vDropPercent = (vd / 240) * 100;
+        vDropPercent = (vd / systemVoltage) * 100;
         
         if (vDropPercent <= 3.0) {
           break; // Voltage drop is compliant!
@@ -2693,11 +2712,11 @@
         // Rule 8-106: EVEMS managed load — EVSE entered as 0W in demand calculation
         calculatedWatts += 0;
       } else {
-        calculatedWatts += (chargerAmps * 240); // Continuous load evaluated at 100%
+        calculatedWatts += (chargerAmps * systemVoltage); // Continuous load evaluated at 100%
       }
 
-      // Convert total calculated Watts to panel demand Amperage at 240V
-      panelDemandAmps = calculatedWatts / 240;
+      // Convert total calculated Watts to panel demand Amperage at systemVoltage
+      panelDemandAmps = calculatedWatts / systemVoltage;
       let availableAmps = effectiveServiceCeiling - panelDemandAmps;
 
       document.getElementById('totalCalcLoad').value = panelDemandAmps.toFixed(1) + " A";
