@@ -250,6 +250,68 @@
       box-shadow: var(--shadow-glow);
     }
 
+    /* CARD SPACING IN LEFT COLUMN */
+    .left-col .card {
+      margin-bottom: 20px;
+    }
+    .left-col .card + .card,
+    .left-col .tab-content .card + .card {
+      margin-top: 20px;
+    }
+
+    /* COLLAPSIBLE EXPLANATORY SECTIONS */
+    details.info-collapse {
+      background: rgba(46, 64, 54, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-top: 12px;
+      transition: var(--transition);
+    }
+    details.info-collapse[open] {
+      padding-bottom: 14px;
+    }
+    details.info-collapse summary {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-primary);
+      cursor: pointer;
+      outline: none;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.info-collapse summary::-webkit-details-marker {
+      display: none;
+    }
+    details.info-collapse summary::after {
+      content: "▼";
+      font-size: 10px;
+      color: var(--color-muted);
+      transition: transform 0.2s ease;
+    }
+    details.info-collapse[open] summary::after {
+      transform: rotate(180deg);
+    }
+    details.info-collapse .details-content {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(46, 64, 54, 0.06);
+    }
+
+    /* TIGHTEN SECONDARY HELPER & EXPLANATORY TEXT */
+    .card .helper-text,
+    .card .secondary-text,
+    .info-collapse p,
+    .info-collapse li,
+    .info-collapse div {
+      font-size: 11.5px;
+      color: var(--color-muted);
+      line-height: 1.5;
+      max-width: 680px;
+    }
+
     .card-title {
       font-family: var(--font-display);
       font-size: 16px;
@@ -1337,14 +1399,22 @@
             </div>
 
             <!-- Trenching Code & Safety Explanatory Card -->
-            <div style="margin-top: 12px; padding: 10px 12px; background: rgba(46, 64, 54, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 11px; color: var(--color-text); line-height: 1.4;">
-              💡 <strong>Rule 12-012 Burial & Warning Tape Rules:</strong> Direct burial Teck90 cable in lawn areas requires 450mm (18 in) depth. Under vehicular driveways, 600mm (24 in) depth is mandatory (or 450mm if enclosed in Schedule 40 PVC). Mandatory electrical warning tape must be placed 150mm (6 in) above cable/conduit before backfilling.
-            </div>
+            <details class="info-collapse" style="margin-top: 12px;">
+              <summary>Rule 12-012 Burial &amp; Warning Tape Rules</summary>
+              <div class="details-content">
+                <p class="helper-text" style="margin: 0;">💡 <strong>Rule 12-012 Burial & Warning Tape Rules:</strong> Direct burial Teck90 cable in lawn areas requires 450mm (18 in) depth. Under vehicular driveways, 600mm (24 in) depth is mandatory (or 450mm if enclosed in Schedule 40 PVC). Mandatory electrical warning tape must be placed 150mm (6 in) above cable/conduit before backfilling.</p>
+              </div>
+            </details>
 
-            <div class="status-panel warning" style="margin-top: 14px;">
-              <div class="status-icon">⚠️</div>
-              <div><strong>Alberta Permit Mandatory Notice:</strong> Excavation in Alberta legally requires underground utility locates. Prior to breaking ground, clear gas, power, water, and telecom lines via <strong>Alberta One-Call (AB811)</strong>.</div>
-            </div>
+            <details class="info-collapse" style="margin-top: 14px;">
+              <summary>Alberta One-Call / AB811 Notice</summary>
+              <div class="details-content">
+                <div class="status-panel warning" style="margin-top: 0;">
+                  <div class="status-icon">⚠️</div>
+                  <div style="font-size: 11.5px; line-height: 1.5; max-width: 680px;"><strong>Alberta Permit Mandatory Notice:</strong> Excavation in Alberta legally requires underground utility locates. Prior to breaking ground, clear gas, power, water, and telecom lines via <strong>Alberta One-Call (AB811)</strong>.</div>
+                </div>
+              </div>
+            </details>
           </div>
           <div id="detachedDisabledNotice" style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">
             Select "Detached Garage Install" above to configure underground trench specifications.
@@ -1567,9 +1637,9 @@
               <div class="status-icon" style="font-size: 14px;">⚠️</div>
               <div>Main service rating and existing demand are required for a meaningful commercial headroom result.</div>
             </div>
-            <div class="status-panel warning" style="margin-top: 10px; font-size: 11px;">
+            <div class="status-panel warning" style="margin-top: 18px; padding: 10px 14px; font-size: 11.5px; line-height: 1.5;">
               <div class="status-icon" style="font-size: 14px;">⚠️</div>
-              <div><strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.</div>
+              <div style="color: var(--color-muted); max-width: 680px;"><strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.</div>
             </div>
           </div>
 
