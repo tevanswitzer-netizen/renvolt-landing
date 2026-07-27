@@ -2926,8 +2926,7 @@
         terminalAlertText = `<strong>Terminal Size Compliance Alert:</strong> Standard calculations suggest #${calculatedGauge === 0 ? '1/0' : calculatedGauge} AWG, but the <strong>${spec.name}</strong> terminals require a minimum conductor size of <strong>#${spec.minAWG} AWG</strong>. Wire size has been automatically upsized for hardware compatibility.`;
         finalGaugeNum = spec.minAWG;
       }
-      
-      let terminalAlertText = "";
+
 
       if (!isAWGFitting(finalGaugeNum, spec.minAWG, spec.maxAWG)) {
         terminalAlertClass = "fail";
