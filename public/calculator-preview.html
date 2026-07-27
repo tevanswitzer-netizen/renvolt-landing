@@ -1130,6 +1130,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           CRM Workspace
         </button>
+        <button class="tab-btn" onclick="switchTab('dataTab', this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Data Backup
+        </button>
       </div>
 
       <!-- TAB 1: CEC SIZING -->
@@ -1832,23 +1836,25 @@
         </div>
       </div>
 
-      <!-- DATA MANAGEMENT: EXPORT / IMPORT -->
-      <div class="card" style="margin-top: 16px;">
-        <div class="card-title">
-          Data Backup & Transfer
-          <span class="badge" style="background-color: rgba(46,64,54,0.08); border-color: var(--color-primary); color: var(--color-primary);">Portable</span>
-        </div>
-        <p style="font-size: 12px; color: var(--color-muted); margin-bottom: 14px;">
-          Export all your saved quotes and CRM leads as a JSON file. Use this to back up your data, move between browsers, or transfer between your laptop and phone.
-        </p>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn btn-success" onclick="exportAllDataAsJSON()" style="padding: 10px 18px; font-size: 13px;">
-            📥 Export All Data (JSON)
-          </button>
-          <button class="btn btn-secondary" onclick="document.getElementById('jsonImportInput').click()" style="padding: 10px 18px; font-size: 13px;">
-            📤 Import Data (JSON)
-          </button>
-          <input type="file" id="jsonImportInput" accept=".json" onchange="importAllDataFromJSON(this)" style="display: none;">
+      <!-- TAB 7: DATA MANAGEMENT: EXPORT / IMPORT -->
+      <div id="dataTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            Data Backup & Transfer
+            <span class="badge" style="background-color: rgba(46,64,54,0.08); border-color: var(--color-primary); color: var(--color-primary);">Portable</span>
+          </div>
+          <p style="font-size: 12px; color: var(--color-muted); margin-bottom: 14px;">
+            Export all your saved quotes and CRM leads as a JSON file. Use this to back up your data, move between browsers, or transfer between your laptop and phone.
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-success" onclick="exportAllDataAsJSON()" style="padding: 10px 18px; font-size: 13px;">
+              📥 Export All Data (JSON)
+            </button>
+            <button class="btn btn-secondary" onclick="document.getElementById('jsonImportInput').click()" style="padding: 10px 18px; font-size: 13px;">
+              📤 Import Data (JSON)
+            </button>
+            <input type="file" id="jsonImportInput" accept=".json" onchange="importAllDataFromJSON(this)" style="display: none;">
+          </div>
         </div>
       </div>
 
