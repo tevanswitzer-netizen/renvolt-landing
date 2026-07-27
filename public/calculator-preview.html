@@ -1112,6 +1112,37 @@
       gap: 6px;
     }
 
+    /* SANDWICH DROPDOWN MENU FOR TABS */
+    .tab-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .tab-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 6px;
+      background: #111a14;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      z-index: 1000;
+      min-width: 210px;
+      padding: 8px;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tab-dropdown-content.show {
+      display: flex;
+    }
+    .tab-dropdown-content .tab-btn {
+      width: 100%;
+      justify-content: flex-start;
+      border-radius: var(--radius-sm);
+      margin: 0;
+    }
+
     .print-only {
       display: none;
     }
@@ -1143,11 +1174,31 @@
           <span class="brand-tag">EV Installation Calculator</span>
         </div>
       </div>
-      <div class="header-meta no-print">
-        <p>CEC Code Edition: <strong>2024 (CSA C22.1-24)</strong></p>
-        <p>Market Zone: <strong>Edmonton & Greater Area</strong></p>
+      <div class="header-meta no-print" style="display: flex; align-items: center; gap: 16px;">
+        <div>
+          <p>CEC Code Edition: <strong>2024 (CSA C22.1-24)</strong></p>
+          <p>Market Zone: <strong>Edmonton & Greater Area</strong></p>
+        </div>
+        <button class="btn-preset" onclick="toggleTechNotesModal()" style="font-weight: 700; color: var(--color-primary); border-color: var(--color-primary); padding: 8px 14px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+          📌 Tech Notes ☰
+        </button>
       </div>
     </header>
+
+    <!-- TECH NOTES & ASSUMPTIONS MODAL / SLIDE-DOWN PANEL -->
+    <div id="techNotesModal" class="card tech-notes-card no-print" style="display: none; margin: 10px 0 20px 0; border-color: var(--color-primary) !important;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+        <span style="font-weight: 700; font-size: 14px; color: var(--color-primary);">📌 CEC-2024 Tech Notes &amp; Engineering Assumptions</span>
+        <button class="btn-preset" onclick="toggleTechNotesModal()" style="padding: 4px 10px; font-size: 12px;">✕ Close</button>
+      </div>
+      <ul class="tech-notes-list" style="font-size: 12px; color: var(--color-text);">
+        <li><strong>Branch voltage drop target:</strong> 3% (Rule 8‑102) – tool warns when above this.</li>
+        <li><strong>Residential demand logic:</strong> Dwelling demand per CEC 8‑200 (floor area, range, dryer, fixed loads).</li>
+        <li><strong>Commercial mode:</strong> Uses engineer/utility-provided service rating and existing demand/headroom; does NOT perform full CEC 8‑4xx demand calculation.</li>
+        <li><strong>EV loads:</strong> One EV branch circuit per calculation. Multiple EVSEs or depots require separate engineered load design.</li>
+        <li><strong>Pricing:</strong> Material and labour costs based on mid‑2026 Edmonton wholesaler and trade rates; adjust periodically as needed.</li>
+      </ul>
+    </div>
 
     <!-- TOP CONTROL PANEL: INSTALL PROFILES & LOCAL DATABASE -->
     <div class="presets-panel no-print">
@@ -1203,18 +1254,27 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           Quoting / Takeoff
         </button>
-        <button class="tab-btn" onclick="switchTab('exportsTab', this)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-          Exporters
-        </button>
-        <button class="tab-btn" onclick="switchTab('crmTab', this)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          CRM Workspace
-        </button>
-        <button class="tab-btn" onclick="switchTab('dataTab', this)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Data Backup
-        </button>
+        <!-- SANDWICH DROPDOWN MENU FOR SECONDARY TOOLS -->
+        <div class="tab-dropdown">
+          <button class="tab-btn tab-dropdown-btn" id="tabDropdownBtn" onclick="toggleTabDropdown(event)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            Data &amp; Tools ▾
+          </button>
+          <div class="tab-dropdown-content" id="tabDropdownMenu">
+            <button class="tab-btn" onclick="switchTab('exportsTab', this); closeTabDropdown();">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+              Exporters
+            </button>
+            <button class="tab-btn" onclick="switchTab('crmTab', this); closeTabDropdown();">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              CRM Workspace
+            </button>
+            <button class="tab-btn" onclick="switchTab('dataTab', this); closeTabDropdown();">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Data Backup
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- TAB 1: CEC SIZING -->
@@ -1939,24 +1999,7 @@
         </div>
       </div>
 
-      <!-- TECH NOTES & ENGINEERING ASSUMPTIONS -->
-      <div class="card tech-notes-card">
-        <details>
-          <summary class="tech-notes-summary">
-            <span>📌 Tech Notes &amp; Assumptions</span>
-            <span class="tech-notes-badge">CEC-2024</span>
-          </summary>
-          <div class="tech-notes-content">
-            <ul class="tech-notes-list">
-              <li><strong>Branch voltage drop target:</strong> 3% (Rule 8‑102) – tool warns when above this.</li>
-              <li><strong>Residential demand logic:</strong> Dwelling demand per CEC 8‑200 (floor area, range, dryer, fixed loads).</li>
-              <li><strong>Commercial mode:</strong> Uses engineer/utility-provided service rating and existing demand/headroom; does NOT perform full CEC 8‑4xx demand calculation.</li>
-              <li><strong>EV loads:</strong> One EV branch circuit per calculation. Multiple EVSEs or depots require separate engineered load design.</li>
-              <li><strong>Pricing:</strong> Material and labour costs based on mid‑2026 Edmonton wholesaler and trade rates; adjust periodically as needed.</li>
-            </ul>
-          </div>
-        </details>
-      </div>
+      <!-- Tech Notes moved to Header Modal for Maximum Screen Cleanup -->
 
       <!-- TAB 6: QUOTING & TAKEOFF -->
       <div id="quoteTab" class="tab-content">
@@ -2562,7 +2605,35 @@
       // Show target tab
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
+      
+      const dropdownBtn = document.getElementById('tabDropdownBtn');
+      if (dropdownBtn) {
+        if (btnElement && btnElement.closest('.tab-dropdown-content')) {
+          dropdownBtn.classList.add('active');
+        } else {
+          dropdownBtn.classList.remove('active');
+        }
+      }
     }
+
+    function toggleTabDropdown(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('tabDropdownMenu');
+      if (menu) menu.classList.toggle('show');
+    }
+    function closeTabDropdown() {
+      const menu = document.getElementById('tabDropdownMenu');
+      if (menu && menu.classList.contains('show')) menu.classList.remove('show');
+    }
+    function toggleTechNotesModal() {
+      const modal = document.getElementById('techNotesModal');
+      if (modal) modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('.tab-dropdown')) {
+        closeTabDropdown();
+      }
+    });
 
     function getRecommendedBreaker(amps) {
       let calculatedBreakerAmps = Math.ceil(amps * 1.25);
