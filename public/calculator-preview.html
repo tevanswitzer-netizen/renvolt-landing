@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Renvolt | Mobile Electrical Design & Quoting Cockpit</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#10b981">
   <!-- Google Fonts: Cormorant Garamond, IBM Plex Mono, and Plus Jakarta Sans (Branded) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1116,6 +1118,7 @@
     .tab-dropdown {
       position: relative;
       display: inline-block;
+      cursor: pointer;
     }
     .tab-dropdown-content {
       display: none;
@@ -2629,11 +2632,32 @@
       const modal = document.getElementById('techNotesModal');
       if (modal) modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
     }
-    window.addEventListener('click', function(e) {
+    let lastDropdownCloseTime = 0;
+    function handleOutsideDropdownClose(e) {
+      if (Date.now() - lastDropdownCloseTime < 300) return;
       if (!e.target.closest('.tab-dropdown')) {
+        lastDropdownCloseTime = Date.now();
         closeTabDropdown();
       }
+    }
+    ['click', 'touchend'].forEach(evt => window.addEventListener(evt, handleOutsideDropdownClose, { passive: true }));
+
+    // Safe non-negative input guard helper
+    window.addEventListener('input', function(e) {
+      if (e.target.matches('input[type="number"], .takeoff-input, #crmLeadRunLength, #crmLeadTrenchLength, #labourRate, #utilitySurcharge')) {
+        if (e.target.value !== "" && Number(e.target.value) < 0) {
+          e.target.value = Math.abs(Number(e.target.value));
+          if (typeof runElectricalMath === 'function') runElectricalMath();
+        }
+      }
     });
+
+    // Basic PWA Service Worker Stub
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
 
     function getRecommendedBreaker(amps) {
       let calculatedBreakerAmps = Math.ceil(amps * 1.25);
@@ -3802,14 +3826,27 @@
       document.getElementById('quoteNameInput').value = "";
       refreshSavedQuotesDropdown();
       
+      // Increment save counter for JSON backup reminder
+      let saveCount = parseInt(localStorage.getItem('renvolt_save_counter') || '0', 10) + 1;
+      localStorage.setItem('renvolt_save_counter', saveCount.toString());
+
       // Notify Copied/Saved
       const toast = document.getElementById('toast');
-      toast.textContent = "Quote saved successfully!";
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-        toast.textContent = "Successfully copied to clipboard!";
-      }, 3000);
+      if (saveCount % 5 === 0) {
+        toast.textContent = "Reminder: You’ve saved several quotes on this device. Use Backup to JSON to keep an offline copy in Google Drive or iCloud.";
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = "Successfully copied to clipboard!";
+        }, 5000);
+      } else {
+        toast.textContent = "Quote saved successfully!";
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = "Successfully copied to clipboard!";
+        }, 3000);
+      }
     }
 
     function loadQuoteFromDB(name) {
