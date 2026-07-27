@@ -2007,8 +2007,14 @@
       <!-- TAB 6: QUOTING & TAKEOFF -->
       <div id="quoteTab" class="tab-content">
         <div class="card">
-          <div class="card-title">
-            T&amp;M Quoting Engine &amp; Takeoff Sheet
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="logo-transparent-dark.png" alt="Revolt Electric" style="height: 28px; width: auto;">
+              <div>
+                <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--color-primary); line-height: 1.1;">Revolt Electric</div>
+                <div style="font-size: 11px; color: var(--color-muted);">T&amp;M Quoting Engine &amp; Takeoff Sheet</div>
+              </div>
+            </div>
             <span class="badge" style="background-color: var(--color-success); border-color: var(--color-success); color: var(--bg-main);">Interactive</span>
           </div>
 
@@ -2131,97 +2137,109 @@
     <!-- ==========================================================================
          PRINT ONLY LAYOUT (Highly clean Corporate PDF Sheet)
          ========================================================================== -->
-    <div class="print-only" style="width: 100%; padding: 30px; color: black; background: white;">
-      <h2 style="font-family: var(--font-display); font-size: 28px; border-bottom: 2px solid black; padding-bottom: 8px; margin-bottom: 24px;">
-        RENVOLT SITE ASSESSMENT & TECHNICAL PROPOSAL
-      </h2>
-      
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-        <div>
-          <h3 style="font-size: 14px; text-transform: uppercase; color: #555; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">CLIENT & PROJECT GENERAL INFO</h3>
-          <p style="margin-bottom: 5px;"><strong>Project Jurisdiction:</strong> Edmonton & Greater Area, AB</p>
-          <p style="margin-bottom: 5px;"><strong>Target Schedule:</strong> Weekend Installation Operations (Fri - Sun)</p>
-          <p style="margin-bottom: 5px;"><strong>Permitting Standard:</strong> CSA C22.1-24 (CEC 2024 Edition)</p>
-          <p id="printInstallationType" style="margin-bottom: 5px;"><strong>Installation Archetype:</strong> Attached Garage Install</p>
+    <!-- ==========================================================================
+         PRINT ONLY LAYOUT (Customer-Facing Revolt Electric Proposal)
+         ========================================================================== -->
+    <div class="print-only" style="width: 100%; padding: 40px; color: #1a1a1a; background: white; font-family: var(--font-body), sans-serif;">
+      <!-- Branded Header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 20px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="logo-transparent-dark.png" alt="Revolt Electric" style="height: 48px; width: auto;">
+          <div>
+            <h1 style="font-family: var(--font-display); font-size: 26px; margin: 0; color: #111a14; font-weight: 800;">Revolt Electric</h1>
+            <p style="margin: 0; font-size: 12px; color: #555; font-weight: 600;">Premium EV Charging Solutions</p>
+          </div>
         </div>
-        <div>
-          <h3 style="font-size: 14px; text-transform: uppercase; color: #555; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 3px;">TECHNICAL LOAD DESIGN</h3>
-          <p id="printBreaker" style="margin-bottom: 5px;"><strong>Breaker Size:</strong> 40A 2-Pole (Continuous Sizing Rule 86-306)</p>
-          <p id="printWire" style="margin-bottom: 5px;"><strong>Circuit Conductors:</strong> #8 AWG Copper (75C terminal compliance)</p>
-          <p id="printVD" style="margin-bottom: 5px;"><strong>Calculated Voltage Drop:</strong> 0.85% (Compliant &le; 3% Rule 8-102)</p>
-          <p id="printCalculatedLoad" style="margin-bottom: 5px;"><strong>Calculated Panel Demand:</strong> 54.2 A (Headroom Calculation check)</p>
+        <div style="text-align: right; font-size: 12px; color: #444; line-height: 1.5;">
+          <p style="margin: 0;"><strong>Edmonton &amp; Greater Area, AB</strong></p>
+          <p style="margin: 0;">Phone: (780) 555-EVSE | Email: quotes@revoltelectric.ca</p>
+          <p style="margin: 0;">Web: www.revoltelectric.ca</p>
         </div>
       </div>
 
-      <h3 style="font-size: 16px; border-bottom: 1px solid #999; padding-bottom: 4px; margin-bottom: 12px; text-transform: uppercase;">MATERIALS & TRADE ESTIMATE</h3>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;" id="printMaterialsTable">
+      <!-- Customer & Quote Metadata -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8faf9; padding: 16px; border-radius: 6px; margin-bottom: 28px; border: 1px solid #e2e8e5; font-size: 13px;">
+        <div>
+          <p style="margin: 0 0 6px 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: 700;">PREPARED FOR CLIENT</p>
+          <p style="margin: 0 0 4px 0; font-size: 15px;"><strong id="printClientName">Valued Customer</strong></p>
+          <p style="margin: 0; color: #444;" id="printSiteAddress">Site Address: On File / Edmonton Area</p>
+        </div>
+        <div style="text-align: right;">
+          <p style="margin: 0 0 4px 0;"><strong>Quote #:</strong> <span id="printQuoteNum">REV-2026-001</span></p>
+          <p style="margin: 0 0 4px 0;"><strong>Issue Date:</strong> <span id="printIssueDate"></span></p>
+          <p style="margin: 0; color: #10b981;"><strong>Valid Until:</strong> <span id="printValidUntil"></span></p>
+        </div>
+      </div>
+
+      <!-- High-Level Scope Line Items (No technical engineering exposure) -->
+      <h3 style="font-size: 14px; text-transform: uppercase; color: #111a14; margin-bottom: 12px; border-bottom: 1px solid #ccc; padding-bottom: 6px;">INVESTMENT &amp; SCOPE OF WORK</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;" id="printCustomerTable">
         <thead>
-          <tr style="border-bottom: 1.5px solid black;">
-            <th style="text-align: left; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px;">Material / Service Specification</th>
-            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 80px;">Quantity</th>
-            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 100px;">Unit Price</th>
-            <th style="text-align: right; padding: 8px; color: black; font-weight: bold; background: none; font-size: 12px; width: 120px;">Total Price</th>
+          <tr style="border-bottom: 2px solid #111a14; background: #f2f4f3;">
+            <th style="text-align: left; padding: 10px; font-weight: 700;">Description of Services</th>
+            <th style="text-align: right; padding: 10px; font-weight: 700; width: 140px;">Amount</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Populated dynamically via JS -->
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px;"><strong>Dedicated EV Charger Circuit &amp; Commissioning</strong><br><span style="font-size: 11.5px; color: #555;">Supply and installation of dedicated circuit, hardware mounting, safety testing, and client orientation.</span></td>
+            <td style="padding: 12px 10px; text-align: right; font-weight: 600;" id="printLineEVSE">$0.00</td>
+          </tr>
+          <tr id="printRowPanel" style="border-bottom: 1px solid #eee; display: none;">
+            <td style="padding: 12px 10px;"><strong>Electrical Panel &amp; Service Management Work</strong><br><span style="font-size: 11.5px; color: #555;">Required panel breaker allocation, service upgrades, or smart EVEMS energy management installation.</span></td>
+            <td style="padding: 12px 10px; text-align: right; font-weight: 600;" id="printLinePanel">$0.00</td>
+          </tr>
+          <tr id="printRowTrench" style="border-bottom: 1px solid #eee; display: none;">
+            <td style="padding: 12px 10px;"><strong>Underground Trenching &amp; Conduit System</strong><br><span style="font-size: 11.5px; color: #555;">Excavation, PVC/Teck conduit routing, burial warning tape, and surface backfilling.</span></td>
+            <td style="padding: 12px 10px; text-align: right; font-weight: 600;" id="printLineTrench">$0.00</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px 10px;"><strong>Electrical Permitting &amp; Inspection Fees</strong><br><span style="font-size: 11.5px; color: #555;">City of Edmonton permitting, utility coordination, and official safety inspection compliance.</span></td>
+            <td style="padding: 12px 10px; text-align: right; font-weight: 600;" id="printLinePermit">$0.00</td>
+          </tr>
+          <tr id="printRowMisc" style="border-bottom: 1px solid #eee; display: none;">
+            <td style="padding: 12px 10px;"><strong>Additional Electrical Work &amp; Custom Adders</strong><br><span style="font-size: 11.5px; color: #555;">Site-specific custom hardware, concrete boring, or utility disconnect coordination.</span></td>
+            <td style="padding: 12px 10px; text-align: right; font-weight: 600;" id="printLineMisc">$0.00</td>
+          </tr>
         </tbody>
       </table>
 
-      <!-- CLIENT-SAFE totals block: subtotal, permit passthrough, GST, grand total -->
-      <div style="display: flex; justify-content: flex-end; margin-top: 16px; margin-bottom: 30px;">
-        <table style="border-collapse: collapse; min-width: 320px; font-size: 12px;">
+      <!-- Totals Block -->
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 30px;">
+        <table style="border-collapse: collapse; min-width: 280px; font-size: 13px;">
           <tr>
-            <td style="padding: 6px 16px 6px 0; color: #555;">Labour &amp; Materials Subtotal</td>
-            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printSubtotal">$0.00</td>
+            <td style="padding: 6px 12px 6px 0; color: #555;">Subtotal</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printSummarySubtotal">$0.00</td>
           </tr>
           <tr>
-            <td style="padding: 6px 16px 6px 0; color: #555;">Electrical Permit (City of Edmonton)</td>
-            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printPermitLine">$166.40</td>
+            <td style="padding: 6px 12px 6px 0; color: #555;">GST (5%)</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printSummaryGST">$0.00</td>
           </tr>
-          <tr id="printUpgradePermitLine" style="display: none;">
-            <td style="padding: 6px 16px 6px 0; color: #555;">Service Upgrade Permit</td>
-            <td style="padding: 6px 0; text-align: right; font-weight: 600;">$175.00</td>
-          </tr>
-          <tr id="printUtilityLine" style="display: none;">
-            <td style="padding: 6px 16px 6px 0; color: #555;" id="printUtilityLabel">Utility Disconnect/Reconnect Fee</td>
-            <td style="padding: 6px 0; text-align: right; font-weight: 600;" id="printUtilityFee">$0.00</td>
-          </tr>
-          <tr style="border-top: 1px solid #ccc;">
-            <td style="padding: 8px 16px 4px 0; color: #555;">GST (5%)</td>
-            <td style="padding: 8px 0 4px 0; text-align: right; font-weight: 600;" id="printGST">$0.00</td>
-          </tr>
-          <tr style="border-top: 2px solid black;">
-            <td style="padding: 10px 16px 0 0; font-size: 14px; font-weight: 800; text-transform: uppercase;">Total (Including GST)</td>
-            <td style="padding: 10px 0 0 0; text-align: right; font-size: 20px; font-weight: 800;" id="printTotalEstimate">$0.00</td>
+          <tr style="border-top: 2px solid #111a14;">
+            <td style="padding: 10px 12px 0 0; font-size: 15px; font-weight: 800; text-transform: uppercase;">Total Due (CAD)</td>
+            <td style="padding: 10px 0 0 0; text-align: right; font-size: 22px; font-weight: 800; color: #10b981;" id="printSummaryTotal">$0.00</td>
           </tr>
         </table>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; page-break-inside: avoid;">
+      <!-- Scope Summary & Exclusions (Editable Textareas for Electrician customization) -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; font-size: 12px;">
         <div>
-          <h3 style="font-size: 12px; text-transform: uppercase; color: #555; margin-bottom: 6px;">COMPLIANCE &amp; ENGINEERING CODE ATTESTATION</h3>
-          <p style="font-size: 11px; line-height: 1.5; color: #444;">
-            All branch circuit designs, wire sizing configurations, and panel load demand assessments strictly adhere to the Canadian Electrical Code (CEC) 2024 Edition. All work is legally filed and permitted by a licensed Master Electrician of record with the City of Edmonton digital safety portal. Standard safety code inspections booked upon installation completion.
-          </p>
+          <h4 style="margin: 0 0 6px 0; color: #111a14; font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 4px;">Scope of Work (Included)</h4>
+          <textarea class="no-print" id="editScopeText" style="width: 100%; height: 70px; font-size: 11px; padding: 6px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 4px;" oninput="document.getElementById('printScopeText').innerText = this.value">Dedicated EV charging circuit installation, charger mounting, safety testing, basic site cleanup, and permit/inspection coordination.</textarea>
+          <p class="print-only" id="printScopeText" style="margin: 0; color: #444; line-height: 1.5;">Dedicated EV charging circuit installation, charger mounting, safety testing, basic site cleanup, and permit/inspection coordination.</p>
         </div>
-        <div style="border: 1px solid #ccc; padding: 14px; font-size: 11px; color: #555;">
-          <p style="font-weight: 700; margin-bottom: 4px; text-transform: uppercase;">Payment Terms</p>
-          <p style="margin-bottom: 4px;">50% deposit due upon booking confirmation.</p>
-          <p style="margin-bottom: 4px;">Balance due upon installation completion.</p>
-          <p>E-transfer: renvolt@gmail.com</p>
+        <div>
+          <h4 style="margin: 0 0 6px 0; color: #111a14; font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 4px;">Assumptions &amp; Exclusions</h4>
+          <textarea class="no-print" id="editExclusionsText" style="width: 100%; height: 70px; font-size: 11px; padding: 6px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 4px;" oninput="document.getElementById('printExclusionsText').innerText = this.value">Drywall repair/painting excluded. Landscaping beyond trench path excluded. Correction of pre-existing code deficiencies excluded unless listed.</textarea>
+          <p class="print-only" id="printExclusionsText" style="margin: 0; color: #444; line-height: 1.5;">Drywall repair/painting excluded. Landscaping beyond trench path excluded. Correction of pre-existing code deficiencies excluded unless listed.</p>
         </div>
       </div>
 
-      <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
-        <div style="border-top: 1px solid black; padding-top: 8px;">
-          <p style="font-size: 11px; color: #555; margin-bottom: 20px;">Renvolt Authorized Representative</p>
-          <p style="font-size: 13px; font-weight: 600;">Renvolt Electrical Ltd.</p>
-        </div>
-        <div style="border-top: 1px solid black; padding-top: 8px;">
-          <p style="font-size: 11px; color: #555; margin-bottom: 20px;">Client Agreement &amp; Authorization</p>
-          <p style="font-size: 13px; font-weight: 600;">Date: ________________________</p>
-        </div>
+      <!-- Terms and Conditions -->
+      <div style="border-top: 1px solid #ddd; padding-top: 16px; font-size: 11px; color: #666; line-height: 1.5;">
+        <p style="margin: 0 0 4px 0;"><strong>Payment Terms:</strong> 50% deposit upon quote acceptance; balance due upon satisfactory installation and electrical inspection approval.</p>
+        <p style="margin: 0;"><strong>Scheduling &amp; Validity:</strong> Standard installation timeline is 1-2 weeks from permit approval. This quote is valid for 30 days from issue date.</p>
       </div>
     </div>
 
@@ -3440,16 +3458,6 @@
           ${actionCell}
         `;
         tbody.appendChild(tr);
-
-        // Render PDF Proposal Print Table Row (Plain text values, no input boxes — shows client-facing marked up price)
-        let ptr = document.createElement("tr");
-        ptr.innerHTML = `
-          <td style="padding: 8px; border-bottom: 1px solid #eee; font-size: 11px;">${item.name}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">${item.qty}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">$${(item.cost).toFixed(2)}</td>
-          <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-size: 11px;">$${itemMarkedUpSum.toFixed(2)}</td>
-        `;
-        printTbody.appendChild(ptr);
       });
 
       // 6. Labour hours calculations (Time & Materials)
@@ -3546,37 +3554,60 @@
       document.getElementById('profitVal').innerText = "$" + grossProfitValue.toFixed(2);
       document.getElementById('marginVal').innerText = grossMarginPercentage.toFixed(0) + "%";
 
-      // Render client-safe PDF print fields
-      document.getElementById('printSubtotal').innerText = "$" + subtotalBeforeTax.toFixed(2);
-      document.getElementById('printPermitLine').innerText = "$" + permitCostFee.toFixed(2);
-      // Service upgrade permit row
-      const printUpgRow = document.getElementById('printUpgradePermitLine');
-      if (printUpgRow) printUpgRow.style.display = upgradePermitFee > 0 ? 'table-row' : 'none';
-      // Utility fee row
-      const printUtilRow = document.getElementById('printUtilityLine');
-      const utilLabel = document.getElementById('printUtilityLabel');
-      const utilFeeEl = document.getElementById('printUtilityFee');
-      if (printUtilRow && utilLabel && utilFeeEl) {
-        if (utilitySurcharge > 0) {
-          const op = document.getElementById('utilityOperatorSelect')?.value || 'none';
-          const opName = op === 'epcor' ? 'EPCOR' : op === 'fortis' ? 'FortisAlberta' : 'Utility';
-          utilLabel.innerText = opName + ' Disconnect/Reconnect Fee';
-          utilFeeEl.innerText = '$' + utilitySurcharge.toFixed(2);
-          printUtilRow.style.display = 'table-row';
-        } else {
-          printUtilRow.style.display = 'none';
+      // 5. Build Aggregated Customer Quote State (Separating internal math from customer view)
+      const evseLineTotal = subtotalBeforeTax - trenchCostTotal - (useEVEMS ? 1725 : 0) - (upgradePermitFee > 0 ? 850 : 0);
+      const panelLineTotal = (useEVEMS ? 1725 : 0) + (upgradePermitFee > 0 ? 850 : 0);
+      const miscLineTotal = customItems.reduce((sum, item) => sum + (item.qty * item.cost), 0) + Number(document.getElementById('utilitySurcharge')?.value || 0);
+
+      const quoteState = {
+        clientName: document.getElementById('quoteNameInput')?.value.trim() || "Valued Customer",
+        quoteNum: "REV-" + new Date().getFullYear() + "-" + Math.floor(100 + Math.random() * 900),
+        issueDate: new Date().toLocaleDateString('en-CA'),
+        validUntil: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-CA'),
+        evseAmount: Math.max(0, evseLineTotal),
+        panelAmount: panelLineTotal,
+        trenchAmount: trenchCostTotal,
+        permitAmount: permitCostFee + upgradePermitFee,
+        miscAmount: miscLineTotal,
+        subtotal: subtotalBeforeTax + permitCostFee + upgradePermitFee,
+        gst: gstAmount,
+        total: grandTotal
+      };
+
+      // Populate customer-facing printable quote (No engineering wire/rule details exposed)
+      if (document.getElementById('printClientName')) {
+        document.getElementById('printClientName').innerText = quoteState.clientName;
+        document.getElementById('printIssueDate').innerText = quoteState.issueDate;
+        document.getElementById('printValidUntil').innerText = quoteState.validUntil;
+        
+        document.getElementById('printLineEVSE').innerText = "$" + quoteState.evseAmount.toFixed(2);
+        document.getElementById('printLinePermit').innerText = "$" + quoteState.permitAmount.toFixed(2);
+        
+        const printPanelRow = document.getElementById('printRowPanel');
+        if (printPanelRow) {
+          printPanelRow.style.display = quoteState.panelAmount > 0 ? 'table-row' : 'none';
+          document.getElementById('printLinePanel').innerText = "$" + quoteState.panelAmount.toFixed(2);
         }
+        const printTrenchRow = document.getElementById('printRowTrench');
+        if (printTrenchRow) {
+          printTrenchRow.style.display = quoteState.trenchAmount > 0 ? 'table-row' : 'none';
+          document.getElementById('printLineTrench').innerText = "$" + quoteState.trenchAmount.toFixed(2);
+        }
+        const printMiscRow = document.getElementById('printRowMisc');
+        if (printMiscRow) {
+          printMiscRow.style.display = quoteState.miscAmount > 0 ? 'table-row' : 'none';
+          document.getElementById('printLineMisc').innerText = "$" + quoteState.miscAmount.toFixed(2);
+        }
+        
+        document.getElementById('printSummarySubtotal').innerText = "$" + quoteState.subtotal.toFixed(2);
+        document.getElementById('printSummaryGST').innerText = "$" + quoteState.gst.toFixed(2);
+        document.getElementById('printSummaryTotal').innerText = "$" + quoteState.total.toFixed(2);
+        
+        const scopeIn = document.getElementById('editScopeText');
+        if (scopeIn && document.getElementById('printScopeText')) document.getElementById('printScopeText').innerText = scopeIn.value;
+        const exclIn = document.getElementById('editExclusionsText');
+        if (exclIn && document.getElementById('printExclusionsText')) document.getElementById('printExclusionsText').innerText = exclIn.value;
       }
-      document.getElementById('printGST').innerText = "$" + gstAmount.toFixed(2);
-      document.getElementById('printTotalEstimate').innerText = "$" + grandTotal.toFixed(2);
-
-      document.getElementById('printInstallationType').innerHTML = `<strong>Installation Archetype:</strong> ${isDetached ? 'Detached Garage Laneway (PVC Conductor Burial)' : 'Standard Attached Garage Install'}`;
-      document.getElementById('printBreaker').innerHTML = `<strong>Breaker Sizing:</strong> ${breaker}A 2-Pole (Continuous Sizing Rule 86-306)`;
-      document.getElementById('printWire').innerHTML = `<strong>Conductor Sizing:</strong> #${gauge} AWG ${runType} Conductor`;
-      document.getElementById('printVD').innerHTML = `<strong>Voltage Drop Calculation:</strong> ${vDropPercent.toFixed(2)}% drop over ${runLength}ft (Rule 8-102 Compliant)`;
-
-      let demandText = useEVEMS ? "EVEMS Smart Shedding active (Bypassed under Rule 8-106)" : document.getElementById('totalCalcLoad').value;
-      document.getElementById('printCalculatedLoad').innerHTML = `<strong>Main Service Calculations:</strong> ${demandText} Demand check`;
 
       // 7. Render dynamic customer SMS copy & digital permit specs
       generateExporters(grandTotal, finalGaugeNum, breaker, vDropPercent);
