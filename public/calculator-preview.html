@@ -1031,6 +1031,87 @@
       }
     }
 
+    /* =========================================================================
+       REUSABLE UTILITY & COMPONENT CLASSES (SPRING CLEANING)
+       ========================================================================= */
+    .notice-box {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: rgba(46, 64, 54, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .status-disclaimer {
+      margin-top: 18px;
+      padding: 10px 14px;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+    .status-disclaimer .status-icon {
+      font-size: 14px;
+    }
+    .status-disclaimer > div:last-child {
+      color: var(--color-muted);
+      max-width: 680px;
+    }
+
+    .form-row-spaced {
+      margin-top: 10px;
+    }
+    .form-group-spaced {
+      margin-top: 15px;
+    }
+
+    .empty-state-notice {
+      text-align: center;
+      padding: 30px;
+      color: var(--color-muted);
+      font-style: italic;
+    }
+
+    .tech-notes-card {
+      margin-top: 16px;
+      background: rgba(46, 64, 54, 0.02) !important;
+      border: 1px solid var(--border-color) !important;
+    }
+    .tech-notes-summary {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      outline: none;
+      list-style: none;
+      cursor: pointer;
+    }
+    .tech-notes-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(46, 64, 54, 0.08);
+      color: var(--color-muted);
+    }
+    .tech-notes-content {
+      margin-top: 12px;
+      font-size: 11.5px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 10px;
+    }
+    .tech-notes-list {
+      margin: 0;
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
     .print-only {
       display: none;
     }
@@ -1292,11 +1373,11 @@
           </div>
 
           <!-- GFCI Rule 86-306 Explanatory Guide Tag -->
-          <div style="margin-top: 8px; padding: 8px 12px; background: rgba(46, 64, 54, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 11px; color: var(--color-text); line-height: 1.4;">
+          <div class="notice-box">
             💡 <strong>CEC 2024 Rule 86-306 GFCI Guide:</strong> Class A GFCI breaker protection ($250) is mandatory for 240V NEMA 14-50 plug-in receptacles. Hardwiring directly to the charger eliminates the need for expensive GFCI breakers and prevents nuisance trips from smart charger self-tests.
           </div>
 
-          <div class="input-row" style="margin-top: 10px;">
+          <div class="input-row form-row-spaced">
             <div class="form-group">
               <label>Interior Drywall Routing Surcharge</label>
               <select id="drywallSurcharge" onchange="runElectricalMath()">
@@ -1420,7 +1501,7 @@
               </div>
             </details>
           </div>
-          <div id="detachedDisabledNotice" style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">
+          <div id="detachedDisabledNotice" class="empty-state-notice">
             Select "Detached Garage Install" above to configure underground trench specifications.
           </div>
         </div>
@@ -1641,9 +1722,9 @@
               <div class="status-icon" style="font-size: 14px;">⚠️</div>
               <div>Main service rating and existing demand are required for a meaningful commercial headroom result.</div>
             </div>
-            <div class="status-panel warning" style="margin-top: 18px; padding: 10px 14px; font-size: 11.5px; line-height: 1.5;">
-              <div class="status-icon" style="font-size: 14px;">⚠️</div>
-              <div style="color: var(--color-muted); max-width: 680px;"><strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.</div>
+            <div class="status-panel warning status-disclaimer">
+              <div class="status-icon">⚠️</div>
+              <div><strong>Commercial Mode Disclaimer:</strong> Commercial mode does not perform a full CEC 8‑4xx demand calculation. Use only with a verified existing demand/headroom value from a load study, engineer, or utility.</div>
             </div>
           </div>
 
@@ -1859,14 +1940,14 @@
       </div>
 
       <!-- TECH NOTES & ENGINEERING ASSUMPTIONS -->
-      <div class="card" style="margin-top: 16px; background: rgba(46, 64, 54, 0.02); border: 1px solid var(--border-color);">
-        <details style="cursor: pointer;">
-          <summary style="font-weight: 700; font-size: 13px; color: var(--color-primary); display: flex; align-items: center; justify-content: space-between; outline: none; list-style: none;">
+      <div class="card tech-notes-card">
+        <details>
+          <summary class="tech-notes-summary">
             <span>📌 Tech Notes &amp; Assumptions</span>
-            <span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(46, 64, 54, 0.08); color: var(--color-muted);">CEC-2024</span>
+            <span class="tech-notes-badge">CEC-2024</span>
           </summary>
-          <div style="margin-top: 12px; font-size: 11.5px; color: var(--color-muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
-            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="tech-notes-content">
+            <ul class="tech-notes-list">
               <li><strong>Branch voltage drop target:</strong> 3% (Rule 8‑102) – tool warns when above this.</li>
               <li><strong>Residential demand logic:</strong> Dwelling demand per CEC 8‑200 (floor area, range, dryer, fixed loads).</li>
               <li><strong>Commercial mode:</strong> Uses engineer/utility-provided service rating and existing demand/headroom; does NOT perform full CEC 8‑4xx demand calculation.</li>
@@ -2118,8 +2199,17 @@
     let manualOverrides = {}; // Map to store manual price/qty overrides
     let requiresJunctionBox = false;
 
-    // Global Configuration Object (Hardware specs, materials costs, labor constants)
+    // =========================================================================
+    // RENVOLT FIELD CALCULATOR - MASTER PRICING & HARDWARE CONFIGURATION
+    // =========================================================================
+    // To update your wholesale costs or hourly trade rates, simply edit the
+    // dollar numbers below. Do NOT remove commas or quotes. All costs are CAD.
+    // =========================================================================
     const CONFIG = {
+      // -----------------------------------------------------------------------
+      // 1. CHARGER HARDWARE SKUs & WHOLESALE COSTS (EDMONTON MARKET)
+      // Edit 'baseCost' and 'msrp' when supplier wholesale prices change.
+      // -----------------------------------------------------------------------
       hardware: {
         grizzle: {
           name: "Grizzl-E Classic",
@@ -2242,6 +2332,10 @@
           configGuide: "Hardwired only. App-configurable from 32A to 80A continuous. Requires #4 AWG minimum for 80A (100A breaker). Integrated Porsche Home Energy Manager compatible."
         }
       },
+      // -----------------------------------------------------------------------
+      // 2. ELECTRICAL MATERIALS & WHOLESALE WIRE PRICING (EDMONTON MARKET)
+      // Edit 'cost' and 'unitCost' (per foot or per item) when wholesaler rates change.
+      // -----------------------------------------------------------------------
       materials: {
         breaker40: { name: "2-Pole Breaker 40A (Siemens/Schneider)", cost: 45.00, unitCost: 45.00, description: "2-Pole Breaker 40A (Siemens/Schneider)" },
         breaker60: { name: "2-Pole Breaker 60A (High-Amp L2 Charger)", cost: 65.00, unitCost: 65.00, description: "2-Pole Breaker 60A (High-Amp L2 Charger)" },
@@ -2256,10 +2350,14 @@
         evemsUnit: { name: "RVE DCC-9-40A Smart Energy Manager", cost: 1725.00, unitCost: 1725.00, description: "RVE DCC-9-40A Smart Energy Manager" },
         sundries: { name: "Mounting hardware, code labels, junction fittings", cost: 30.00, unitCost: 30.00, description: "Mounting hardware, code labels, junction fittings" }
       },
+      // -----------------------------------------------------------------------
+      // 3. HOURLY LABOUR RATES & BASE TIME CONSTANTS
+      // Edit default billing rate ($/hr) and base installation time (hours).
+      // -----------------------------------------------------------------------
       labor: {
-        defaultLabourRate: 100,
-        internalCostRate: 45,
-        baseInstallHours: 6
+        defaultLabourRate: 100, // Client billing rate ($/hr)
+        internalCostRate: 45,   // Internal trade wages & overhead cost ($/hr)
+        baseInstallHours: 6     // Standard base installation time (hours)
       }
     };
 
