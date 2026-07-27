@@ -1149,6 +1149,36 @@
     .print-only {
       display: none;
     }
+
+    /* CRM Status Badges and Filter Buttons */
+    .crm-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .crm-badge-new { background: rgba(0, 225, 255, 0.15); color: #00e1ff; border: 1px solid rgba(0, 225, 255, 0.4); }
+    .crm-badge-quoted { background: rgba(167, 139, 250, 0.15); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.4); }
+    .crm-badge-follow { background: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.4); }
+    .crm-badge-booked { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .crm-badge-completed { background: rgba(52, 211, 153, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.6); }
+    .crm-badge-lost { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    .crm-filter-btn.active {
+      background: var(--color-primary) !important;
+      color: #111a14 !important;
+      font-weight: 700 !important;
+    }
+    #crmJobsTable th, #crmJobsTable td {
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+    #crmJobsTable tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
   </style>
 </head>
 <body>
@@ -1840,65 +1870,181 @@
       <!-- TAB 5: LEAD CRM WORKSPACE -->
       <div id="crmTab" class="tab-content">
         <div class="card">
-          <div class="card-title">
-            Renvolt Premium Lead CRM
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+            <div class="card-title" style="margin-bottom: 0;">
+              Renvolt EV-Charger Job Tracker &amp; CRM
+            </div>
             <span class="badge" style="background-color: var(--color-accent); border-color: var(--color-accent); color: white;">Operational</span>
           </div>
 
-          <!-- CRM Actions Bar -->
-          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-            <input type="text" id="crmSearchInput" placeholder="Search leads by name, phone, or address..." oninput="renderCRMLeads()" style="flex: 1; padding: 10px 14px; font-size: 13.5px;">
-            <button class="btn btn-success" onclick="openCRMLeadDrawer('add')" style="width: auto; padding: 0 18px; font-size: 13.5px; white-space: nowrap;">
-              ➕ Add Lead
-            </button>
+          <!-- Light follow-up alert panel (Due Today / Overdue) -->
+          <div id="crmFollowUpAlert" style="display: none; background: rgba(239, 68, 68, 0.08); border: 1px solid var(--color-danger); padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="color: var(--color-danger); font-size: 13px;">⚠️ Follow-up Due Today or Overdue (<span id="crmOverdueCount">0</span> jobs)</strong>
+              <button class="btn-preset" onclick="filterCRMBy('Follow-up due')" style="font-size: 11px; padding: 4px 8px; background: white; color: var(--color-danger); border-color: var(--color-danger);">Filter View</button>
+            </div>
+            <div id="crmOverdueList" style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;"></div>
           </div>
 
-          <!-- Lead Detail Overlay Drawer Form (Embedded inside CRM for sleek workflow) -->
-          <div id="crmLeadDrawer" class="card" style="display: none; border-color: var(--color-accent); background: #FFFFFF; margin-top: 15px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(46, 64, 54, 0.15);">
-            <div class="card-title" id="crmDrawerTitle" style="border-bottom-color: var(--border-color); color: var(--color-primary);">Add New CRM Lead</div>
+          <!-- Quick Add Mini Form -->
+          <div style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--color-primary); margin-bottom: 10px; text-transform: uppercase;">⚡ Quick Add Job Snapshot</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 10px;">
+              <input type="text" id="quickAddName" placeholder="Customer Name*" style="padding: 8px 10px; font-size: 12px;">
+              <input type="text" id="quickAddPhone" placeholder="Phone" style="padding: 8px 10px; font-size: 12px;">
+              <input type="text" id="quickAddSuburb" placeholder="Suburb / City" style="padding: 8px 10px; font-size: 12px;">
+              <select id="quickAddJobType" style="padding: 8px 10px; font-size: 12px;">
+                <option value="Attached L2">Attached L2</option>
+                <option value="Detached L2 w/trench">Detached L2 w/trench</option>
+                <option value="Panel work">Panel work</option>
+                <option value="EVEMS add-on">EVEMS add-on</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="number" id="quickAddAmount" placeholder="Quote Amount ($)" style="padding: 8px 10px; font-size: 12px;">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button class="btn btn-success" onclick="quickAddCRMLead()" style="padding: 6px 16px; font-size: 12px; width: auto;">➕ Quick Add Entry</button>
+              <button class="btn-preset" onclick="openCRMLeadDrawer('add')" style="font-size: 12px; padding: 6px 12px;">📂 Open Full Lead Form</button>
+            </div>
+          </div>
+
+          <!-- Filters & Sort Controls -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: rgba(255,255,255,0.02); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px;">
+              <span style="color: var(--color-muted); font-weight: 600;">Show:</span>
+              <button class="btn-preset crm-filter-btn active" onclick="filterCRMBy('All', this)" style="padding: 4px 10px; font-size: 11px;">All</button>
+              <button class="btn-preset crm-filter-btn" onclick="filterCRMBy('Follow-up due', this)" style="padding: 4px 10px; font-size: 11px;">Follow-up due</button>
+              <button class="btn-preset crm-filter-btn" onclick="filterCRMBy('Booked', this)" style="padding: 4px 10px; font-size: 11px;">Booked</button>
+              <button class="btn-preset crm-filter-btn" onclick="filterCRMBy('Completed', this)" style="padding: 4px 10px; font-size: 11px;">Completed</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;">
+              <input type="text" id="crmSearchInput" placeholder="Search jobs..." oninput="renderCRMLeads()" style="padding: 6px 10px; font-size: 12px; width: 140px;">
+              <span style="color: var(--color-muted); font-weight: 600;">Sort:</span>
+              <select id="crmSortSelect" onchange="renderCRMLeads()" style="padding: 6px 8px; font-size: 12px;">
+                <option value="followUp">Follow-up Date</option>
+                <option value="amount">Quote Amount</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Compact Table / List Display -->
+          <div class="table-container" style="overflow-x: auto;">
+            <table id="crmJobsTable" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); background: rgba(0,0,0,0.1); text-align: left;">
+                  <th style="padding: 10px 8px;">Customer &amp; Contact</th>
+                  <th style="padding: 10px 8px;">Suburb</th>
+                  <th style="padding: 10px 8px;">Job Snapshot</th>
+                  <th style="padding: 10px 8px; text-align: right;">Quote Amt</th>
+                  <th style="padding: 10px 8px; text-align: center;">Status</th>
+                  <th style="padding: 10px 8px;">Follow-up Date</th>
+                  <th style="padding: 10px 8px;">Next Action</th>
+                  <th style="padding: 10px 8px; text-align: center; width: 110px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="crmLeadsContainer">
+                <!-- Rendered dynamically in JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Full Lead Detail Overlay Drawer Form (Retained & Extended for full details) -->
+          <div id="crmLeadDrawer" class="card" style="display: none; border-color: var(--color-accent); background: #FFFFFF; color: #1a1a1a; margin-top: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.25);">
+            <div class="card-title" id="crmDrawerTitle" style="border-bottom: 1px solid #ddd; color: #111a14;">Add New CRM Lead</div>
             <input type="hidden" id="crmLeadIndex">
             
             <div class="input-row">
               <div class="form-group">
-                <label>Client Full Name</label>
-                <input type="text" id="crmLeadName" placeholder="e.g. David Miller">
+                <label style="color: #444;">Customer Full Name</label>
+                <input type="text" id="crmLeadName" placeholder="e.g. David Miller" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
               </div>
               <div class="form-group">
-                <label>Status Pipeline</label>
-                <select id="crmLeadStatus">
-                  <option value="Lead" selected>Lead (Received)</option>
-                  <option value="Assessed">Assessed (Site check done)</option>
-                  <option value="Quoted">Quoted (Estimate sent)</option>
-                  <option value="Scheduled">Scheduled (Installation booked)</option>
-                  <option value="Completed">Completed (Permit signed off)</option>
+                <label style="color: #444;">Status</label>
+                <select id="crmLeadStatus" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+                  <option value="New lead" selected>New lead</option>
+                  <option value="Quoted">Quoted</option>
+                  <option value="Follow-up due">Follow-up due</option>
+                  <option value="Booked">Booked</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Lost">Lost</option>
                 </select>
               </div>
             </div>
             
             <div class="input-row">
               <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" id="crmLeadPhone" placeholder="780-555-0199">
+                <label style="color: #444;">Phone Number</label>
+                <input type="text" id="crmLeadPhone" placeholder="780-555-0199" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
               </div>
               <div class="form-group">
-                <label>Email Address</label>
-                <input type="text" id="crmLeadEmail" placeholder="david.m@gmail.com">
+                <label style="color: #444;">Email Address</label>
+                <input type="text" id="crmLeadEmail" placeholder="david.m@gmail.com" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
               </div>
-            </div>
-            
-            <div class="form-group">
-              <label>Installation Site Address</label>
-              <input type="text" id="crmLeadAddress" placeholder="10432 82 Ave NW, Edmonton, AB">
-            </div>
-            
-            <div style="font-size: 10px; color: var(--color-accent); font-weight: 700; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin: 15px 0 10px 0; letter-spacing: 0.5px; text-transform: uppercase;">
-              🔧 Technical Sizing Specs (Preloads into CEC Sizer)
             </div>
             
             <div class="input-row">
               <div class="form-group">
-                <label>EVSE Hardware Preset</label>
-                <select id="crmLeadHardware">
+                <label style="color: #444;">Suburb / City</label>
+                <input type="text" id="crmLeadSuburb" placeholder="e.g. St. Albert / South Edmonton" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+              <div class="form-group">
+                <label style="color: #444;">Full Site Address</label>
+                <input type="text" id="crmLeadAddress" placeholder="10432 82 Ave NW, Edmonton, AB" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label style="color: #444;">Job Type</label>
+                <select id="crmLeadJobType" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+                  <option value="Attached L2" selected>Attached L2</option>
+                  <option value="Detached L2 w/trench">Detached L2 w/trench</option>
+                  <option value="Panel work">Panel work</option>
+                  <option value="EVEMS add-on">EVEMS add-on</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label style="color: #444;">Property Type</label>
+                <select id="crmLeadPropertyType" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+                  <option value="residential detached" selected>Residential Detached</option>
+                  <option value="townhouse">Townhouse / Condo</option>
+                  <option value="small commercial">Small Commercial / Bay</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label style="color: #444;">Quote Amount ($)</label>
+                <input type="number" id="crmLeadQuoteAmount" value="2500" step="50" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+              <div class="form-group">
+                <label style="color: #444;">Quote Date</label>
+                <input type="date" id="crmLeadQuoteDate" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label style="color: #444;">Follow-up Date</label>
+                <input type="date" id="crmLeadFollowUpDate" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+              <div class="form-group">
+                <label style="color: #444;">One-line Next Action Note</label>
+                <input type="text" id="crmLeadNextAction" placeholder="e.g. Call client Friday afternoon to check permit questions" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
+              </div>
+            </div>
+            
+            <div style="font-size: 11px; color: #10b981; font-weight: 700; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin: 15px 0 10px 0; text-transform: uppercase;">
+              🔧 Technical Sizing Specs (Syncs with Quoting Tab)
+            </div>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label style="color: #444;">EVSE Hardware Preset</label>
+                <select id="crmLeadHardware" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
                   <option value="grizzle" selected>Grizzl-E Classic ($499)</option>
                   <option value="lectron">Lectron V-Box ($450)</option>
                   <option value="chargepoint">ChargePoint Home Flex ($749)</option>
@@ -1910,8 +2056,8 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Continuous Amps Sizing</label>
-                <select id="crmLeadAmps">
+                <label style="color: #444;">Continuous Amps Sizing</label>
+                <select id="crmLeadAmps" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
                   <option value="24">24A continuous (30A breaker)</option>
                   <option value="30">30A continuous (40A breaker - Flo G5/X5)</option>
                   <option value="32" selected>32A continuous (40A breaker)</option>
@@ -1923,19 +2069,19 @@
             
             <div class="input-row">
               <div class="form-group">
-                <label>Branch Run Length (ft)</label>
-                <input type="number" id="crmLeadRunLength" value="30">
+                <label style="color: #444;">Branch Run Length (ft)</label>
+                <input type="number" id="crmLeadRunLength" value="30" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
               </div>
               <div class="form-group">
-                <label>Trench Length (ft / 0 if attached)</label>
-                <input type="number" id="crmLeadTrenchLength" value="0">
+                <label style="color: #444;">Trench Length (ft / 0 if attached)</label>
+                <input type="number" id="crmLeadTrenchLength" value="0" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
               </div>
             </div>
             
             <div class="input-row">
               <div class="form-group">
-                <label>Main Service Upgrade</label>
-                <select id="crmLeadServiceUpgrade">
+                <label style="color: #444;">Main Service Upgrade</label>
+                <select id="crmLeadServiceUpgrade" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
                   <option value="none" selected>No Service Upgrade</option>
                   <option value="upgrade200a">100A to 200A Full Service Upgrade</option>
                   <option value="subpanel">100A Garage Subpanel Installation</option>
@@ -1943,8 +2089,8 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Service Ceiling rating</label>
-                <select id="crmLeadPanelCapacity">
+                <label style="color: #444;">Service Ceiling rating</label>
+                <select id="crmLeadPanelCapacity" style="background: #f8faf9; color: #111; border: 1px solid #ccc;">
                   <option value="100" selected>100A Main Service</option>
                   <option value="125">125A Main Service</option>
                   <option value="150">150A Main Service</option>
@@ -1955,7 +2101,7 @@
 
             <div class="input-row" style="margin-bottom: 15px;">
               <div class="form-group">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #444;">
                   <input type="checkbox" id="crmLeadEVEMS" style="width: 16px; height: 16px; cursor: pointer;">
                   Smart Energy Management System (EVEMS)
                 </label>
@@ -1963,19 +2109,14 @@
             </div>
 
             <div class="form-group">
-              <label>Internal Lead Notes & Site Assessment logs</label>
-              <textarea id="crmLeadNotes" placeholder="Enter custom notes about basement finishes, federal pioneer panels, trench obstacles, and client scheduling preferences..." style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: var(--radius-sm); padding: 10px; height: 80px; font-size: 13px; outline: none; resize: none;"></textarea>
+              <label style="color: #444;">Internal Lead Notes & Site Assessment logs</label>
+              <textarea id="crmLeadNotes" placeholder="Enter custom notes about basement finishes, federal pioneer panels, trench obstacles, and client scheduling preferences..." style="width: 100%; background: #f8faf9; border: 1px solid #ccc; color: #111; border-radius: var(--radius-sm); padding: 10px; height: 70px; font-size: 13px; outline: none; resize: none;"></textarea>
             </div>
             
             <div class="btn-row" style="margin-top: 15px;">
               <button class="btn btn-success" onclick="saveCRMLead()">💾 Save Lead Details</button>
               <button class="btn btn-secondary" onclick="closeCRMLeadDrawer()">Cancel</button>
             </div>
-          </div>
-
-          <!-- CRM Pipeline leads list container -->
-          <div id="crmLeadsContainer" style="display: flex; flex-direction: column; gap: 16px;">
-            <!-- Rendered dynamically in JS -->
           </div>
         </div>
       </div>
@@ -3854,6 +3995,63 @@
       db[name] = quoteConfig;
       localStorage.setItem('renvolt_saved_quotes', JSON.stringify(db));
 
+      // Hook into CRM: Create or update CRM record automatically
+      const crmLeads = getCRMLeads();
+      let existingIndex = crmLeads.findIndex(l => (l.name || "").toLowerCase() === name.toLowerCase());
+      const todayStr = new Date().toLocaleDateString('en-CA');
+      const followUpDateObj = new Date();
+      followUpDateObj.setDate(followUpDateObj.getDate() + 2);
+      const followUpStr = followUpDateObj.toLocaleDateString('en-CA');
+
+      // Infer Job Type
+      let inferredJobType = "Attached L2";
+      if (isDetached || trenchLength > 0) inferredJobType = "Detached L2 w/trench";
+      else if (quoteConfig.serviceUpgrade !== 'none') inferredJobType = "Panel work";
+      else if (useEVEMS) inferredJobType = "EVEMS add-on";
+
+      if (existingIndex >= 0) {
+        crmLeads[existingIndex].quoteTotal = grandTotal;
+        crmLeads[existingIndex].quoteDate = todayStr;
+        crmLeads[existingIndex].status = "Quoted";
+        crmLeads[existingIndex].jobType = inferredJobType;
+        if (!crmLeads[existingIndex].followUpDate) crmLeads[existingIndex].followUpDate = followUpStr;
+        if (!crmLeads[existingIndex].nextAction) crmLeads[existingIndex].nextAction = "Follow up on proposal sent";
+        // Update sizing state
+        crmLeads[existingIndex].hardware = quoteConfig.chargerHardware;
+        crmLeads[existingIndex].amps = quoteConfig.chargerAmps;
+        crmLeads[existingIndex].runLength = quoteConfig.runLength;
+        crmLeads[existingIndex].trenchLength = quoteConfig.trenchLength;
+        crmLeads[existingIndex].isDetached = quoteConfig.isDetached;
+        crmLeads[existingIndex].useEVEMS = quoteConfig.useEVEMS;
+        crmLeads[existingIndex].serviceUpgrade = quoteConfig.serviceUpgrade;
+      } else {
+        crmLeads.push({
+          name: name,
+          phone: "",
+          email: "",
+          suburb: "Edmonton Area",
+          address: "",
+          jobType: inferredJobType,
+          propertyType: "residential detached",
+          quoteTotal: grandTotal,
+          quoteDate: todayStr,
+          status: "Quoted",
+          followUpDate: followUpStr,
+          nextAction: "Follow up on proposal sent",
+          hardware: quoteConfig.chargerHardware,
+          amps: quoteConfig.chargerAmps,
+          runLength: quoteConfig.runLength,
+          trenchLength: quoteConfig.trenchLength,
+          isDetached: quoteConfig.isDetached,
+          useEVEMS: quoteConfig.useEVEMS,
+          serviceUpgrade: quoteConfig.serviceUpgrade,
+          panelCapacity: quoteConfig.serviceAmps,
+          notes: "Automatically imported from saved quote."
+        });
+      }
+      saveCRMLeads(crmLeads);
+      if (typeof renderCRMLeads === 'function') renderCRMLeads();
+
       document.getElementById('quoteNameInput').value = "";
       refreshSavedQuotesDropdown();
       
@@ -4103,98 +4301,280 @@
       localStorage.setItem('renvolt_crm_leads', JSON.stringify(leads));
     }
 
+    let currentCRMFilter = 'All';
+
+    function filterCRMBy(filterName, btnEl = null) {
+      currentCRMFilter = filterName;
+      if (btnEl) {
+        document.querySelectorAll('.crm-filter-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      } else {
+        document.querySelectorAll('.crm-filter-btn').forEach(b => {
+          if (b.innerText === filterName || (filterName === 'Follow-up due' && b.innerText.includes('Follow-up'))) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+      }
+      renderCRMLeads();
+    }
+
+    function quickAddCRMLead() {
+      const name = document.getElementById('quickAddName')?.value.trim();
+      if (!name) {
+        alert("Please enter a customer name for the quick job snapshot.");
+        return;
+      }
+      const phone = document.getElementById('quickAddPhone')?.value.trim() || "";
+      const suburb = document.getElementById('quickAddSuburb')?.value.trim() || "Edmonton Area";
+      const jobType = document.getElementById('quickAddJobType')?.value || "Attached L2";
+      const amount = parseFloat(document.getElementById('quickAddAmount')?.value) || 2500.00;
+
+      const fDate = new Date();
+      fDate.setDate(fDate.getDate() + 2);
+
+      const leads = getCRMLeads();
+      leads.push({
+        name: name,
+        phone: phone,
+        email: "",
+        suburb: suburb,
+        address: suburb,
+        jobType: jobType,
+        propertyType: "residential detached",
+        quoteTotal: amount,
+        quoteDate: new Date().toLocaleDateString('en-CA'),
+        status: "New lead",
+        followUpDate: fDate.toLocaleDateString('en-CA'),
+        nextAction: "Initial scoping contact",
+        hardware: "grizzle",
+        amps: "32",
+        runLength: "30",
+        trenchLength: "0",
+        isDetached: jobType === "Detached L2 w/trench",
+        useEVEMS: jobType === "EVEMS add-on",
+        serviceUpgrade: jobType === "Panel work" ? "subpanel" : "none",
+        panelCapacity: "100",
+        notes: "Quick added from CRM job tracker."
+      });
+
+      saveCRMLeads(leads);
+      if (document.getElementById('quickAddName')) document.getElementById('quickAddName').value = "";
+      if (document.getElementById('quickAddPhone')) document.getElementById('quickAddPhone').value = "";
+      if (document.getElementById('quickAddSuburb')) document.getElementById('quickAddSuburb').value = "";
+      if (document.getElementById('quickAddAmount')) document.getElementById('quickAddAmount').value = "";
+
+      renderCRMLeads();
+      const toast = document.getElementById('toast');
+      toast.textContent = "Job snapshot added to CRM!";
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function updateCRMStatus(index, newStatus) {
+      const leads = getCRMLeads();
+      if (!leads[index]) return;
+      leads[index].status = newStatus;
+      saveCRMLeads(leads);
+      renderCRMLeads();
+    }
+
+    function updateCRMFollowUp(index, newDate) {
+      const leads = getCRMLeads();
+      if (!leads[index]) return;
+      leads[index].followUpDate = newDate;
+      saveCRMLeads(leads);
+      renderCRMLeads();
+    }
+
+    function updateCRMNextAction(index, newAction) {
+      const leads = getCRMLeads();
+      if (!leads[index]) return;
+      leads[index].nextAction = newAction;
+      saveCRMLeads(leads);
+    }
+
+    function markCRMFollowedUp(index) {
+      const leads = getCRMLeads();
+      const lead = leads[index];
+      if (!lead) return;
+
+      const choice = prompt(`Log follow-up for ${lead.name}.\nEnter new status:\n1: Follow-up due (sets date +3 days)\n2: Booked (job won)\n3: Lost (job closed)\n4: Completed`, "1");
+      if (!choice) return;
+
+      const nowLog = `[Followed up ${new Date().toLocaleDateString('en-CA')} ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}]`;
+      lead.notes = (lead.notes ? lead.notes + " " : "") + nowLog;
+
+      if (choice === "1" || choice.toLowerCase().includes("follow")) {
+        lead.status = "Follow-up due";
+        const fDate = new Date();
+        fDate.setDate(fDate.getDate() + 3);
+        lead.followUpDate = fDate.toLocaleDateString('en-CA');
+        lead.nextAction = "Continued follow-up call";
+      } else if (choice === "2" || choice.toLowerCase().includes("book")) {
+        lead.status = "Booked";
+        lead.nextAction = "Schedule installation date";
+      } else if (choice === "3" || choice.toLowerCase().includes("lost")) {
+        lead.status = "Lost";
+        lead.nextAction = "Archived";
+      } else if (choice === "4" || choice.toLowerCase().includes("comp")) {
+        lead.status = "Completed";
+        lead.nextAction = "Send final invoice / review request";
+      }
+      saveCRMLeads(leads);
+      renderCRMLeads();
+      
+      const toast = document.getElementById('toast');
+      toast.textContent = `Follow-up logged for ${lead.name}!`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function openQuoteFromCRM(index) {
+      loadLeadIntoSizer(index);
+      const quoteBtn = document.querySelector(".tabs-nav button:nth-child(4)") || document.querySelector("#quoteTab");
+      switchTab('quoteTab', quoteBtn);
+      const leads = getCRMLeads();
+      if (leads[index] && document.getElementById('quoteNameInput')) {
+        document.getElementById('quoteNameInput').value = leads[index].name;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // Dynamic Leads list rendering based on search filters
     function renderCRMLeads() {
       const container = document.getElementById('crmLeadsContainer');
       if (!container) return;
       container.innerHTML = '';
 
-      const query = document.getElementById('crmSearchInput').value.toLowerCase().trim();
+      const query = (document.getElementById('crmSearchInput')?.value || "").toLowerCase().trim();
+      const sortMode = document.getElementById('crmSortSelect')?.value || "followUp";
       const leads = getCRMLeads();
 
-      const filteredLeads = leads.filter(lead => {
-        return lead.name.toLowerCase().includes(query) ||
-               lead.phone.toLowerCase().includes(query) ||
-               lead.email.toLowerCase().includes(query) ||
-               lead.address.toLowerCase().includes(query) ||
-               lead.status.toLowerCase().includes(query);
+      // Check Overdue / Due Today for Alert Box
+      const todayStr = new Date().toLocaleDateString('en-CA');
+      const overdueJobs = leads.filter(l => {
+        const statusMatch = l.status === 'Quoted' || l.status === 'Follow-up due' || l.status === 'New lead';
+        return statusMatch && l.followUpDate && l.followUpDate <= todayStr;
+      });
+
+      const alertEl = document.getElementById('crmFollowUpAlert');
+      const overdueCountEl = document.getElementById('crmOverdueCount');
+      const overdueListEl = document.getElementById('crmOverdueList');
+      if (alertEl && overdueCountEl && overdueListEl) {
+        if (overdueJobs.length > 0) {
+          overdueCountEl.textContent = overdueJobs.length;
+          overdueListEl.innerHTML = overdueJobs.map(j => {
+            const idx = leads.indexOf(j);
+            return `<div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.05); padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 4px;">
+              <span><strong>${j.name}</strong> (${j.suburb || 'Edmonton'}) — Due: <span style="color: #ef4444; font-weight: 700;">${j.followUpDate}</span> (${j.nextAction || 'Follow up'})</span>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-preset" onclick="openQuoteFromCRM(${idx})" style="padding: 2px 8px; font-size: 11px; background: var(--color-primary-glow); color: var(--color-primary); border-color: var(--color-primary);">📂 Open Quote</button>
+                <button class="btn-preset" onclick="markCRMFollowedUp(${idx})" style="padding: 2px 8px; font-size: 11px; background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success);">✅ Log Follow-up</button>
+              </div>
+            </div>`;
+          }).join('');
+          alertEl.style.display = 'block';
+        } else {
+          alertEl.style.display = 'none';
+        }
+      }
+
+      // Filter
+      let filteredLeads = leads.filter(lead => {
+        const matchesQuery = !query || 
+               (lead.name && lead.name.toLowerCase().includes(query)) ||
+               (lead.phone && lead.phone.toLowerCase().includes(query)) ||
+               (lead.email && lead.email.toLowerCase().includes(query)) ||
+               (lead.suburb && lead.suburb.toLowerCase().includes(query)) ||
+               (lead.address && lead.address.toLowerCase().includes(query)) ||
+               (lead.jobType && lead.jobType.toLowerCase().includes(query)) ||
+               (lead.status && lead.status.toLowerCase().includes(query));
+
+        if (!matchesQuery) return false;
+
+        if (currentCRMFilter === 'All') return true;
+        if (currentCRMFilter === 'Follow-up due') return lead.status === 'Follow-up due' || lead.status === 'Quoted';
+        if (currentCRMFilter === 'Booked') return lead.status === 'Booked' || lead.status === 'Scheduled';
+        if (currentCRMFilter === 'Completed') return lead.status === 'Completed';
+        return true;
+      });
+
+      // Sort
+      filteredLeads.sort((a, b) => {
+        if (sortMode === 'followUp') {
+          return (a.followUpDate || '9999').localeCompare(b.followUpDate || '9999');
+        } else if (sortMode === 'amount') {
+          return (b.quoteTotal || 0) - (a.quoteTotal || 0);
+        } else if (sortMode === 'status') {
+          return (a.status || '').localeCompare(b.status || '');
+        }
+        return 0;
       });
 
       if (filteredLeads.length === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">No leads found matching your search. Click "Add Lead" to insert a new client.</div>';
+        container.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--color-muted); font-style: italic;">No job records found matching your current filter or search. Use Quick Add above to log a job!</td></tr>';
         return;
       }
 
-      filteredLeads.forEach((lead, origIndex) => {
-        // Find original index in master list for load/edit mapping
+      filteredLeads.forEach(lead => {
         const index = leads.indexOf(lead);
 
-        // Dynamic badges styles matching pipelines
-        let badgeColor = "var(--color-warning)";
-        let badgeBg = "var(--color-warning-bg)";
-        if (lead.status === 'Completed') {
-          badgeColor = "var(--color-success)";
-          badgeBg = "var(--color-success-bg)";
-        } else if (lead.status === 'Scheduled') {
-          badgeColor = "var(--color-primary)";
-          badgeBg = "var(--color-primary-glow)";
-        } else if (lead.status === 'Quoted') {
-          badgeColor = "var(--color-primary)";
-          badgeBg = "var(--color-primary-glow)";
-        } else if (lead.status === 'Assessed') {
-          badgeColor = "var(--color-accent)";
-          badgeBg = "rgba(204, 88, 51, 0.08)";
-        }
+        // Badge class mapping
+        let badgeClass = "crm-badge-new";
+        if (lead.status === 'Quoted') badgeClass = "crm-badge-quoted";
+        else if (lead.status === 'Follow-up due') badgeClass = "crm-badge-follow";
+        else if (lead.status === 'Booked' || lead.status === 'Scheduled') badgeClass = "crm-badge-booked";
+        else if (lead.status === 'Completed') badgeClass = "crm-badge-completed";
+        else if (lead.status === 'Lost') badgeClass = "crm-badge-lost";
 
-        // EVSE Brand names beautification
-        let evseText = lead.hardware ? EVSE_SPECS[lead.hardware].name : "Tesla Wall Connector";
-        let upgradeText = "No upgrade required";
-        if (lead.serviceUpgrade === 'upgrade200a') upgradeText = "100A to 200A Full Service Upgrade";
-        else if (lead.serviceUpgrade === 'subpanel') upgradeText = "100A Garage Subpanel Installation";
-        else if (lead.serviceUpgrade === 'rejuvenation') upgradeText = "Panel Rejuvenation & Swaps";
-
-        let leadCard = document.createElement("div");
-        leadCard.className = "card";
-        leadCard.style.cssText = "margin-bottom: 12px; border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.01);";
-        leadCard.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
-            <div style="flex: 1; min-width: 280px;">
-              <h3 style="font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--color-text); display: flex; align-items: center; gap: 8px;">
-                ${lead.name}
-                <span class="badge" style="background-color: ${badgeBg}; border-color: ${badgeColor}; color: ${badgeColor}; font-size: 10px; padding: 2px 8px; border-radius: 50px;">
-                  ${lead.status}
-                </span>
-              </h3>
-              <p style="font-size: 12px; color: var(--color-muted); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px;">
-                <span>📍 ${lead.address}</span>
-                <span>• 📞 ${lead.phone}</span>
-                <span>• ✉️ ${lead.email}</span>
-              </p>
-              
-              <div style="font-family: var(--font-mono); font-size: 11.5px; color: var(--color-primary); margin-top: 10px; background: rgba(46, 64, 54, 0.04); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); line-height: 1.4;">
-                • EVSE Hardware: ${evseText}<br>
-                • Sizing Parameter: ${lead.amps}A continuous load over ${lead.runLength}ft (${lead.isDetached ? 'Detached ' + lead.trenchLength + 'ft Trench' : 'Attached Garage'})<br>
-                • Service Upgrade: ${upgradeText} (${lead.panelCapacity}A Base panel)
-              </div>
-              
-              ${lead.notes ? `<p style="font-size: 12.5px; color: var(--color-muted); font-style: italic; margin-top: 8px; border-left: 2px solid var(--color-primary); padding-left: 8px;">"${lead.notes}"</p>` : ""}
-            </div>
-            
-            <div style="text-align: right; min-width: 150px; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-              <div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--color-primary); font-family: var(--font-display);">$${lead.quoteTotal.toFixed(2)}</div>
-                <div style="font-size: 10px; color: var(--color-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Quoted Price</div>
-              </div>
-              <div style="display: flex; gap: 6px; margin-top: 20px; justify-content: flex-end; flex-wrap: wrap;">
-                <button class="btn-preset" onclick="loadLeadIntoSizer(${index})" style="padding: 6px 10px; font-size: 11px; background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success);">⚡ Load</button>
-                <button class="btn-preset" onclick="syncSizerBackToLead(${index})" style="padding: 6px 10px; font-size: 11px; background: var(--color-primary-glow); border-color: var(--color-primary); color: var(--color-primary);">💾 Sync</button>
-                <button class="btn-preset" onclick="openCRMLeadDrawer('edit', ${index})" style="padding: 6px 8px; font-size: 11px;">📝 Edit</button>
-                <button class="btn-preset" onclick="deleteCRMLead(${index})" style="padding: 6px 8px; font-size: 11px; background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger);">🗑️</button>
+        const tr = document.createElement("tr");
+        tr.style.cssText = "border-bottom: 1px solid var(--border-color); transition: background 0.2s;";
+        tr.innerHTML = `
+          <td style="padding: 10px 8px;">
+            <div style="font-weight: 700; color: var(--color-text);">${lead.name || 'Unnamed Client'}</div>
+            <div style="font-size: 11px; color: var(--color-muted);">📞 ${lead.phone || 'No phone'} ${lead.email ? '• ✉️ ' + lead.email : ''}</div>
+          </td>
+          <td style="padding: 10px 8px; color: var(--color-text); font-weight: 600;">
+            ${lead.suburb || lead.address || 'Edmonton Area'}
+          </td>
+          <td style="padding: 10px 8px;">
+            <div style="font-weight: 600; color: var(--color-primary);">${lead.jobType || 'Attached L2'}</div>
+            <div style="font-size: 10.5px; color: var(--color-muted); text-transform: capitalize;">${lead.propertyType || 'residential detached'}</div>
+          </td>
+          <td style="padding: 10px 8px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--color-primary);">
+            $${(lead.quoteTotal || 0).toFixed(2)}
+            <div style="font-size: 10px; color: var(--color-muted); font-family: var(--font-body); font-weight: normal;">${lead.quoteDate || ''}</div>
+          </td>
+          <td style="padding: 10px 8px; text-align: center;">
+            <select onchange="updateCRMStatus(${index}, this.value)" class="crm-badge ${badgeClass}" style="border: none; outline: none; cursor: pointer; padding: 4px 6px;">
+              <option value="New lead" ${lead.status === 'New lead' ? 'selected' : ''} style="background: #111a14; color: #00e1ff;">New lead</option>
+              <option value="Quoted" ${lead.status === 'Quoted' ? 'selected' : ''} style="background: #111a14; color: #a78bfa;">Quoted</option>
+              <option value="Follow-up due" ${lead.status === 'Follow-up due' ? 'selected' : ''} style="background: #111a14; color: #f97316;">Follow-up due</option>
+              <option value="Booked" ${lead.status === 'Booked' || lead.status === 'Scheduled' ? 'selected' : ''} style="background: #111a14; color: #10b981;">Booked</option>
+              <option value="Completed" ${lead.status === 'Completed' ? 'selected' : ''} style="background: #111a14; color: #34d399;">Completed</option>
+              <option value="Lost" ${lead.status === 'Lost' ? 'selected' : ''} style="background: #111a14; color: #ef4444;">Lost</option>
+            </select>
+          </td>
+          <td style="padding: 10px 8px;">
+            <input type="date" value="${lead.followUpDate || ''}" onchange="updateCRMFollowUp(${index}, this.value)" style="padding: 4px 6px; font-size: 11px; width: 115px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: 4px;">
+          </td>
+          <td style="padding: 10px 8px;">
+            <input type="text" value="${lead.nextAction || ''}" placeholder="Next step..." onchange="updateCRMNextAction(${index}, this.value)" style="padding: 6px 8px; font-size: 11.5px; width: 100%; min-width: 140px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--color-text); border-radius: 4px;">
+          </td>
+          <td style="padding: 10px 8px; text-align: center; white-space: nowrap;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <button class="btn-preset" onclick="openQuoteFromCRM(${index})" style="padding: 4px 6px; font-size: 10.5px; background: var(--color-primary-glow); border-color: var(--color-primary); color: var(--color-primary); font-weight: 700;">📂 Open Quote</button>
+              <div style="display: flex; gap: 4px;">
+                <button class="btn-preset" onclick="markCRMFollowedUp(${index})" title="Mark Followed Up" style="padding: 4px; font-size: 10px; flex: 1; background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success);">✅ Log</button>
+                <button class="btn-preset" onclick="openCRMLeadDrawer('edit', ${index})" title="Edit Details" style="padding: 4px; font-size: 10px; flex: 1;">📝</button>
+                <button class="btn-preset" onclick="deleteCRMLead(${index})" title="Delete Job" style="padding: 4px; font-size: 10px; background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger);">🗑️</button>
               </div>
             </div>
-          </div>
+          </td>
         `;
-        container.appendChild(leadCard);
+        container.appendChild(tr);
       });
     }
 
@@ -4210,11 +4590,20 @@
         title.textContent = "Add New CRM Lead";
         document.getElementById('crmLeadIndex').value = "";
         document.getElementById('crmLeadName').value = "";
-        document.getElementById('crmLeadStatus').value = "Lead";
+        document.getElementById('crmLeadStatus').value = "New lead";
         document.getElementById('crmLeadPhone').value = "";
         document.getElementById('crmLeadEmail').value = "";
+        document.getElementById('crmLeadSuburb').value = "";
         document.getElementById('crmLeadAddress').value = "";
-        document.getElementById('crmLeadHardware').value = "tesla";
+        document.getElementById('crmLeadJobType').value = "Attached L2";
+        document.getElementById('crmLeadPropertyType').value = "residential detached";
+        document.getElementById('crmLeadQuoteAmount').value = "2500";
+        document.getElementById('crmLeadQuoteDate').value = new Date().toLocaleDateString('en-CA');
+        const fDate = new Date();
+        fDate.setDate(fDate.getDate() + 2);
+        document.getElementById('crmLeadFollowUpDate').value = fDate.toLocaleDateString('en-CA');
+        document.getElementById('crmLeadNextAction').value = "Initial scoping call";
+        document.getElementById('crmLeadHardware').value = "grizzle";
         document.getElementById('crmLeadAmps').value = "32";
         document.getElementById('crmLeadRunLength').value = "30";
         document.getElementById('crmLeadTrenchLength').value = "0";
@@ -4230,11 +4619,18 @@
 
         document.getElementById('crmLeadIndex').value = index;
         document.getElementById('crmLeadName').value = lead.name || "";
-        document.getElementById('crmLeadStatus').value = lead.status || "Lead";
+        document.getElementById('crmLeadStatus').value = lead.status || "New lead";
         document.getElementById('crmLeadPhone').value = lead.phone || "";
         document.getElementById('crmLeadEmail').value = lead.email || "";
+        document.getElementById('crmLeadSuburb').value = lead.suburb || lead.address || "";
         document.getElementById('crmLeadAddress').value = lead.address || "";
-        document.getElementById('crmLeadHardware').value = lead.hardware || "tesla";
+        document.getElementById('crmLeadJobType').value = lead.jobType || "Attached L2";
+        document.getElementById('crmLeadPropertyType').value = lead.propertyType || "residential detached";
+        document.getElementById('crmLeadQuoteAmount').value = lead.quoteTotal || "2500";
+        document.getElementById('crmLeadQuoteDate').value = lead.quoteDate || new Date().toLocaleDateString('en-CA');
+        document.getElementById('crmLeadFollowUpDate').value = lead.followUpDate || "";
+        document.getElementById('crmLeadNextAction').value = lead.nextAction || "";
+        document.getElementById('crmLeadHardware').value = lead.hardware || "grizzle";
         document.getElementById('crmLeadAmps').value = lead.amps || "32";
         document.getElementById('crmLeadRunLength').value = lead.runLength || "30";
         document.getElementById('crmLeadTrenchLength').value = lead.trenchLength || "0";
@@ -4244,7 +4640,6 @@
         document.getElementById('crmLeadNotes').value = lead.notes || "";
       }
 
-      // Scroll drawer into visual scope smoothly
       drawer.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -4269,7 +4664,14 @@
         status: document.getElementById('crmLeadStatus').value,
         phone: document.getElementById('crmLeadPhone').value.trim(),
         email: document.getElementById('crmLeadEmail').value.trim(),
-        address: document.getElementById('crmLeadAddress').value.trim(),
+        suburb: document.getElementById('crmLeadSuburb')?.value.trim() || "",
+        address: document.getElementById('crmLeadAddress').value.trim() || document.getElementById('crmLeadSuburb')?.value.trim() || "",
+        jobType: document.getElementById('crmLeadJobType')?.value || "Attached L2",
+        propertyType: document.getElementById('crmLeadPropertyType')?.value || "residential detached",
+        quoteTotal: parseFloat(document.getElementById('crmLeadQuoteAmount')?.value) || 2500.00,
+        quoteDate: document.getElementById('crmLeadQuoteDate')?.value || new Date().toLocaleDateString('en-CA'),
+        followUpDate: document.getElementById('crmLeadFollowUpDate')?.value || "",
+        nextAction: document.getElementById('crmLeadNextAction')?.value.trim() || "",
         hardware: document.getElementById('crmLeadHardware').value,
         amps: document.getElementById('crmLeadAmps').value,
         runLength: document.getElementById('crmLeadRunLength').value,
@@ -4282,13 +4684,9 @@
       };
 
       if (indexStr === "") {
-        // Insert new lead and simulate target quote price baseline
-        leadConfig.quoteTotal = 2500.00; // Baseline default, load and sync updates this!
         leads.push(leadConfig);
       } else {
-        // Edit existing lead details but retain previous quote total unless loaded & updated
         const index = parseInt(indexStr);
-        leadConfig.quoteTotal = leads[index].quoteTotal || 2500.00;
         leads[index] = leadConfig;
       }
 
