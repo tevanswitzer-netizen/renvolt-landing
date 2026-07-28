@@ -1902,9 +1902,12 @@
               </select>
               <input type="number" id="quickAddAmount" placeholder="Quote Amount ($)" style="padding: 8px 10px; font-size: 12px;">
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <button class="btn btn-success" onclick="quickAddCRMLead()" style="padding: 6px 16px; font-size: 12px; width: auto;">➕ Quick Add Entry</button>
-              <button class="btn-preset" onclick="openCRMLeadDrawer('add')" style="font-size: 12px; padding: 6px 12px;">📂 Open Full Lead Form</button>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-preset" onclick="openCRMLeadDrawer('add')" style="font-size: 12px; padding: 6px 12px;">📂 Open Full Lead Form</button>
+                <button class="btn-preset" onclick="exportAllDataAsJSON()" style="font-size: 12px; padding: 6px 12px; background: var(--color-primary-glow); color: var(--color-primary); border-color: var(--color-primary);" title="Backup all data to JSON">📥 Backup JSON</button>
+              </div>
             </div>
           </div>
 
@@ -2128,15 +2131,18 @@
             Data Backup & Transfer
             <span class="badge" style="background-color: rgba(46,64,54,0.08); border-color: var(--color-primary); color: var(--color-primary);">Portable</span>
           </div>
-          <p style="font-size: 12px; color: var(--color-muted); margin-bottom: 14px;">
-            Export all your saved quotes and CRM leads as a JSON file. Use this to back up your data, move between browsers, or transfer between your laptop and phone.
+          <p style="font-size: 12px; color: var(--color-muted); margin-bottom: 8px;">
+            Export all your saved quotes and CRM leads as an offline JSON backup file. Use this to protect your data, move between browsers, or transfer between your laptop and phone.
           </p>
+          <div style="font-size: 11.5px; color: var(--color-warning); font-weight: 600; margin-bottom: 14px; background: rgba(245, 158, 11, 0.08); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(245, 158, 11, 0.3);">
+            🔒 Privacy &amp; Offline Notice: Data is stored on this device/browser in IndexedDB unless backed up. No cloud servers or third-party databases are used.
+          </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button class="btn btn-success" onclick="exportAllDataAsJSON()" style="padding: 10px 18px; font-size: 13px;">
-              📥 Export All Data (JSON)
+              📥 Backup to JSON (Export All)
             </button>
             <button class="btn btn-secondary" onclick="document.getElementById('jsonImportInput').click()" style="padding: 10px 18px; font-size: 13px;">
-              📤 Import Data (JSON)
+              📤 Restore from JSON (Import)
             </button>
             <input type="file" id="jsonImportInput" accept=".json" onchange="importAllDataFromJSON(this)" style="display: none;">
           </div>
@@ -2581,16 +2587,12 @@
       0: 105600 // #1/0 AWG
     };
 
-    // Standard local storage initialization
+    // Standard local storage & IndexedDB initialization
     window.onload = function() {
-      // Load saved quotes database into UI dropdown
-      refreshSavedQuotesDropdown();
-      
-      // Load standard "attached" preset on startup
-      loadPresetProfile('attached');
-      
-      // Initialize and render CRM Leads
-      initializeCRMLeads();
+      // Initialize IndexedDB storage and load cached quotes/leads into UI
+      loadIndexedDBData().then(() => {
+        loadPresetProfile('attached');
+      });
     };
 
     // EVSE Hardware Selection Trigger
@@ -3927,15 +3929,142 @@
       document.body.removeChild(link);
     }
 
-    // ON-SITE BROWSER DATABASE (LOCALSTORAGE) PERSISTENCE
-    function getSavedQuotesFromStorage() {
-      let data = localStorage.getItem('renvolt_saved_quotes');
-      if (!data) return {};
+    // ==========================================================================
+    // INDEXEDDB STORAGE WRAPPER & BROWSER PERSISTENCE
+    // ==========================================================================
+    const IDB_NAME = 'revoltElectricAppDB';
+    const IDB_VERSION = 1;
+    let idbInstance = null;
+
+    // In-memory synchronous caches for instant UI rendering
+    window.idbQuotesCache = {};
+    window.idbCRMCache = [];
+
+    function initIDB() {
+      return new Promise((resolve, reject) => {
+        if (idbInstance) return resolve(idbInstance);
+        const request = indexedDB.open(IDB_NAME, IDB_VERSION);
+        request.onerror = (e) => {
+          console.error("IndexedDB open error:", e);
+          reject("Could not open IndexedDB");
+        };
+        request.onsuccess = (e) => {
+          idbInstance = e.target.result;
+          resolve(idbInstance);
+        };
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('quotes')) {
+            db.createObjectStore('quotes', { keyPath: 'id' });
+          }
+          if (!db.objectStoreNames.contains('crmRecords')) {
+            db.createObjectStore('crmRecords', { keyPath: 'id' });
+          }
+          if (!db.objectStoreNames.contains('appMeta')) {
+            db.createObjectStore('appMeta', { keyPath: 'key' });
+          }
+        };
+      });
+    }
+
+    async function idbGetAll(storeName) {
+      const db = await initIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbPut(storeName, item) {
+      const db = await initIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        const req = store.put(item);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGetMeta(key, defaultValue = null) {
       try {
-        return JSON.parse(data);
+        const db = await initIDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction('appMeta', 'readonly');
+          const req = tx.objectStore('appMeta').get(key);
+          req.onsuccess = () => resolve(req.result ? req.result.value : defaultValue);
+          req.onerror = () => resolve(defaultValue);
+        });
+      } catch(e) { return defaultValue; }
+    }
+
+    async function idbSetMeta(key, value) {
+      try { return await idbPut('appMeta', { key, value }); } catch(e) {}
+    }
+
+    // Load data from IndexedDB into memory on startup
+    async function loadIndexedDBData() {
+      try {
+        const quotesArr = await idbGetAll('quotes');
+        const crmArr = await idbGetAll('crmRecords');
+
+        window.idbQuotesCache = {};
+        if (quotesArr.length > 0) {
+          quotesArr.forEach(q => {
+            window.idbQuotesCache[q.customerName || q.id] = q;
+          });
+        } else {
+          // Fallback migrate legacy localStorage quotes if IDB is empty
+          let legacyQuotes = localStorage.getItem('renvolt_saved_quotes');
+          if (legacyQuotes) {
+            try {
+              const parsed = JSON.parse(legacyQuotes);
+              for (let qName in parsed) {
+                let q = parsed[qName];
+                q.id = q.id || `quote_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+                q.customerName = qName;
+                q.createdAt = q.createdAt || new Date().toISOString();
+                q.updatedAt = new Date().toISOString();
+                window.idbQuotesCache[qName] = q;
+                await idbPut('quotes', q);
+              }
+            } catch(e) {}
+          }
+        }
+
+        if (crmArr.length > 0) {
+          window.idbCRMCache = crmArr;
+        } else {
+          // If IDB is empty, migrate legacy localStorage leads if any
+          let legacyLeads = localStorage.getItem('renvolt_crm_leads');
+          if (legacyLeads) {
+            try {
+              const parsed = JSON.parse(legacyLeads);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                window.idbCRMCache = parsed.map((l, idx) => ({
+                  ...l,
+                  id: l.id || `crm_${Date.now()}_${idx}`,
+                  createdAt: l.createdAt || new Date().toISOString(),
+                  updatedAt: new Date().toISOString()
+                }));
+                for (let l of window.idbCRMCache) await idbPut('crmRecords', l);
+              }
+            } catch(e) {}
+          }
+        }
+
+        refreshSavedQuotesDropdown();
+        if (typeof initializeCRMLeads === 'function') initializeCRMLeads();
       } catch(e) {
-        return {};
+        console.error("Failed to load IndexedDB data on startup:", e);
       }
+    }
+
+    function getSavedQuotesFromStorage() {
+      return window.idbQuotesCache || {};
     }
 
     function refreshSavedQuotesDropdown() {
@@ -3958,7 +4087,33 @@
         return;
       }
 
+      const now = new Date().toISOString();
+      const existingQuote = window.idbQuotesCache[name];
+      const quoteId = existingQuote ? existingQuote.id : `quote_${Date.now()}_${Math.random().toString(36).substr(2,5)}`;
+
       const quoteConfig = {
+        id: quoteId,
+        quoteNumber: existingQuote ? (existingQuote.quoteNumber || `REV-${Math.floor(1000 + Math.random()*9000)}`) : `REV-${Math.floor(1000 + Math.random()*9000)}`,
+        customerName: name,
+        customerPhone: "",
+        customerEmail: "",
+        projectAddress: "",
+        issueDate: new Date().toLocaleDateString('en-CA'),
+        validityDays: 30,
+        jobType: "Attached L2",
+        quoteTotals: {
+          subtotal: parseFloat(document.getElementById('quotedPriceVal')?.innerText.replace(/[^0-9.]/g, '') || grandTotal),
+          tax: parseFloat(document.getElementById('gstVal')?.innerText.replace(/[^0-9.]/g, '') || 0),
+          total: grandTotal
+        },
+        printableFields: {
+          scope: document.getElementById('smsQuoteBox')?.value || "",
+          assumptions: "Standard residential installation assumptions apply.",
+          exclusions: "Underground obstacle remediation or hazardous material abatement excluded."
+        },
+        linkedCrmId: null,
+        createdAt: existingQuote ? existingQuote.createdAt : now,
+        updatedAt: now,
         chargerHardware: document.getElementById('chargerHardwareSelect').value,
         chargerAmps: chargerAmps,
         runLength: runLength,
@@ -3991,11 +4146,7 @@
         quoteStatus: document.getElementById('quoteStatusSelect').value
       };
 
-      const db = getSavedQuotesFromStorage();
-      db[name] = quoteConfig;
-      localStorage.setItem('renvolt_saved_quotes', JSON.stringify(db));
-
-      // Hook into CRM: Create or update CRM record automatically
+      // Hook into CRM: Create or update CRM record automatically in IndexedDB
       const crmLeads = getCRMLeads();
       let existingIndex = crmLeads.findIndex(l => (l.name || "").toLowerCase() === name.toLowerCase());
       const todayStr = new Date().toLocaleDateString('en-CA');
@@ -4009,6 +4160,8 @@
       else if (quoteConfig.serviceUpgrade !== 'none') inferredJobType = "Panel work";
       else if (useEVEMS) inferredJobType = "EVEMS add-on";
 
+      quoteConfig.jobType = inferredJobType;
+
       if (existingIndex >= 0) {
         crmLeads[existingIndex].quoteTotal = grandTotal;
         crmLeads[existingIndex].quoteDate = todayStr;
@@ -4016,7 +4169,6 @@
         crmLeads[existingIndex].jobType = inferredJobType;
         if (!crmLeads[existingIndex].followUpDate) crmLeads[existingIndex].followUpDate = followUpStr;
         if (!crmLeads[existingIndex].nextAction) crmLeads[existingIndex].nextAction = "Follow up on proposal sent";
-        // Update sizing state
         crmLeads[existingIndex].hardware = quoteConfig.chargerHardware;
         crmLeads[existingIndex].amps = quoteConfig.chargerAmps;
         crmLeads[existingIndex].runLength = quoteConfig.runLength;
@@ -4024,8 +4176,13 @@
         crmLeads[existingIndex].isDetached = quoteConfig.isDetached;
         crmLeads[existingIndex].useEVEMS = quoteConfig.useEVEMS;
         crmLeads[existingIndex].serviceUpgrade = quoteConfig.serviceUpgrade;
+        crmLeads[existingIndex].updatedAt = now;
+        quoteConfig.linkedCrmId = crmLeads[existingIndex].id;
       } else {
+        const newCrmId = `crm_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+        quoteConfig.linkedCrmId = newCrmId;
         crmLeads.push({
+          id: newCrmId,
           name: name,
           phone: "",
           email: "",
@@ -4046,36 +4203,47 @@
           useEVEMS: quoteConfig.useEVEMS,
           serviceUpgrade: quoteConfig.serviceUpgrade,
           panelCapacity: quoteConfig.serviceAmps,
-          notes: "Automatically imported from saved quote."
+          notes: "Automatically imported from saved quote.",
+          linkedQuoteIds: [quoteId],
+          createdAt: now,
+          updatedAt: now
         });
       }
       saveCRMLeads(crmLeads);
       if (typeof renderCRMLeads === 'function') renderCRMLeads();
 
+      // Save quote to memory and IndexedDB
+      window.idbQuotesCache[name] = quoteConfig;
+      idbPut('quotes', quoteConfig).catch(err => console.error("Error saving quote to IDB:", err));
+      localStorage.setItem('renvolt_saved_quotes', JSON.stringify(window.idbQuotesCache));
+
       document.getElementById('quoteNameInput').value = "";
       refreshSavedQuotesDropdown();
       
-      // Increment save counter for JSON backup reminder
-      let saveCount = parseInt(localStorage.getItem('renvolt_save_counter') || '0', 10) + 1;
-      localStorage.setItem('renvolt_save_counter', saveCount.toString());
+      // Increment save counter in IndexedDB and show reminder every 5 saves
+      idbGetMeta('save_counter', 0).then(count => {
+        const newCount = (parseInt(count, 10) || 0) + 1;
+        idbSetMeta('save_counter', newCount);
+        localStorage.setItem('renvolt_save_counter', newCount.toString());
 
-      // Notify Copied/Saved
-      const toast = document.getElementById('toast');
-      if (saveCount % 5 === 0) {
-        toast.textContent = "Reminder: You’ve saved several quotes on this device. Use Backup to JSON to keep an offline copy in Google Drive or iCloud.";
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-          toast.textContent = "Successfully copied to clipboard!";
-        }, 5000);
-      } else {
-        toast.textContent = "Quote saved successfully!";
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-          toast.textContent = "Successfully copied to clipboard!";
-        }, 3000);
-      }
+        const toast = document.getElementById('toast');
+        if (toast) {
+          if (newCount % 5 === 0) {
+            toast.textContent = "Reminder: Your quotes and CRM data are stored on this device. Use Backup to JSON to keep an offline copy in Google Drive or iCloud.";
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+              toast.textContent = "Successfully copied to clipboard!";
+            }, 6000);
+          } else {
+            toast.textContent = "Quote saved successfully to IndexedDB!";
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+            }, 3000);
+          }
+        }
+      });
     }
 
     function loadQuoteFromDB(name) {
@@ -4288,17 +4456,26 @@
     }
 
     function getCRMLeads() {
-      const data = localStorage.getItem('renvolt_crm_leads');
-      if (!data) return [];
-      try {
-        return JSON.parse(data);
-      } catch(e) {
-        return [];
-      }
+      return window.idbCRMCache || [];
     }
 
     function saveCRMLeads(leads) {
+      const now = new Date().toISOString();
+      leads.forEach((l, idx) => {
+        if (!l.id) l.id = `crm_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+        if (!l.createdAt) l.createdAt = now;
+        l.updatedAt = now;
+      });
+      window.idbCRMCache = leads;
       localStorage.setItem('renvolt_crm_leads', JSON.stringify(leads));
+
+      // Asynchronously sync master array to IndexedDB
+      initIDB().then(db => {
+        const tx = db.transaction('crmRecords', 'readwrite');
+        const store = tx.objectStore('crmRecords');
+        store.clear();
+        leads.forEach(l => store.put(l));
+      }).catch(err => console.error("Error syncing CRM to IDB:", err));
     }
 
     let currentCRMFilter = 'All';
@@ -4823,7 +5000,6 @@
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');
-        toast.textContent = "Successfully copied to clipboard!";
       }, 3000);
     }
 
@@ -4831,30 +5007,45 @@
     // JSON DATA EXPORT / IMPORT (Portable Backup for Field Use)
     // ==========================================================================
 
-    function exportAllDataAsJSON() {
-      const exportData = {
-        exportVersion: '2.0.0',
-        exportDate: new Date().toISOString(),
-        exportSource: 'Renvolt EV Calculator',
-        savedQuotes: getSavedQuotesFromStorage(),
-        crmLeads: getCRMLeads()
-      };
+    async function exportAllDataAsJSON() {
+      try {
+        const quotesArr = await idbGetAll('quotes');
+        const crmArr = await idbGetAll('crmRecords');
+        const saveCount = await idbGetMeta('save_counter', 0);
 
-      const jsonString = JSON.stringify(exportData, null, 2);
-      const blob = new Blob([jsonString], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Renvolt_Backup_${new Date().toISOString().slice(0,10)}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+        const exportData = {
+          schemaVersion: '2.1.0',
+          exportedAt: new Date().toISOString(),
+          exportSource: 'Renvolt EV Calculator',
+          appMeta: {
+            saveCounter: saveCount,
+            devicePlatform: navigator.platform || "unknown"
+          },
+          quotes: quotesArr.length > 0 ? quotesArr : Object.values(window.idbQuotesCache || {}),
+          crmRecords: crmArr.length > 0 ? crmArr : (window.idbCRMCache || [])
+        };
 
-      const toast = document.getElementById('toast');
-      toast.textContent = 'Data exported successfully!';
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+        const jsonString = JSON.stringify(exportData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `revolt-electric-backup-${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        const toast = document.getElementById('toast');
+        if (toast) {
+          toast.textContent = 'All data exported to JSON backup!';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+      } catch(e) {
+        console.error("Export error:", e);
+        alert("Could not export data: " + e.message);
+      }
     }
 
     function importAllDataFromJSON(inputElement) {
@@ -4862,57 +5053,86 @@
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         try {
           const importData = JSON.parse(e.target.result);
 
           // Validate structure
-          if (!importData.exportSource || importData.exportSource !== 'Renvolt EV Calculator') {
-            alert('Invalid file: This does not appear to be a Renvolt data export.');
+          if (!importData || typeof importData !== 'object' || (!importData.quotes && !importData.savedQuotes && !importData.crmRecords && !importData.crmLeads)) {
+            alert('Invalid backup file: Could not find valid Renvolt quotes or CRM records structure.');
+            inputElement.value = '';
             return;
           }
 
-          const confirmMsg = `This will import data from ${importData.exportDate ? new Date(importData.exportDate).toLocaleDateString() : 'unknown date'}.\n\n` +
-            `• ${Object.keys(importData.savedQuotes || {}).length} saved quotes\n` +
-            `• ${(importData.crmLeads || []).length} CRM leads\n\n` +
-            `Choose how to import:\n` +
-            `OK = MERGE with existing data\n` +
-            `Cancel = Abort import`;
+          const quotesToImport = Array.isArray(importData.quotes) ? importData.quotes : Object.values(importData.savedQuotes || {});
+          const crmToImport = Array.isArray(importData.crmRecords) ? importData.crmRecords : (importData.crmLeads || []);
 
-          if (!confirm(confirmMsg)) return;
+          const confirmMsg = `Restore backup from ${importData.exportedAt ? new Date(importData.exportedAt).toLocaleDateString() : 'selected file'}?\n\n` +
+            `• ${quotesToImport.length} quote records found\n` +
+            `• ${crmToImport.length} CRM records found\n\n` +
+            `Click OK to safely MERGE records by ID/Name (no duplicates).`;
 
-          // Merge saved quotes
-          if (importData.savedQuotes) {
-            const existingQuotes = getSavedQuotesFromStorage();
-            const mergedQuotes = { ...existingQuotes, ...importData.savedQuotes };
-            localStorage.setItem('renvolt_saved_quotes', JSON.stringify(mergedQuotes));
-            refreshSavedQuotesDropdown();
+          if (!confirm(confirmMsg)) {
+            inputElement.value = '';
+            return;
           }
 
-          // Merge CRM leads (deduplicate by name + phone)
-          if (importData.crmLeads && Array.isArray(importData.crmLeads)) {
-            const existingLeads = getCRMLeads();
-            const existingKeys = new Set(existingLeads.map(l => l.name + '|' + l.phone));
-            
-            importData.crmLeads.forEach(lead => {
-              const key = lead.name + '|' + lead.phone;
-              if (!existingKeys.has(key)) {
-                existingLeads.push(lead);
-                existingKeys.add(key);
-              }
-            });
-            
-            saveCRMLeads(existingLeads);
-            renderCRMLeads();
+          let importedQuotesCount = 0;
+          let importedCRMCount = 0;
+          const now = new Date().toISOString();
+
+          // Safe merge Quotes into IndexedDB
+          for (let q of quotesToImport) {
+            if (!q.id) q.id = `quote_${Date.now()}_${Math.random().toString(36).substr(2,5)}`;
+            if (!q.createdAt) q.createdAt = now;
+            q.updatedAt = now;
+            await idbPut('quotes', q);
+            window.idbQuotesCache[q.customerName || q.id] = q;
+            importedQuotesCount++;
           }
 
+          // Safe merge CRM records into IndexedDB (merge by ID or Name+Phone)
+          const existingCRM = await idbGetAll('crmRecords');
+          const existingMap = new Map();
+          existingCRM.forEach(l => {
+            if (l.id) existingMap.set(l.id, l);
+            existingMap.set((l.name || "") + '|' + (l.phone || ""), l);
+          });
+
+          for (let l of crmToImport) {
+            if (!l.id) l.id = `crm_${Date.now()}_${Math.random().toString(36).substr(2,5)}`;
+            const key = (l.name || "") + '|' + (l.phone || "");
+            const match = existingMap.get(l.id) || existingMap.get(key);
+            if (match) {
+              const merged = { ...match, ...l, id: match.id, updatedAt: now };
+              await idbPut('crmRecords', merged);
+              existingMap.set(merged.id, merged);
+              existingMap.set(key, merged);
+            } else {
+              if (!l.createdAt) l.createdAt = now;
+              l.updatedAt = now;
+              await idbPut('crmRecords', l);
+              existingMap.set(l.id, l);
+              existingMap.set(key, l);
+            }
+            importedCRMCount++;
+          }
+
+          // Reload UI from IndexedDB
+          await loadIndexedDBData();
+          inputElement.value = '';
+
+          alert(`Successfully imported and merged:\n• ${importedQuotesCount} quotes\n• ${importedCRMCount} CRM records.`);
           const toast = document.getElementById('toast');
-          toast.textContent = 'Data imported successfully!';
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 3000);
-
+          if (toast) {
+            toast.textContent = 'Backup restored successfully!';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+          }
         } catch (err) {
-          alert('Error reading file: ' + err.message);
+          console.error("Import error:", err);
+          alert('Error reading JSON file: The file is malformed or corrupted.');
+          inputElement.value = '';
         }
       };
       reader.readAsText(file);
