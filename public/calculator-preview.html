@@ -2596,12 +2596,14 @@
     };
 
     // EVSE Hardware Selection Trigger
-    function selectEVSEHardware(brand, triggerMath = true) {
+    function selectEVSEHardware(brand, triggerMath = true, preserveAmps = false) {
       const spec = EVSE_SPECS[brand];
       if (!spec) return;
       
-      // Auto-set continuous amps to hardware default
-      chargerAmps = spec.defaultAmps || spec.maxAmps || 40;
+      // Auto-set continuous amps to hardware default (skip if preset is loading)
+      if (!preserveAmps) {
+        chargerAmps = spec.defaultAmps || spec.maxAmps || 40;
+      }
       
       // Auto-select largest appropriate breaker size (125% rule) while remaining selectable
       let recommendedBreaker = getRecommendedBreaker(chargerAmps);
@@ -2736,7 +2738,7 @@
       
       // Update UI Toggles & Sliders
       document.getElementById('chargerHardwareSelect').value = 'grizzle';
-      selectEVSEHardware('grizzle', false);
+      selectEVSEHardware('grizzle', false, true);  // preserve preset amps
 
       document.getElementById('runLength').value = runLength;
       document.getElementById('runLengthVal').innerText = runLength + " ft";
@@ -3007,6 +3009,11 @@
       runElectricalMath();
     }
 
+    // AWG terminal fitting check: smaller AWG number = thicker wire
+    function isAWGFitting(gauge, minAWG, maxAWG) {
+      return gauge <= minAWG && gauge >= maxAWG;
+    }
+
     // CORE COMPLIANCE CALCULATION ENGINE
     function runElectricalMath() {
       // Toggle secondary conduit selector dropdown
@@ -3165,6 +3172,7 @@
       // 4. CEC Section 8 Demand Load Calculation (Dwelling Rule 8-200 vs Commercial Headroom Check)
       let panelDemandAmps = 0;
       let availableAmps = 0;
+      let effectiveServiceCeiling = 100; // declared here so it's in scope for gauges
       const panelBox = document.getElementById('panelCalcResult');
       const panelIcon = document.getElementById('panelCalcIcon');
       const panelText = document.getElementById('panelCalcText');
@@ -3172,6 +3180,7 @@
 
       if (systemMode === 'commercial') {
         if (panelBadge) panelBadge.innerText = "3Ø 120/208V Headroom";
+        effectiveServiceCeiling = parseFloat(document.getElementById('commServiceAmps')?.value) || 200;
 
         let commServiceInput = document.getElementById('commServiceAmps');
         let commDemandInput = document.getElementById('commExistingDemand');
@@ -3219,7 +3228,7 @@
 
         let serviceCeiling = parseInt(document.getElementById('serviceAmps').value);
         const serviceUpgradeType = document.getElementById('serviceUpgradeSelect').value;
-        const effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
+        effectiveServiceCeiling = serviceUpgradeType === 'upgrade200a' ? 200 : serviceCeiling;
 
         // Run the FULL Rule 8-200 dwelling demand calculation.
         // When EVEMS is active, the only difference is EVSE load = 0W per Rule 8-106.
@@ -3698,6 +3707,15 @@
       document.getElementById('marginVal').innerText = grossMarginPercentage.toFixed(0) + "%";
 
       // 5. Build Aggregated Customer Quote State (Separating internal math from customer view)
+      // Calculate trenching cost total from marked-up material line items
+      let trenchCostTotal = 0;
+      if (isDetached) {
+        materialsList.forEach(item => {
+          if (item.key && (item.key.startsWith('trench') || item.key === 'asphaltCut')) {
+            trenchCostTotal += item.qty * item.cost * markupFactor;
+          }
+        });
+      }
       const evseLineTotal = subtotalBeforeTax - trenchCostTotal - (useEVEMS ? 1725 : 0) - (upgradePermitFee > 0 ? 850 : 0);
       const panelLineTotal = (useEVEMS ? 1725 : 0) + (upgradePermitFee > 0 ? 850 : 0);
       const miscLineTotal = customItems.reduce((sum, item) => sum + (item.qty * item.cost), 0) + Number(document.getElementById('utilitySurcharge')?.value || 0);
@@ -3816,7 +3834,7 @@
       if (isEms) scopeText += " Integrated DCC-9 smart energy load manager.";
       if (requiresJunctionBox) scopeText += " Weatherproof adjacent splicing junction box included.";
 
-      let smsText = `RENVOLT EV CHARGING PROPOSAL\n`;
+      let smsText = `REVOLT ELECTRIC EV CHARGING PROPOSAL\n`;
       smsText += `============================\n`;
       smsText += `EVSE Hardware: ${spec.name}\n`;
       smsText += `Scope: ${scopeText}\n`;
@@ -3834,7 +3852,7 @@
       let serviceCeilingAmps = document.getElementById('serviceAmps').value;
       let permitText = `CEC 2024 DESIGN PERMIT SUBMISSION SHEET\n`;
       permitText += `========================================\n`;
-      permitText += `Contractor: Renvolt Electrical\n`;
+      permitText += `Contractor: Revolt Electric\n`;
       permitText += `EVSE Hardware: ${spec.name} ($${spec.msrp} MSRP)\n`;
       permitText += `Continuous Load Limit: ${chargerAmps}A (continuous Load Rule 86-306)\n`;
       permitText += `Overcurrent Protection: ${breaker}A 2-Pole breaker\n`;
@@ -4102,9 +4120,9 @@
         validityDays: 30,
         jobType: "Attached L2",
         quoteTotals: {
-          subtotal: parseFloat(document.getElementById('quotedPriceVal')?.innerText.replace(/[^0-9.]/g, '') || grandTotal),
-          tax: parseFloat(document.getElementById('gstVal')?.innerText.replace(/[^0-9.]/g, '') || 0),
-          total: grandTotal
+          subtotal: parseFloat(document.getElementById('quotedPriceVal')?.innerText.replace(/[^0-9.]/g, '') || '0'),
+          tax: parseFloat(document.getElementById('gstVal')?.innerText.replace(/[^0-9.]/g, '') || '0'),
+          total: parseFloat(document.getElementById('grandTotalVal')?.innerText.replace(/[^0-9.]/g, '') || '0')
         },
         printableFields: {
           scope: document.getElementById('smsQuoteBox')?.value || "",
@@ -4163,7 +4181,7 @@
       quoteConfig.jobType = inferredJobType;
 
       if (existingIndex >= 0) {
-        crmLeads[existingIndex].quoteTotal = grandTotal;
+        crmLeads[existingIndex].quoteTotal = parseFloat(document.getElementById('grandTotalVal')?.innerText.replace(/[^0-9.]/g, '') || '0');
         crmLeads[existingIndex].quoteDate = todayStr;
         crmLeads[existingIndex].status = "Quoted";
         crmLeads[existingIndex].jobType = inferredJobType;
@@ -4190,7 +4208,7 @@
           address: "",
           jobType: inferredJobType,
           propertyType: "residential detached",
-          quoteTotal: grandTotal,
+          quoteTotal: parseFloat(document.getElementById('grandTotalVal')?.innerText.replace(/[^0-9.]/g, '') || '0'),
           quoteDate: todayStr,
           status: "Quoted",
           followUpDate: followUpStr,
